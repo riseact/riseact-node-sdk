@@ -1,5 +1,5 @@
+import { Database, Options } from 'better-sqlite3';
 import { RequestHandler } from 'express';
-import { Options, Database } from 'better-sqlite3';
 
 /* ---------------------------------- Auth ---------------------------------- */
 export interface AuthConfig {

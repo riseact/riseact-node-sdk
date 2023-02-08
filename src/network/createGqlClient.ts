@@ -1,7 +1,8 @@
-import { HttpLink, ApolloClient, InMemoryCache, ApolloClientOptions } from '@apollo/client/core';
+import { ApolloClient, ApolloClientOptions, HttpLink, InMemoryCache } from '@apollo/client/core';
+import fetch from 'cross-fetch';
+
 import { DEF_RISEACT_CORE_URL } from '../config/consts';
 import urlJoin from '../utils/urlJoin';
-import fetch from 'cross-fetch';
 
 interface GqlClientOptions {
   accessToken: string;

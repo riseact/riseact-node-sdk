@@ -1,4 +1,5 @@
-import { BaseClient, generators, Issuer } from 'openid-client';
+import { BaseClient, Issuer, generators } from 'openid-client';
+
 import { DEF_RISEACT_ACCOUNTS_URL } from '../config/consts';
 import { AuthConfig } from '../types';
 import urlJoin from '../utils/urlJoin';

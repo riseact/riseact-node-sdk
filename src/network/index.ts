@@ -1,8 +1,9 @@
 import cookieParser from 'cookie-parser';
 import { RequestHandler } from 'express';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+
 import { DEF_RISEACT_CORE_URL, TOKEN_COOKIE_NAME } from '../config/consts';
 import { NetworkConfig, TokenStorage } from '../types';
-import { createProxyMiddleware } from 'http-proxy-middleware';
 
 const initNetwork = async (config: NetworkConfig = {}, storage: TokenStorage) => {
   const proxy = createProxyMiddleware({

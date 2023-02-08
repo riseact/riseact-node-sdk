@@ -1,11 +1,12 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { AuthConfig, RiseactAuth, TokenStorage } from '../types';
-import { getAuthorizationData, getOAuthClient } from './oauth';
+import { ApolloQueryResult, gql } from '@apollo/client/core';
 import cookieParser from 'cookie-parser';
+import { NextFunction, Request, RequestHandler, Response } from 'express';
+import { uuid } from 'uuidv4';
+
 import { COOKIE_CODE_VERIFIER, COOKIE_REFRESH_TOKEN, TOKEN_COOKIE_NAME } from '../config/consts';
 import createGqlClient from '../network/createGqlClient';
-import { ApolloQueryResult, gql } from '@apollo/client/core';
-import { uuid } from 'uuidv4';
+import { AuthConfig, RiseactAuth, TokenStorage } from '../types';
+import { getAuthorizationData, getOAuthClient } from './oauth';
 
 const ORGANIZATION_QUERY = gql`
   query Organization {

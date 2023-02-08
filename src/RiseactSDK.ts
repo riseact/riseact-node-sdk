@@ -1,9 +1,10 @@
-import { initAuth } from './auth';
-import { RiseactConfig, RiseactInstance } from './types';
 import dns from 'node:dns';
-import initStorage from './storage';
-import urlJoin from './utils/urlJoin';
+
+import { initAuth } from './auth';
 import initNetwork from './network';
+import initStorage from './storage';
+import { RiseactConfig, RiseactInstance } from './types';
+import urlJoin from './utils/urlJoin';
 
 async function RiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
   // Check required fields

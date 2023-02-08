@@ -1,11 +1,12 @@
 import sqliteDriver from 'better-sqlite3';
+
 import { DEF_SQLITE_PATH } from '../config/consts';
 import {
   OAuthCredentials,
-  TokenStorage,
   SqliteInstance,
   SqliteOptions,
   StorageConfig,
+  TokenStorage,
 } from '../types';
 
 const initDB = (db: sqliteDriver.Database) => {
