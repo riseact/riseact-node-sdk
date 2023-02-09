@@ -8,13 +8,13 @@ const initVite = async (config?: DevConfig) => {
     server: {
       middlewareMode: true,
       hmr: {
-        // host: "0.0.0.0",
         clientPort: DEF_APP_PORT,
         port: config?.devPort || DEF_HMR_PORT,
       },
     },
-    root: `${process.cwd()}/frontend`,
-    configFile: `${process.cwd()}/frontend/vite.config.ts`,
+    root: `${process.cwd()}/src/frontend`,
+    configFile: `${process.cwd()}/src/frontend/vite.config.ts`,
+    ...config?.viteConfig,
   });
 
   return vite;
