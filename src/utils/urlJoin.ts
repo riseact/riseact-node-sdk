@@ -4,6 +4,10 @@ function normalize(strArray: Array<string | undefined>) {
     return '';
   }
 
+  if (typeof strArray[0] === 'undefined') {
+    strArray[0] = '';
+  }
+
   if (typeof strArray[0] !== 'string') {
     throw new TypeError('Url must be a string. Received ' + strArray[0]);
   }
