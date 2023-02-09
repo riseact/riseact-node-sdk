@@ -1,4 +1,4 @@
-function normalize(strArray: string[]) {
+function normalize(strArray: Array<string | undefined>) {
   const resultArray = [];
   if (strArray.length === 0) {
     return '';
@@ -22,6 +22,10 @@ function normalize(strArray: string[]) {
 
   for (let i = 0; i < strArray.length; i++) {
     let component = strArray[i];
+
+    if (typeof component === 'undefined') {
+      continue;
+    }
 
     if (typeof component !== 'string') {
       throw new TypeError('Url must be a string. Received ' + component);
@@ -59,7 +63,7 @@ function normalize(strArray: string[]) {
   return str;
 }
 
-export default function urlJoin(...args: string[]) {
+export default function urlJoin(...args: Array<string | undefined>) {
   const parts = Array.from(Array.isArray(args[0]) ? args[0] : args);
   return normalize(parts);
 }

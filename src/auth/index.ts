@@ -6,6 +6,7 @@ import { uuid } from 'uuidv4';
 import { COOKIE_CODE_VERIFIER, COOKIE_REFRESH_TOKEN, TOKEN_COOKIE_NAME } from '../config/consts';
 import createGqlClient from '../network/createGqlClient';
 import { AuthConfig, CredentialsStorage, RiseactAuth } from '../types';
+import urlJoin from '../utils/urlJoin';
 import { getAuthorizationData, getOAuthClient } from './oauth';
 
 const ORGANIZATION_QUERY = gql`
@@ -20,7 +21,7 @@ const ORGANIZATION_QUERY = gql`
 export async function initAuth(config: AuthConfig, storage: CredentialsStorage): Promise<RiseactAuth> {
   const client = await getOAuthClient(config);
 
-  const oauthInstallHandler: RequestHandler = async (_req: Request, res: Response) => {
+  const oauthAuthorizeHandler: RequestHandler = async (_req: Request, res: Response) => {
     const authorization = getAuthorizationData(client);
 
     res.cookie(COOKIE_CODE_VERIFIER, authorization.codeVerifier, {
@@ -38,7 +39,7 @@ export async function initAuth(config: AuthConfig, storage: CredentialsStorage):
 
     const params = client.callbackParams(req);
 
-    const tokenSet = await client.callback(config.redirectUri, params, {
+    const tokenSet = await client.callback(config.redirectUri || urlJoin(req.headers.origin, '/oauth/callback'), params, {
       code_verifier: req.cookies?.[COOKIE_CODE_VERIFIER],
     });
     res.clearCookie(COOKIE_CODE_VERIFIER);
@@ -88,7 +89,7 @@ export async function initAuth(config: AuthConfig, storage: CredentialsStorage):
     });
 
     if (req.path === '/oauth/authorize') {
-      return oauthInstallHandler(req, res, next);
+      return oauthAuthorizeHandler(req, res, next);
     }
 
     if (req.path === '/oauth/callback') {
@@ -112,7 +113,7 @@ export async function initAuth(config: AuthConfig, storage: CredentialsStorage):
 
   return {
     authMiddleware,
-    oauthInstallHandler,
+    oauthInstallHandler: oauthAuthorizeHandler,
     oauthCallbackHandler,
   };
 }
