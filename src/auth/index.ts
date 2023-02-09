@@ -5,7 +5,7 @@ import { uuid } from 'uuidv4';
 
 import { COOKIE_CODE_VERIFIER, COOKIE_REFRESH_TOKEN, TOKEN_COOKIE_NAME } from '../config/consts';
 import createGqlClient from '../network/createGqlClient';
-import { AuthConfig, RiseactAuth, TokenStorage } from '../types';
+import { AuthConfig, CredentialsStorage, RiseactAuth } from '../types';
 import { getAuthorizationData, getOAuthClient } from './oauth';
 
 const ORGANIZATION_QUERY = gql`
@@ -17,7 +17,10 @@ const ORGANIZATION_QUERY = gql`
   }
 `;
 
-export async function initAuth(config: AuthConfig, storage: TokenStorage): Promise<RiseactAuth> {
+export async function initAuth(
+  config: AuthConfig,
+  storage: CredentialsStorage,
+): Promise<RiseactAuth> {
   const client = await getOAuthClient(config);
 
   const oauthInstallHandler: RequestHandler = async (_req: Request, res: Response) => {

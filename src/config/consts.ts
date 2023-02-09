@@ -6,3 +6,4 @@ export const COOKIE_CODE_VERIFIER = 'X-Riseact-Code-Verifier';
 export const COOKIE_REFRESH_TOKEN = 'X-Riseact-Refresh-Token';
 export const DEF_SQLITE_PATH = 'credentials.db';
 export const TOKEN_COOKIE_NAME = 'client-token';
+export const DEF_APP_HOST = 'http://localhost:3000';

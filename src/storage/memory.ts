@@ -1,8 +1,8 @@
-import { OAuthCredentials, TokenStorage } from '../types';
+import { CredentialsStorage, OAuthCredentials } from '../types';
 
 const MemoryStorage: { [key: string]: any } = {};
 
-export const MemoryDriver = (): TokenStorage => {
+export const MemoryDriver = (): CredentialsStorage => {
   const saveCredentials = async (credentials: OAuthCredentials) => {
     if (MemoryStorage[credentials.organizationId]) {
       MemoryStorage[credentials.organizationId].clientTokens.push(credentials.clientToken);

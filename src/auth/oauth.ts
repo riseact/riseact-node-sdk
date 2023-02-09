@@ -23,8 +23,6 @@ export async function getOAuthClient(config: AuthConfig): Promise<BaseClient> {
     client_secret: config.clientSecret,
     redirect_uris: [config.redirectUri],
     response_types: ['code'],
-    // id_token_signed_response_alg (default "RS256")
-    // token_endpoint_auth_method (default "client_secret_basic")
   });
 
   return client;

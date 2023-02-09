@@ -1,16 +1,15 @@
 import RiseactSDK from './RiseactSDK';
 import {
   AuthConfig,
+  CredentialsStorage,
   NetworkConfig,
   OAuthCredentials,
   RiseactAuth,
   RiseactConfig,
   RiseactInstance,
   RiseactNetwork,
-  SqliteInstance,
   SqliteOptions,
   StorageConfig,
-  TokenStorage,
 } from './types';
 
 export {
@@ -18,8 +17,7 @@ export {
   OAuthCredentials,
   StorageConfig,
   SqliteOptions,
-  SqliteInstance,
-  TokenStorage,
+  CredentialsStorage,
   NetworkConfig,
   RiseactNetwork,
   RiseactConfig,

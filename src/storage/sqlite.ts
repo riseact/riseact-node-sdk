@@ -1,13 +1,7 @@
 import sqliteDriver from 'better-sqlite3';
 
 import { DEF_SQLITE_PATH } from '../config/consts';
-import {
-  OAuthCredentials,
-  SqliteInstance,
-  SqliteOptions,
-  StorageConfig,
-  TokenStorage,
-} from '../types';
+import { CredentialsStorage, OAuthCredentials, SqliteOptions, StorageConfig } from '../types';
 
 const initDB = (db: sqliteDriver.Database) => {
   db.prepare(
@@ -27,12 +21,12 @@ const initDB = (db: sqliteDriver.Database) => {
   db.pragma('journal_mode = WAL');
 };
 
-const openDB = (path = DEF_SQLITE_PATH, options?: SqliteOptions): SqliteInstance => {
+const openDB = (path = DEF_SQLITE_PATH, options?: SqliteOptions) => {
   const db = sqliteDriver(path, options);
   return Object.assign(db, { init: () => initDB(db) });
 };
 
-export const SqliteDriver = (config?: StorageConfig): TokenStorage => {
+export const SqliteDriver = (config?: StorageConfig): CredentialsStorage => {
   const db = openDB(config?.sqlite?.path, config?.sqlite?.options);
   initDB(db);
 

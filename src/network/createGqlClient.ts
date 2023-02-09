@@ -2,12 +2,13 @@ import { ApolloClient, ApolloClientOptions, HttpLink, InMemoryCache } from '@apo
 import fetch from 'cross-fetch';
 
 import { DEF_RISEACT_CORE_URL } from '../config/consts';
+import { OAuthCredentials } from '../types';
 import urlJoin from '../utils/urlJoin';
 
 interface GqlClientOptions {
   accessToken: string;
-  refreshToken?: string;
   options?: ApolloClientOptions<unknown>;
+  refreshToken?: string;
 }
 
 const createGqlClient = ({ accessToken, refreshToken, options }: GqlClientOptions) => {
@@ -30,7 +31,19 @@ const createGqlClient = ({ accessToken, refreshToken, options }: GqlClientOption
         return response;
       })
       .catch((error: any) => {
-        // todo refresh token if expired
+        // todo refresh token
+        // if (error.status === 401 && refreshToken) {
+        //   const res = fetch(urlJoin(DEF_RISEACT_CORE_URL, '/auth/refresh/'), {
+        //     method: 'POST',
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({
+        //       refresh: refreshToken,
+        //     }),
+        //   });
+        //   return res;
+        // }
       });
   };
 
