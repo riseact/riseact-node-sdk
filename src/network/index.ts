@@ -4,6 +4,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import { DEF_RISEACT_CORE_URL, TOKEN_COOKIE_NAME } from '../config/consts';
 import { CredentialsStorage, NetworkConfig, RiseactNetwork } from '../types';
+import urlJoin from '../utils/urlJoin';
 
 const initNetwork = async (config: NetworkConfig = {}, storage: CredentialsStorage): Promise<RiseactNetwork> => {
   const proxy = createProxyMiddleware({
@@ -30,6 +31,8 @@ const initNetwork = async (config: NetworkConfig = {}, storage: CredentialsStora
     if (config.gqlRewriterMiddleware) {
       config.gqlRewriterMiddleware(req, res, () => undefined);
     }
+
+    req.originalUrl = urlJoin(DEF_RISEACT_CORE_URL, '/graphql/');
 
     proxy(req, res, next);
   };
