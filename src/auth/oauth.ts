@@ -10,9 +10,7 @@ interface AuthorizationData {
 }
 
 export async function getOAuthClient(config: AuthConfig): Promise<BaseClient> {
-  const riseactIssuer = await Issuer.discover(
-    urlJoin(DEF_RISEACT_ACCOUNTS_URL, '/oauth/.well-known/openid-configuration/'),
-  );
+  const riseactIssuer = await Issuer.discover(urlJoin(DEF_RISEACT_ACCOUNTS_URL, '/oauth/.well-known/openid-configuration/'));
 
   if (!config.clientId || !config.clientSecret || !config.redirectUri) {
     throw Error('Oauth client not valid. Check OAuth credentials');

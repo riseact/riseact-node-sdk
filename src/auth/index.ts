@@ -17,10 +17,7 @@ const ORGANIZATION_QUERY = gql`
   }
 `;
 
-export async function initAuth(
-  config: AuthConfig,
-  storage: CredentialsStorage,
-): Promise<RiseactAuth> {
+export async function initAuth(config: AuthConfig, storage: CredentialsStorage): Promise<RiseactAuth> {
   const client = await getOAuthClient(config);
 
   const oauthInstallHandler: RequestHandler = async (_req: Request, res: Response) => {
@@ -85,11 +82,7 @@ export async function initAuth(
     res.redirect('/');
   };
 
-  const authMiddleware: RequestHandler = async (
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ) => {
+  const authMiddleware: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
     await new Promise((resolve) => {
       cookieParser()(req, res, resolve);
     });

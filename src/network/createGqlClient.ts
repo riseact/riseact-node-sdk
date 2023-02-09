@@ -2,7 +2,6 @@ import { ApolloClient, ApolloClientOptions, HttpLink, InMemoryCache } from '@apo
 import fetch from 'cross-fetch';
 
 import { DEF_RISEACT_CORE_URL } from '../config/consts';
-import { OAuthCredentials } from '../types';
 import urlJoin from '../utils/urlJoin';
 
 interface GqlClientOptions {

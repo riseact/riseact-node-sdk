@@ -5,10 +5,7 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 import { DEF_RISEACT_CORE_URL, TOKEN_COOKIE_NAME } from '../config/consts';
 import { CredentialsStorage, NetworkConfig, RiseactNetwork } from '../types';
 
-const initNetwork = async (
-  config: NetworkConfig = {},
-  storage: CredentialsStorage,
-): Promise<RiseactNetwork> => {
+const initNetwork = async (config: NetworkConfig = {}, storage: CredentialsStorage): Promise<RiseactNetwork> => {
   const proxy = createProxyMiddleware({
     target: DEF_RISEACT_CORE_URL,
     changeOrigin: true,

@@ -5,7 +5,7 @@ module.exports = {
     endOfLine: "lf",
     trailingComma: 'all',
     singleQuote: true,
-    printWidth: 100,
+    printWidth: 150,
     tabWidth: 2,
     useTabs: false,
     importOrder: ["<THIRD_PARTY_MODULES>", "^[./]", "^[../]"],
