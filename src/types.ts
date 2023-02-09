@@ -1,5 +1,8 @@
 import { Options } from 'better-sqlite3';
 import { RequestHandler } from 'express';
+import { IncomingMessage } from 'http';
+import internal from 'stream';
+import { Connect } from 'vite';
 
 /** Base configuration to connect your app to Riseact.
  *
@@ -15,6 +18,8 @@ export interface RiseactConfig {
   storage?: StorageConfig;
   /** Network configuration for the app */
   network?: NetworkConfig;
+  /** Dev tools configuration for the app */
+  dev?: DevConfig;
 
   /** Disable the DNS order override (required for node >= 15 to enable subdomains) Default: false */
   disableDnsOrderOverride?: boolean;
@@ -24,6 +29,7 @@ export interface RiseactInstance {
   auth: RiseactAuth;
   storage: CredentialsStorage;
   network: RiseactNetwork;
+  tools: RiseactDevTools;
 }
 
 export interface RiseactAuth {
@@ -108,4 +114,21 @@ export interface RiseactNetwork {
    * See {@link https://help.riseact.org/en/manuale/applications/ docs} to learn how to use it
    */
   gqlRewriterHandler: RequestHandler;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 Development                                */
+/* -------------------------------------------------------------------------- */
+
+/** Configuration to use when developing your app */
+export interface DevConfig {
+  /** The port where your app is served. Default: 3000 */
+  devPort: number;
+}
+
+export type ServerEventListener = (req: IncomingMessage, socket: internal.Duplex, head: Buffer) => void;
+
+export interface RiseactDevTools {
+  devMiddleware: Connect.Server;
+  hmrProxyHandler: ServerEventListener;
 }
