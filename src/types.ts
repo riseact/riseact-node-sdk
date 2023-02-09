@@ -2,16 +2,13 @@ import { Options } from 'better-sqlite3';
 import { RequestHandler } from 'express';
 import { IncomingMessage } from 'http';
 import internal from 'stream';
-import { Connect } from 'vite';
+import { Connect, InlineConfig } from 'vite';
 
 /** Base configuration to connect your app to Riseact.
  *
  * See {@link https://help.riseact.org/en/manuale/applications/ docs} to get started with Riseact Apps
  */
 export interface RiseactConfig {
-  /** The host where your app is served. Default: 'http://localhost:3000' */
-  appHost?: string;
-
   /** Authentication configuration for the app */
   auth: AuthConfig;
   /** Storage configuration for the app */
@@ -123,7 +120,10 @@ export interface RiseactNetwork {
 /** Configuration to use when developing your app */
 export interface DevConfig {
   /** The port where your app is served. Default: 3000 */
-  devPort: number;
+  devPort?: number;
+  
+  /** Override the default Vite configuration */
+  viteConfig?: InlineConfig
 }
 
 export type ServerEventListener = (req: IncomingMessage, socket: internal.Duplex, head: Buffer) => void;

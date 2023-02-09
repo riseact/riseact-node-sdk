@@ -18,10 +18,12 @@ const ORGANIZATION_QUERY = gql`
   }
 `;
 
-export async function initAuth(config: AuthConfig, storage: CredentialsStorage): Promise<RiseactAuth> {
-  const client = await getOAuthClient(config);
-
-  const oauthAuthorizeHandler: RequestHandler = async (_req: Request, res: Response) => {
+export function initAuth(config: AuthConfig, storage: CredentialsStorage): RiseactAuth {
+  const oauthAuthorizeHandler: RequestHandler = async (req: Request, res: Response) => {
+    if (!config.redirectUri) {
+      config.redirectUri = urlJoin(`${req.protocol}://`, req.headers.host, '/oauth/callback');
+    }
+    const client = await getOAuthClient(config);
     const authorization = getAuthorizationData(client);
 
     res.cookie(COOKIE_CODE_VERIFIER, authorization.codeVerifier, {
@@ -37,9 +39,15 @@ export async function initAuth(config: AuthConfig, storage: CredentialsStorage):
       return res.sendStatus(401);
     }
 
+    if (!config.redirectUri) {
+      config.redirectUri = urlJoin(`${req.protocol}://`, req.headers.host, '/oauth/callback');
+    }
+    console.log('config.redirectUri', config.redirectUri);
+    const client = await getOAuthClient(config);
+
     const params = client.callbackParams(req);
 
-    const tokenSet = await client.callback(config.redirectUri || urlJoin(req.headers.origin, '/oauth/callback'), params, {
+    const tokenSet = await client.callback(config.redirectUri, params, {
       code_verifier: req.cookies?.[COOKIE_CODE_VERIFIER],
     });
     res.clearCookie(COOKIE_CODE_VERIFIER);

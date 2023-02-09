@@ -13,7 +13,7 @@ export async function getOAuthClient(config: AuthConfig): Promise<BaseClient> {
   const riseactIssuer = await Issuer.discover(urlJoin(DEF_RISEACT_ACCOUNTS_URL, '/oauth/.well-known/openid-configuration/'));
 
   if (!config.clientId || !config.clientSecret || !config.redirectUri) {
-    throw Error('Oauth client not valid. Check OAuth credentials');
+    throw Error('OAuth client not valid. Check OAuth credentials');
   }
 
   const client = new riseactIssuer.Client({
