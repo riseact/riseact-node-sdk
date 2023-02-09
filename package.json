@@ -1,5 +1,5 @@
 {
-  "name": "riseact-node-sdk",
+  "name": "@riseact/riseact-node-sdk",
   "version": "1.0.0",
   "description": "Riseact SDK for Nodejs",
   "main": "lib/cjs/index.js",
