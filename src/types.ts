@@ -24,7 +24,7 @@ export interface RiseactConfig {
 
 export interface RiseactInstance {
   auth: RiseactAuth;
-  storage: CredentialsStorage;
+  storage: StorageDriver;
   network: RiseactNetwork;
   tools: RiseactDevTools;
 }
@@ -54,6 +54,12 @@ export interface AuthConfig {
 
   /** The OAuth callback url. Change it if you use a custom implementation instead of {@link RiseactAuth.authMiddleware} */
   redirectUri?: string;
+
+  /** Callback to run after a successful installation of the app */
+  onInstall?: (organizationId: number, clientToken: string) => Promise<void>;
+
+  /** Callback to run after a successful login of the user */
+  onLogin?: (organizationId: number, clientToken: string) => Promise<void>;
 }
 
 /** Credentials returned by Riseact after a successful OAuth flow */
@@ -87,12 +93,13 @@ export interface StorageConfig {
   };
 
   /** Custom storage driver */
-  custom?: CredentialsStorage;
+  custom?: StorageDriver;
 }
 
 /** Interface to implement to use a custom storage driver */
-export interface CredentialsStorage {
-  getCredentials: (token: string) => Promise<OAuthCredentials | null>;
+export interface StorageDriver {
+  getCredentialsByClientToken: (token: string) => Promise<OAuthCredentials | null>;
+  getCredentialsByOrganizationId: (organizationId: number) => Promise<OAuthCredentials | null>;
   saveCredentials: (credentials: OAuthCredentials) => Promise<void>;
 }
 
@@ -121,9 +128,9 @@ export interface RiseactNetwork {
 export interface DevConfig {
   /** The port where your app is served. Default: 3000 */
   devPort?: number;
-  
+
   /** Override the default Vite configuration */
-  viteConfig?: InlineConfig
+  viteConfig?: InlineConfig;
 }
 
 export type ServerEventListener = (req: IncomingMessage, socket: internal.Duplex, head: Buffer) => void;

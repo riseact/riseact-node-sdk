@@ -3,10 +3,10 @@ import { RequestHandler } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
 import { DEF_RISEACT_CORE_URL, TOKEN_COOKIE_NAME } from '../config/consts';
-import { CredentialsStorage, NetworkConfig, RiseactNetwork } from '../types';
+import { NetworkConfig, RiseactNetwork, StorageDriver } from '../types';
 import urlJoin from '../utils/urlJoin';
 
-const initNetwork = async (config: NetworkConfig = {}, storage: CredentialsStorage): Promise<RiseactNetwork> => {
+const initNetwork = async (config: NetworkConfig = {}, storage: StorageDriver): Promise<RiseactNetwork> => {
   const proxy = createProxyMiddleware({
     target: DEF_RISEACT_CORE_URL,
     changeOrigin: true,
@@ -21,7 +21,7 @@ const initNetwork = async (config: NetworkConfig = {}, storage: CredentialsStora
       return res.sendStatus(401);
     }
 
-    const credentials = await storage.getCredentials(token);
+    const credentials = await storage.getCredentialsByClientToken(token);
     if (!credentials) {
       return res.sendStatus(401);
     }
