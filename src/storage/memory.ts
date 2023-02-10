@@ -1,33 +1,60 @@
-import { CredentialsStorage, OAuthCredentials } from '../types';
+import { OAuthCredentials, StorageDriver } from '../types';
 
-const MemoryStorage: { [key: string]: any } = {};
+const MemoryStorage: {
+  [key: number]: {
+    accessToken: string;
+    refreshToken: string;
+    clientToken: string;
+  };
+} = {};
 
-export const MemoryDriver = (): CredentialsStorage => {
+export const MemoryDriver = (): StorageDriver => {
   const saveCredentials = async (credentials: OAuthCredentials) => {
-    if (MemoryStorage[credentials.organizationId]) {
-      MemoryStorage[credentials.organizationId].clientTokens.push(credentials.clientToken);
-    } else {
-      MemoryStorage[credentials.organizationId] = {
-        accessToken: credentials.accessToken,
-        refreshToken: credentials.refreshToken,
-        clientTokens: [credentials.clientToken],
-      };
-    }
+    const { accessToken, refreshToken, organizationId, clientToken } = credentials;
+
+    MemoryStorage[organizationId] = {
+      accessToken,
+      refreshToken,
+      clientToken,
+    };
   };
 
-  const getCredentials = async (token: string) => {
-    const credentials = Object.values(MemoryStorage).find((credentials: any) => {
-      return credentials.clientTokens.includes(token);
-    });
+  const getCredentialsByClientToken = async (token: string): Promise<OAuthCredentials | null> => {
+    let credentials;
 
-    if (!credentials) {
+    for (const organizationId in MemoryStorage) {
+      const organization = MemoryStorage[organizationId];
+      if (organization.clientToken === token) {
+        credentials = {
+          accessToken: organization.accessToken,
+          refreshToken: organization.refreshToken,
+          organizationId: Number(organizationId),
+          clientToken: organization.clientToken,
+        };
+        break;
+      }
+    }
+    return credentials || null;
+  };
+
+  const getCredentialsByOrganizationId = async (organizationId: number): Promise<OAuthCredentials | null> => {
+    const organization = MemoryStorage[organizationId];
+
+    if (!organization) {
       return null;
     }
-    return credentials;
+
+    return {
+      accessToken: organization.accessToken,
+      refreshToken: organization.refreshToken,
+      organizationId,
+      clientToken: organization.clientToken,
+    };
   };
 
   return {
     saveCredentials,
-    getCredentials,
+    getCredentialsByClientToken,
+    getCredentialsByOrganizationId,
   };
 };

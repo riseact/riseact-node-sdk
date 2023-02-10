@@ -1,11 +1,11 @@
 import { ApolloQueryResult, gql } from '@apollo/client/core';
 import cookieParser from 'cookie-parser';
 import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { uuid } from 'uuidv4';
+import { v4 } from 'uuid';
 
 import { COOKIE_CODE_VERIFIER, COOKIE_REFRESH_TOKEN, TOKEN_COOKIE_NAME } from '../config/consts';
 import createGqlClient from '../network/createGqlClient';
-import { AuthConfig, CredentialsStorage, RiseactAuth } from '../types';
+import { AuthConfig, RiseactAuth, StorageDriver } from '../types';
 import urlJoin from '../utils/urlJoin';
 import { getAuthorizationData, getOAuthClient } from './oauth';
 
@@ -13,12 +13,11 @@ const ORGANIZATION_QUERY = gql`
   query Organization {
     organization {
       id
-      name
     }
   }
 `;
 
-export function initAuth(config: AuthConfig, storage: CredentialsStorage): RiseactAuth {
+export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAuth {
   const oauthAuthorizeHandler: RequestHandler = async (req: Request, res: Response) => {
     if (!config.redirectUri) {
       config.redirectUri = urlJoin(`${req.protocol}://`, req.headers.host, '/oauth/callback');
@@ -70,23 +69,37 @@ export function initAuth(config: AuthConfig, storage: CredentialsStorage): Risea
     }
 
     const organizationId = orgRes.data.organization.id;
-    const clientToken = uuid();
 
-    res.cookie(TOKEN_COOKIE_NAME, clientToken);
-
-    if (!refreshToken || !accessToken || !clientToken || !organizationId) {
+    if (!organizationId) {
       return res.sendStatus(500);
     }
 
-    storage.saveCredentials({
-      refreshToken,
-      accessToken,
-      organizationId,
-      clientToken,
+    const org = await storage.getCredentialsByOrganizationId(organizationId);
+    const clientToken = org?.clientToken || v4();
+
+    if (!org) {
+      storage.saveCredentials({
+        refreshToken,
+        accessToken,
+        organizationId,
+        clientToken,
+      });
+
+      if (config.onInstall) {
+        config.onInstall(organizationId, clientToken);
+      }
+    } else {
+      if (config.onLogin) {
+        config.onLogin(organizationId, clientToken);
+      }
+    }
+
+    res.cookie(TOKEN_COOKIE_NAME, clientToken, {
+      sameSite: true,
+      secure: true,
     });
 
     res.clearCookie(COOKIE_REFRESH_TOKEN);
-
     res.redirect('/');
   };
 
@@ -109,11 +122,16 @@ export function initAuth(config: AuthConfig, storage: CredentialsStorage): Risea
       return res.redirect('/oauth/authorize');
     }
 
-    const credentials = await storage.getCredentials(token);
+    const credentials = await storage.getCredentialsByClientToken(token);
 
     if (!credentials) {
       return res.redirect('/oauth/authorize');
     }
+
+    req.user = {
+      organizationId: credentials.organizationId,
+      clientToken: credentials.clientToken,
+    };
 
     next();
   };
