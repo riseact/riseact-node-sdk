@@ -42,7 +42,6 @@ export function initAuth(config: AuthConfig, storage: CredentialsStorage): Risea
     if (!config.redirectUri) {
       config.redirectUri = urlJoin(`${req.protocol}://`, req.headers.host, '/oauth/callback');
     }
-    console.log('config.redirectUri', config.redirectUri);
     const client = await getOAuthClient(config);
 
     const params = client.callbackParams(req);
