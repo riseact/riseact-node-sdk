@@ -17,7 +17,6 @@
     "build": "rm -rf ./lib/* && concurrently \"npm run build:cjs \" \"npm run build:esm \"",
     "build:cjs": "rm -rf ./lib/cjs && tsc -p . --outDir ./lib/cjs --module commonjs --target es5",
     "build:esm": "rm -rf ./lib/esm && tsc -p . --outDir ./lib/esm --module esnext --target esnext",
-    "publish": "yarn build && npm publish --access public",
     "lint": "eslint --ext .ts,.tsx .",
     "lint:fix": "eslint --ext .ts,.tsx . --fix",
     "tsc": "tsc",
