@@ -1,6 +1,6 @@
 {
   "name": "@riseact/riseact-node-sdk",
-  "version": "1.1.0",
+  "version": "1.2.1",
   "description": "Riseact SDK for Nodejs",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -14,9 +14,10 @@
   "author": "Riseact",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf ./lib/* && concurrently \"npm run build:cjs \" \"npm run build:esm \"",
+    "build": "rm -rf ./lib/* && concurrently \"npm run build:cjs \" \"npm run build:esm \" && npm run build:type-extension",
     "build:cjs": "rm -rf ./lib/cjs && tsc -p . --outDir ./lib/cjs --module commonjs --target es5",
     "build:esm": "rm -rf ./lib/esm && tsc -p . --outDir ./lib/esm --module esnext --target esnext",
+    "build:type-extension": "cp ./TypeExtensions.d.ts ./lib/TypeExtensions.d.ts",
     "lint": "eslint --ext .ts,.tsx .",
     "lint:fix": "eslint --ext .ts,.tsx . --fix",
     "tsc": "tsc",
