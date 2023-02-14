@@ -1,4 +1,4 @@
-import { ApolloClientOptions } from '@apollo/client';
+import { ApolloClientOptions } from '@apollo/client/core';
 import cookieParser from 'cookie-parser';
 import { RequestHandler } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';

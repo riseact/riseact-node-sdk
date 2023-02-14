@@ -1,4 +1,4 @@
-import { ApolloClient, ApolloClientOptions } from '@apollo/client';
+import { ApolloClient, ApolloClientOptions } from '@apollo/client/core';
 import { Options } from 'better-sqlite3';
 import { RequestHandler } from 'express';
 import { IncomingMessage } from 'http';
