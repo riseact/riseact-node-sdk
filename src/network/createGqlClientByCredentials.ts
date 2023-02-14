@@ -10,7 +10,7 @@ interface GqlClientOptions {
   refreshToken?: string;
 }
 
-const createGqlClient = ({ accessToken, refreshToken, options }: GqlClientOptions) => {
+const createGqlClientByCredentials = ({ accessToken, refreshToken, options }: GqlClientOptions) => {
   if (!accessToken) throw new Error('You must provide at last one of credentials or clientToken');
 
   if (typeof window !== 'undefined') {
@@ -60,4 +60,4 @@ const createGqlClient = ({ accessToken, refreshToken, options }: GqlClientOption
   });
 };
 
-export default createGqlClient;
+export default createGqlClientByCredentials;

@@ -1,6 +1,7 @@
+import path from 'path';
 import { createServer } from 'vite';
 
-import { DEF_APP_PORT, DEF_HMR_PORT } from '../config/consts';
+import { DEF_APP_PORT, DEF_FRONTEND_SRC_PATH, DEF_HMR_PORT } from '../config/consts';
 import { DevConfig } from '../types';
 
 const initVite = async (config?: DevConfig) => {
@@ -12,8 +13,8 @@ const initVite = async (config?: DevConfig) => {
         port: config?.devPort || DEF_HMR_PORT,
       },
     },
-    root: `${process.cwd()}/src/frontend`,
-    configFile: `${process.cwd()}/src/frontend/vite.config.ts`,
+    root: path.join(process.cwd(), DEF_FRONTEND_SRC_PATH),
+    configFile: path.join(process.cwd(), DEF_FRONTEND_SRC_PATH, 'vite.config.ts'),
     ...config?.viteConfig,
   });
 

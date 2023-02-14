@@ -8,3 +8,4 @@ export const DEF_APP_PORT = 3000;
 export const DEF_APP_HOST = `http://localhost:${DEF_APP_PORT}`;
 export const DEF_HMR_PORT = 3030;
 export const DEF_HMR_HOST = `http://localhost:${DEF_HMR_PORT}`;
+export const DEF_FRONTEND_SRC_PATH = 'src/frontend';

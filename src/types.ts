@@ -1,3 +1,4 @@
+import { ApolloClient, ApolloClientOptions } from '@apollo/client';
 import { Options } from 'better-sqlite3';
 import { RequestHandler } from 'express';
 import { IncomingMessage } from 'http';
@@ -118,6 +119,9 @@ export interface RiseactNetwork {
    * See {@link https://help.riseact.org/en/manuale/applications/ docs} to learn how to use it
    */
   gqlRewriterHandler: RequestHandler;
+
+  /** The Apollo client to use to make GraphQL requests to Riseact from your backend. */
+  createGqlClient: (organizationId: number, options?: ApolloClientOptions<unknown>) => Promise<ApolloClient<unknown>>
 }
 
 /* -------------------------------------------------------------------------- */

@@ -4,7 +4,7 @@ import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { v4 } from 'uuid';
 
 import { COOKIE_CODE_VERIFIER, COOKIE_REFRESH_TOKEN, TOKEN_COOKIE_NAME } from '../config/consts';
-import createGqlClient from '../network/createGqlClient';
+import createGqlClientByCredentials from '../network/createGqlClientByCredentials';
 import { AuthConfig, RiseactAuth, StorageDriver } from '../types';
 import urlJoin from '../utils/urlJoin';
 import { getAuthorizationData, getOAuthClient } from './oauth';
@@ -57,7 +57,7 @@ export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAut
       return res.sendStatus(500);
     }
 
-    const gqlClient = createGqlClient({ accessToken });
+    const gqlClient = createGqlClientByCredentials({ accessToken });
 
     let orgRes: ApolloQueryResult<{ organization: { id: number } }>;
     try {
