@@ -1,14 +1,14 @@
 import { StorageConfig } from '../types';
-import { MemoryDriver } from './memory';
-import { SqliteDriver } from './sqlite';
+import { MemoryStorage } from './memory';
+import { SqliteStorage } from './sqlite';
 
 const initStorage = (config?: StorageConfig) => {
   switch (config?.type || 'memory') {
     case 'sqlite':
-      return SqliteDriver(config);
+      return SqliteStorage(config);
 
     case 'memory':
-      return MemoryDriver();
+      return MemoryStorage();
 
     case 'custom':
       if (!config?.custom) throw new Error('Custom storage driver is not provided');

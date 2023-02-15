@@ -20,7 +20,7 @@ const openDB = (path = DEF_SQLITE_PATH, options?: SqliteOptions) => {
   return Object.assign(db, { init: () => initDB(db) });
 };
 
-export const SqliteDriver = (config?: StorageConfig): StorageDriver => {
+export const SqliteStorage = (config?: StorageConfig): StorageDriver => {
   const db = openDB(config?.sqlite?.path, config?.sqlite?.options);
   initDB(db);
 

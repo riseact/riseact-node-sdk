@@ -1,6 +1,6 @@
 import { OAuthCredentials, StorageDriver } from '../types';
 
-const MemoryStorage: {
+const MemoryStorageObj: {
   [key: number]: {
     accessToken: string;
     refreshToken: string;
@@ -8,11 +8,11 @@ const MemoryStorage: {
   };
 } = {};
 
-export const MemoryDriver = (): StorageDriver => {
+export const MemoryStorage = (): StorageDriver => {
   const saveCredentials = async (credentials: OAuthCredentials) => {
     const { accessToken, refreshToken, organizationId, clientToken } = credentials;
 
-    MemoryStorage[organizationId] = {
+    MemoryStorageObj[organizationId] = {
       accessToken,
       refreshToken,
       clientToken,
@@ -22,8 +22,8 @@ export const MemoryDriver = (): StorageDriver => {
   const getCredentialsByClientToken = async (token: string): Promise<OAuthCredentials | null> => {
     let credentials;
 
-    for (const organizationId in MemoryStorage) {
-      const organization = MemoryStorage[organizationId];
+    for (const organizationId in MemoryStorageObj) {
+      const organization = MemoryStorageObj[organizationId];
       if (organization.clientToken === token) {
         credentials = {
           accessToken: organization.accessToken,
@@ -38,7 +38,7 @@ export const MemoryDriver = (): StorageDriver => {
   };
 
   const getCredentialsByOrganizationId = async (organizationId: number): Promise<OAuthCredentials | null> => {
-    const organization = MemoryStorage[organizationId];
+    const organization = MemoryStorageObj[organizationId];
 
     if (!organization) {
       return null;
