@@ -96,8 +96,6 @@ export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAut
     res.clearCookie(COOKIE_REFRESH_TOKEN);
     res.clearCookie(COOKIE_CODE_VERIFIER);
 
-    console.log('clientToken', clientToken);
-
     res.cookie(TOKEN_COOKIE_NAME, clientToken, {
       path: '/',
       // todo check if this is needed in production
