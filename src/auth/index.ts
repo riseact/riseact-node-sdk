@@ -27,6 +27,7 @@ export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAut
 
     res.cookie(COOKIE_CODE_VERIFIER, authorization.codeVerifier, {
       sameSite: 'none',
+      httpOnly: true,
       secure: true,
     });
 
@@ -96,11 +97,7 @@ export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAut
     res.clearCookie(COOKIE_REFRESH_TOKEN);
     res.clearCookie(COOKIE_CODE_VERIFIER);
 
-    res.cookie(TOKEN_COOKIE_NAME, clientToken, {
-      path: '/',
-      // todo check if this is needed in production
-      ...(process.env.NODE_ENV !== 'development' && { secure: true, sameSite: true }),
-    });
+    res.cookie(TOKEN_COOKIE_NAME, clientToken, { path: '/', secure: true, sameSite: 'none', httpOnly: true });
 
     res.redirect('/');
   };
