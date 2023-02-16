@@ -6,9 +6,9 @@ import { createProxyMiddleware } from 'http-proxy-middleware';
 import { DEF_RISEACT_CORE_URL, TOKEN_COOKIE_NAME } from '../config/consts';
 import { NetworkConfig, RiseactNetwork, StorageDriver } from '../types';
 import urlJoin from '../utils/urlJoin';
-import createGqlClientByCredentials from './createGqlClientByCredentials';
+import { createGqlClientUsingOrganizationId } from './createGqlClient';
 
-const initNetwork = async (config: NetworkConfig = {}, storage: StorageDriver): Promise<RiseactNetwork> => {
+const initNetwork = async (config: NetworkConfig = {}, storage: StorageDriver, clientId: string, clientSecret: string): Promise<RiseactNetwork> => {
   const proxy = createProxyMiddleware({
     target: DEF_RISEACT_CORE_URL,
     changeOrigin: true,
@@ -40,17 +40,7 @@ const initNetwork = async (config: NetworkConfig = {}, storage: StorageDriver): 
   };
 
   const createGqlClient = async (organizationId: number, options?: ApolloClientOptions<unknown>) => {
-    const cred = await storage.getCredentialsByOrganizationId(organizationId);
-
-    if (!cred) {
-      throw new Error('No credentials found for organization');
-    }
-
-    return createGqlClientByCredentials({
-      accessToken: cred.accessToken,
-      refreshToken: cred.refreshToken,
-      options,
-    });
+    return createGqlClientUsingOrganizationId({ organizationId, storage, options, clientId, clientSecret });
   };
 
   return {

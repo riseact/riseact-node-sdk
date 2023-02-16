@@ -18,7 +18,7 @@ async function RiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
 
   const storage = initStorage(config.storage);
   const auth = initAuth(config.auth, storage);
-  const network = await initNetwork(config.network, storage);
+  const network = await initNetwork(config.network, storage, config.auth.clientId, config.auth.clientSecret);
   const tools = await initDevTools(config.dev);
 
   return {
