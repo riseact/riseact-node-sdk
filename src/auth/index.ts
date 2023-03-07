@@ -40,8 +40,9 @@ export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAut
     }
 
     if (!config.redirectUri) {
-      config.redirectUri = urlJoin(`${req.protocol}://`, req.headers.host, '/oauth/callback');
+      config.redirectUri = urlJoin(`${req.headers.host?.includes('ngrok') ? 'https' : req.protocol}://`, req.headers.host, '/oauth/callback');
     }
+
     const client = await getOAuthClient(config);
 
     const params = client.callbackParams(req);
@@ -131,6 +132,8 @@ export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAut
       organizationId: credentials.organizationId,
       clientToken: credentials.clientToken,
     };
+
+    req.app.enable('trust proxy');
 
     next();
   };

@@ -1,7 +1,7 @@
 import path from 'path';
 import { createServer } from 'vite';
 
-import { DEF_HMR_CLIENT_PORT, DEF_FRONTEND_SRC_PATH, DEF_HMR_PORT } from '../config/consts';
+import { DEF_FRONTEND_SRC_PATH, DEF_HMR_CLIENT_PORT, DEF_HMR_PORT } from '../config/consts';
 import { DevConfig } from '../types';
 
 const initVite = async (config?: DevConfig) => {
