@@ -1,7 +1,7 @@
 import path from 'path';
 import { createServer } from 'vite';
 
-import { DEF_APP_PORT, DEF_FRONTEND_SRC_PATH, DEF_HMR_PORT } from '../config/consts';
+import { DEF_HMR_CLIENT_PORT, DEF_FRONTEND_SRC_PATH, DEF_HMR_PORT } from '../config/consts';
 import { DevConfig } from '../types';
 
 const initVite = async (config?: DevConfig) => {
@@ -9,7 +9,7 @@ const initVite = async (config?: DevConfig) => {
     server: {
       middlewareMode: true,
       hmr: {
-        clientPort: DEF_APP_PORT,
+        clientPort: DEF_HMR_CLIENT_PORT,
         port: config?.devPort || DEF_HMR_PORT,
       },
     },
