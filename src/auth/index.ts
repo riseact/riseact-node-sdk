@@ -20,7 +20,7 @@ const ORGANIZATION_QUERY = gql`
 export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAuth {
   const oauthAuthorizeHandler: RequestHandler = async (req: Request, res: Response) => {
     if (!config.redirectUri) {
-      config.redirectUri = urlJoin(`${req.protocol}://`, req.headers.host, '/oauth/callback');
+      config.redirectUri = urlJoin(`${req.headers.host?.includes('ngrok') ? 'https' : req.protocol}://`, req.headers.host, '/oauth/callback');
     }
     const client = await getOAuthClient(config);
     const authorization = getAuthorizationData(client);
