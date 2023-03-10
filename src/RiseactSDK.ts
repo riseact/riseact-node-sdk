@@ -1,10 +1,11 @@
 import dns from 'node:dns';
+import { Connect } from 'vite';
 
 import { initAuth } from './auth';
 import initNetwork from './network';
 import initStorage from './storage';
 import initDevTools from './tools';
-import { RiseactConfig, RiseactInstance } from './types';
+import { RiseactConfig, RiseactDevTools, RiseactInstance, ServerEventListener } from './types';
 
 async function RiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
   if (!config.auth.clientId || !config.auth.clientSecret) {
@@ -19,13 +20,19 @@ async function RiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
   const storage = initStorage(config.storage);
   const auth = initAuth(config.auth, storage);
   const network = await initNetwork(config.network, storage, config.auth.clientId, config.auth.clientSecret);
-  const tools = await initDevTools(config.dev);
+
+  let devTools;
+  if (process.env.NODE_ENV === 'production') {
+    console.warn('⚠ Running RiseactSDK in production. DevTools are disabled');
+  } else {
+    devTools = await initDevTools(config.dev);
+  }
 
   return {
     auth,
     storage,
     network,
-    tools,
+    devTools: devTools as RiseactDevTools,
   };
 }
 

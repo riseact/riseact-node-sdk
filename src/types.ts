@@ -27,7 +27,7 @@ export interface RiseactInstance {
   auth: RiseactAuth;
   storage: StorageDriver;
   network: RiseactNetwork;
-  tools: RiseactDevTools;
+  devTools: RiseactDevTools;
 }
 
 export interface RiseactAuth {

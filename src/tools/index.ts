@@ -1,8 +1,8 @@
-import { DevConfig } from '../types';
+import { DevConfig, RiseactDevTools } from '../types';
 import initVite from './devMiddleware';
 import hmrProxyHandler from './hmrProxyHandler';
 
-const initDevTools = async (devConfig?: DevConfig) => {
+const initDevTools = async (devConfig?: DevConfig): Promise<RiseactDevTools> => {
   const vite = await initVite(devConfig);
 
   return {
