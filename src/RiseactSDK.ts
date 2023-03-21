@@ -1,11 +1,10 @@
 import dns from 'node:dns';
-import { Connect } from 'vite';
 
 import { initAuth } from './auth';
 import initNetwork from './network';
 import initStorage from './storage';
 import initDevTools from './tools';
-import { RiseactConfig, RiseactDevTools, RiseactInstance, ServerEventListener } from './types';
+import { RiseactConfig, RiseactDevTools, RiseactInstance } from './types';
 
 async function RiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
   if (!config.auth.clientId || !config.auth.clientSecret) {
