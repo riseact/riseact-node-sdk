@@ -133,6 +133,9 @@ export interface DevConfig {
   /** The port where your app is served. Default: 3000 */
   devPort?: number;
 
+  /** The port where the HMR server is served. Default: 443 (to use ngrok tunnel). Use 3030 to use locally */
+  hmr_client_port?: number;
+
   /** Override the default Vite configuration */
   viteConfig?: InlineConfig;
 }

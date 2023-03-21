@@ -9,7 +9,7 @@ const initVite = async (config?: DevConfig) => {
     server: {
       middlewareMode: true,
       hmr: {
-        clientPort: DEF_HMR_CLIENT_PORT,
+        clientPort: config?.hmr_client_port || DEF_HMR_CLIENT_PORT,
         port: config?.devPort || DEF_HMR_PORT,
       },
     },
