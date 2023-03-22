@@ -54,64 +54,71 @@ export const createGqlClientUsingOrganizationId = async ({
   const credentials = await storage.getCredentialsByOrganizationId(organizationId);
   if (!credentials) throw new Error('No credentials found for organization');
 
-  const authorizedFetch = (url: RequestInfo, init?: RequestInit) => {
-    return fetch(url, {
+  const authorizedFetch = async (url: RequestInfo, init?: RequestInit) => {
+    const res = await fetch(url, {
       ...init,
       headers: {
         ...init?.headers,
         'Access-Control-Allow-Origin': '*',
         Authorization: 'Bearer ' + credentials.accessToken,
       },
-    }).then(async (res) => {
-      const data = await res.clone().json();
-
-      if (data?.errors?.[0]?.message === 'User is not authenticated') {
-        const urlFormDataObj = {
-          grant_type: 'refresh_token',
-          client_id: clientId,
-          client_secret: clientSecret,
-          refresh_token: credentials.refreshToken,
-        };
-
-        const urlFormDataArr = [];
-        for (const property in urlFormDataObj) {
-          const encodedKey = encodeURIComponent(property);
-          const encodedValue = encodeURIComponent(urlFormDataObj[property as keyof typeof urlFormDataObj]);
-          urlFormDataArr.push(encodedKey + '=' + encodedValue);
-        }
-        const formBodyStr = urlFormDataArr.join('&');
-
-        const res = await fetch(urlJoin(DEF_RISEACT_ACCOUNTS_URL, '/oauth/token/'), {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: formBodyStr,
-        });
-        const data = (await res.json()) as { access_token: string; refresh_token: string; expires_in: number };
-        if (!data?.access_token || !data?.refresh_token) {
-          throw new Error('Could not refresh token');
-        }
-
-        await storage.saveCredentials({
-          clientToken: credentials.clientToken,
-          organizationId: organizationId,
-          accessToken: data.access_token,
-          refreshToken: data.refresh_token,
-        });
-
-        return fetch(url, {
-          ...init,
-          headers: {
-            ...init?.headers,
-            'Access-Control-Allow-Origin': '*',
-            Authorization: 'Bearer ' + credentials.accessToken,
-          },
-        });
-      } else {
-        return res;
-      }
     });
+
+    const data = await res.clone().json();
+
+    // If token is expired, try to refresh it
+    if (data?.errors?.[0]?.message === 'User is not authenticated') {
+      // Create url form data object to send to prepare x-www-form-urlencoded body
+      const urlFormDataObj = {
+        grant_type: 'refresh_token',
+        client_id: clientId,
+        client_secret: clientSecret,
+        refresh_token: credentials.refreshToken,
+      };
+
+      const urlFormDataArr = [];
+      for (const property in urlFormDataObj) {
+        const encodedKey = encodeURIComponent(property);
+        const encodedValue = encodeURIComponent(urlFormDataObj[property as keyof typeof urlFormDataObj]);
+        urlFormDataArr.push(encodedKey + '=' + encodedValue);
+      }
+      const formBodyStr = urlFormDataArr.join('&');
+
+      // Call auth server to refresh token
+      const oauthRes = await fetch(urlJoin(DEF_RISEACT_ACCOUNTS_URL, '/oauth/token/'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: formBodyStr,
+      });
+
+      // Check if response is ok
+      const newCredentials = (await oauthRes.json()) as { access_token: string; refresh_token: string; expires_in: number };
+      if (!newCredentials?.access_token || !newCredentials?.refresh_token) {
+        throw new Error('Could not refresh token');
+      }
+
+      // Save new credentials
+      await storage.saveCredentials({
+        clientToken: credentials.clientToken,
+        organizationId: organizationId,
+        accessToken: newCredentials.access_token,
+        refreshToken: newCredentials.refresh_token,
+      });
+
+      // Call original request again with new token
+      return fetch(url, {
+        ...init,
+        headers: {
+          ...init?.headers,
+          'Access-Control-Allow-Origin': '*',
+          Authorization: 'Bearer ' + newCredentials.access_token,
+        },
+      });
+    } else {
+      return res;
+    }
   };
 
   return new ApolloClient({
