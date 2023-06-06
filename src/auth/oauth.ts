@@ -26,7 +26,7 @@ export async function getOAuthClient(config: AuthConfig): Promise<BaseClient> {
   return client;
 }
 
-export function getAuthorizationData(client: BaseClient): AuthorizationData {
+export function getAuthorizationData(client: BaseClient, organization?: string): AuthorizationData {
   const codeVerifier = generators.codeVerifier();
   const codeChallenge = generators.codeChallenge(codeVerifier);
 
@@ -35,6 +35,9 @@ export function getAuthorizationData(client: BaseClient): AuthorizationData {
     url: client.authorizationUrl({
       code_challenge: codeChallenge,
       code_challenge_method: 'S256',
+      ...(organization && {
+        __organization: organization,
+      }),
     }),
   };
 }

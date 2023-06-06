@@ -19,12 +19,15 @@ const ORGANIZATION_QUERY = gql`
 
 export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAuth {
   const oauthAuthorizeHandler: RequestHandler = async (req: Request, res: Response) => {
+    const organization = req.query['__organization'] as string | undefined;
+
     if (!config.redirectUri) {
       config.redirectUri = urlJoin(`${req.headers.host?.includes('ngrok') ? 'https' : req.protocol}://`, req.headers.host, '/oauth/callback');
     }
     const client = await getOAuthClient(config);
-    const authorization = getAuthorizationData(client);
+    const authorization = getAuthorizationData(client, organization);
 
+    console.log('authorization.url', authorization.url);
     res.cookie(COOKIE_CODE_VERIFIER, authorization.codeVerifier, {
       sameSite: 'none',
       httpOnly: true,
@@ -108,24 +111,27 @@ export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAut
       cookieParser()(req, res, resolve);
     });
 
-    if (req.path === '/oauth/authorize') {
+    const organization = req.query['__organization'];
+    const authorizePageUrl = '/oauth/authorize' + (organization ? `?__organization=${organization}` : '');
+
+    if (req.path.match(/^\/oauth\/authorize/)) {
       return oauthAuthorizeHandler(req, res, next);
     }
 
-    if (req.path === '/oauth/callback') {
+    if (req.path.match(/^\/oauth\/callback/)) {
       return oauthCallbackHandler(req, res, next);
     }
 
     const token = req.cookies?.[TOKEN_COOKIE_NAME] || req.headers.authorization?.split(' ')[1];
 
     if (!token) {
-      return res.redirect('/oauth/authorize');
+      return res.redirect(authorizePageUrl);
     }
 
     const credentials = await storage.getCredentialsByClientToken(token);
 
     if (!credentials) {
-      return res.redirect('/oauth/authorize');
+      return res.redirect(authorizePageUrl);
     }
 
     req.user = {
@@ -134,7 +140,6 @@ export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAut
     };
 
     req.app.enable('trust proxy');
-
     next();
   };
 
