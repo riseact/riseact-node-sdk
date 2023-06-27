@@ -5,7 +5,7 @@ import { v4 } from 'uuid';
 
 import { COOKIE_CODE_VERIFIER, COOKIE_REFRESH_TOKEN, TOKEN_COOKIE_NAME } from '../config/consts';
 import { createGqlClientUsingAccessToken } from '../network/createGqlClient';
-import { AuthConfig, RiseactAuth, StorageDriver } from '../types';
+import { AuthConfig, RiseactAuth, RiseactConfig, StorageDriver } from '../types';
 import urlJoin from '../utils/urlJoin';
 import { getAuthorizationData, getOAuthClient } from './oauth';
 
@@ -17,12 +17,12 @@ const ORGANIZATION_QUERY = gql`
   }
 `;
 
-export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAuth {
+export function initAuth(config: RiseactConfig, storage: StorageDriver): RiseactAuth {
   const oauthAuthorizeHandler: RequestHandler = async (req: Request, res: Response) => {
     const organization = req.query['__organization'] as string | undefined;
 
-    if (!config.redirectUri) {
-      config.redirectUri = urlJoin(`${req.headers.host?.includes('ngrok') ? 'https' : req.protocol}://`, req.headers.host, '/oauth/callback');
+    if (!config.auth.redirectUri) {
+      config.auth.redirectUri = urlJoin(`${req.headers.host?.includes('ngrok') ? 'https' : req.protocol}://`, req.headers.host, '/oauth/callback');
     }
     const client = await getOAuthClient(config);
     const authorization = getAuthorizationData(client, organization);
@@ -42,15 +42,15 @@ export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAut
       return res.sendStatus(401);
     }
 
-    if (!config.redirectUri) {
-      config.redirectUri = urlJoin(`${req.headers.host?.includes('ngrok') ? 'https' : req.protocol}://`, req.headers.host, '/oauth/callback');
+    if (!config.auth.redirectUri) {
+      config.auth.redirectUri = urlJoin(`${req.headers.host?.includes('ngrok') ? 'https' : req.protocol}://`, req.headers.host, '/oauth/callback');
     }
 
     const client = await getOAuthClient(config);
 
     const params = client.callbackParams(req);
 
-    const tokenSet = await client.callback(config.redirectUri, params, {
+    const tokenSet = await client.callback(config.auth.redirectUri, params, {
       code_verifier: req.cookies?.[COOKIE_CODE_VERIFIER],
     });
 
@@ -61,7 +61,7 @@ export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAut
       return res.sendStatus(500);
     }
 
-    const gqlClient = createGqlClientUsingAccessToken({ accessToken });
+    const gqlClient = createGqlClientUsingAccessToken({ accessToken, coreHost: config.hosts!.core! });
 
     let orgRes: ApolloQueryResult<{ organization: { id: number } }>;
     try {
@@ -89,12 +89,12 @@ export function initAuth(config: AuthConfig, storage: StorageDriver): RiseactAut
         clientToken,
       });
 
-      if (config.onInstall) {
-        config.onInstall(organizationId, clientToken);
+      if (config.auth.onInstall) {
+        config.auth.onInstall(organizationId, clientToken);
       }
     } else {
-      if (config.onLogin) {
-        config.onLogin(organizationId, clientToken);
+      if (config.auth.onLogin) {
+        config.auth.onLogin(organizationId, clientToken);
       }
     }
 

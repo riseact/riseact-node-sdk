@@ -2,12 +2,19 @@ import { ApolloClient, ApolloClientOptions, InMemoryCache } from '@apollo/client
 import { createUploadLink } from 'apollo-upload-client';
 import fetch from 'cross-fetch';
 
-import { DEF_RISEACT_ACCOUNTS_URL, DEF_RISEACT_CORE_URL } from '../config/consts';
 import { StorageDriver } from '../types';
 import urlJoin from '../utils/urlJoin';
 
 /** Unsafe, cannot refresh token if expired */
-export const createGqlClientUsingAccessToken = ({ accessToken, options }: { accessToken: string; options?: ApolloClientOptions<unknown> }) => {
+export const createGqlClientUsingAccessToken = ({
+  accessToken,
+  apolloOptions,
+  coreHost,
+}: {
+  accessToken: string;
+  apolloOptions?: ApolloClientOptions<unknown>;
+  coreHost: string;
+}) => {
   if (!accessToken) throw new Error('You must provide at last one of credentials or clientToken');
 
   if (typeof window !== 'undefined') {
@@ -28,13 +35,13 @@ export const createGqlClientUsingAccessToken = ({ accessToken, options }: { acce
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: createUploadLink({
-      uri: urlJoin(DEF_RISEACT_CORE_URL, '/graphql/'),
+      uri: urlJoin(coreHost, '/graphql/'),
       credentials: 'include',
       fetch: authorizedFetch,
     }),
 
     cache: new InMemoryCache(),
-    ...options,
+    ...apolloOptions,
   });
 };
 
@@ -44,12 +51,17 @@ export const createGqlClientUsingOrganizationId = async ({
   organizationId,
   clientId,
   clientSecret,
+  hosts,
 }: {
   storage: StorageDriver;
   options?: Partial<ApolloClientOptions<unknown>>;
   organizationId: number;
   clientId: string;
   clientSecret: string;
+  hosts: {
+    accounts: string;
+    core: string;
+  };
 }) => {
   const credentials = await storage.getCredentialsByOrganizationId(organizationId);
   if (!credentials) throw new Error('No credentials found for organization');
@@ -85,7 +97,7 @@ export const createGqlClientUsingOrganizationId = async ({
       const formBodyStr = urlFormDataArr.join('&');
 
       // Call auth server to refresh token
-      const oauthRes = await fetch(urlJoin(DEF_RISEACT_ACCOUNTS_URL, '/oauth/token/'), {
+      const oauthRes = await fetch(urlJoin(hosts.accounts, '/oauth/token/'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -124,7 +136,7 @@ export const createGqlClientUsingOrganizationId = async ({
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: createUploadLink({
-      uri: urlJoin(DEF_RISEACT_CORE_URL, '/graphql/'),
+      uri: urlJoin(hosts.accounts, '/graphql/'),
       credentials: 'include',
       fetch: authorizedFetch,
     }),

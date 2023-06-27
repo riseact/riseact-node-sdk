@@ -5,6 +5,7 @@ import initNetwork from './network';
 import initStorage from './storage';
 import initDevTools from './tools';
 import { RiseactConfig, RiseactDevTools, RiseactInstance } from './types';
+import { DEF_RISEACT_ACCOUNTS_URL, DEF_RISEACT_CORE_URL } from './config/consts';
 
 async function RiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
   if (!config.auth.clientId || !config.auth.clientSecret) {
@@ -16,9 +17,16 @@ async function RiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
     dns.setDefaultResultOrder('ipv4first');
   }
 
+  // Override default Riseact hosts
+  config.hosts = {
+    accounts: DEF_RISEACT_ACCOUNTS_URL,
+    core: DEF_RISEACT_CORE_URL,
+    ...config.hosts,
+  }
+
   const storage = initStorage(config.storage);
-  const auth = initAuth(config.auth, storage);
-  const network = await initNetwork(config.network, storage, config.auth.clientId, config.auth.clientSecret);
+  const auth = initAuth(config, storage);
+  const network = await initNetwork(config, storage, config.auth.clientId, config.auth.clientSecret);
 
   let devTools;
   if (process.env.NODE_ENV === 'production') {

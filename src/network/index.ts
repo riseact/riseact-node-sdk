@@ -3,16 +3,26 @@ import cookieParser from 'cookie-parser';
 import { RequestHandler } from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
-import { DEF_RISEACT_CORE_URL, TOKEN_COOKIE_NAME } from '../config/consts';
-import { NetworkConfig, RiseactNetwork, StorageDriver } from '../types';
+import { TOKEN_COOKIE_NAME } from '../config/consts';
+import { NetworkConfig, RiseactConfig, RiseactNetwork, StorageDriver } from '../types';
 import urlJoin from '../utils/urlJoin';
 import { createGqlClientUsingOrganizationId } from './createGqlClient';
 
-const initNetwork = async (config: NetworkConfig = {}, storage: StorageDriver, clientId: string, clientSecret: string): Promise<RiseactNetwork> => {
+const initNetwork = async (
+  config: RiseactConfig,
+  storage: StorageDriver,
+  clientId: string,
+  clientSecret: string,
+): Promise<RiseactNetwork> => {
+  if (!config.network) {
+    config.network = {};
+  }
+
   const proxy = createProxyMiddleware({
-    target: DEF_RISEACT_CORE_URL,
+    target: config.hosts!.core,
     changeOrigin: true,
     secure: false,
+    logLevel: 'error',
   });
 
   const gqlRewriterHandler: RequestHandler = async (req, res, next) => {
@@ -28,21 +38,25 @@ const initNetwork = async (config: NetworkConfig = {}, storage: StorageDriver, c
       return res.sendStatus(401);
     }
 
+    // todo check refresh token
+
     req.headers.authorization = `Bearer ${credentials.accessToken}`;
 
-    if (config.gqlRewriterMiddleware) {
-      config.gqlRewriterMiddleware(req, res, () => undefined);
+    if (config.network!.gqlRewriterMiddleware) {
+      config.network!.gqlRewriterMiddleware(req, res, () => undefined);
     }
 
-    req.originalUrl = urlJoin(DEF_RISEACT_CORE_URL, '/graphql/');
+    req.originalUrl = urlJoin(config.hosts!.core, '/graphql/');
 
     proxy(req, res, next);
   };
 
   const createGqlClient = async (organizationId: number, options?: ApolloClientOptions<unknown>) => {
-    return createGqlClientUsingOrganizationId({ organizationId, storage, options, clientId, clientSecret });
+    return createGqlClientUsingOrganizationId({ organizationId, storage, options, clientId, clientSecret, hosts: {
+      core: config.hosts!.core!,
+      accounts: config.hosts!.accounts!,
+    } });
   };
-
   return {
     gqlRewriterHandler,
     createGqlClient,

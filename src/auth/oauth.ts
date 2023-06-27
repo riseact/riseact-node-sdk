@@ -1,7 +1,6 @@
 import { BaseClient, Issuer, generators } from 'openid-client';
 
-import { DEF_RISEACT_ACCOUNTS_URL } from '../config/consts';
-import { AuthConfig } from '../types';
+import { RiseactConfig } from '../types';
 import urlJoin from '../utils/urlJoin';
 
 interface AuthorizationData {
@@ -9,17 +8,17 @@ interface AuthorizationData {
   codeVerifier: string;
 }
 
-export async function getOAuthClient(config: AuthConfig): Promise<BaseClient> {
-  const riseactIssuer = await Issuer.discover(urlJoin(DEF_RISEACT_ACCOUNTS_URL, '/oauth/.well-known/openid-configuration/'));
+export async function getOAuthClient(config: RiseactConfig): Promise<BaseClient> {
+  const riseactIssuer = await Issuer.discover(urlJoin(config.hosts?.accounts, '/oauth/.well-known/openid-configuration/'));
 
-  if (!config.clientId || !config.clientSecret || !config.redirectUri) {
+  if (!config.auth.clientId || !config.auth.clientSecret || !config.auth.redirectUri) {
     throw Error('OAuth client not valid. Check OAuth credentials');
   }
 
   const client = new riseactIssuer.Client({
-    client_id: config.clientId,
-    client_secret: config.clientSecret,
-    redirect_uris: [config.redirectUri],
+    client_id: config.auth.clientId,
+    client_secret: config.auth.clientSecret,
+    redirect_uris: [config.auth.redirectUri],
     response_types: ['code'],
   });
 

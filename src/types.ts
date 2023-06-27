@@ -21,6 +21,14 @@ export interface RiseactConfig {
 
   /** Disable the DNS order override (required for node >= 15 to enable subdomains) Default: false */
   disableDnsOrderOverride?: boolean;
+
+  /** Override the default Riseact hosts */
+  hosts?: {
+    /** Accounts host. Default to https://accounts.riseact.org */
+    accounts?: string;
+    /** Core host. Default to https://core.riseact.org */
+    core?: string;
+  };
 }
 
 export interface RiseactInstance {
@@ -121,7 +129,7 @@ export interface RiseactNetwork {
   gqlRewriterHandler: RequestHandler;
 
   /** The Apollo client to use to make GraphQL requests to Riseact from your backend. */
-  createGqlClient: (organizationId: number, options?: ApolloClientOptions<unknown>) => Promise<ApolloClient<unknown>>
+  createGqlClient: (organizationId: number, options?: ApolloClientOptions<unknown>) => Promise<ApolloClient<unknown>>;
 }
 
 /* -------------------------------------------------------------------------- */
