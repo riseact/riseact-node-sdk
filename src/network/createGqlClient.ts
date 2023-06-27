@@ -136,7 +136,7 @@ export const createGqlClientUsingOrganizationId = async ({
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: createUploadLink({
-      uri: urlJoin(hosts.accounts, '/graphql/'),
+      uri: urlJoin(hosts.core, '/graphql/'),
       credentials: 'include',
       fetch: authorizedFetch,
     }),
