@@ -1,6 +1,6 @@
 {
   "name": "@riseact/riseact-node-sdk",
-  "version": "2.3.2",
+  "version": "3.0.0",
   "description": "Riseact SDK for Nodejs",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",

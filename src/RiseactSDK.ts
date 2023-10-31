@@ -1,11 +1,11 @@
 import dns from 'node:dns';
 
 import { initAuth } from './auth';
+import { DEF_RISEACT_ACCOUNTS_URL, DEF_RISEACT_CORE_URL } from './config/consts';
 import initNetwork from './network';
 import initStorage from './storage';
 import initDevTools from './tools';
 import { RiseactConfig, RiseactDevTools, RiseactInstance } from './types';
-import { DEF_RISEACT_ACCOUNTS_URL, DEF_RISEACT_CORE_URL } from './config/consts';
 
 async function RiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
   if (!config.auth.clientId || !config.auth.clientSecret) {
@@ -22,7 +22,7 @@ async function RiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
     accounts: DEF_RISEACT_ACCOUNTS_URL,
     core: DEF_RISEACT_CORE_URL,
     ...config.hosts,
-  }
+  };
 
   const storage = initStorage(config.storage);
   const auth = initAuth(config, storage);

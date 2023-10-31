@@ -9,7 +9,9 @@ const initDB = (db: sqliteDriver.Database) => {
        organization_id int not null primary key, 
        access_token text not null, 
        refresh_token text not null,
-       client_token text not null
+       client_token text not null,
+       expires_date_utc text not null,
+       expires_in_seconds int not null
      )`,
   ).run();
   db.pragma('journal_mode = WAL');
@@ -34,13 +36,15 @@ export const SqliteStorage = (config?: StorageConfig): StorageDriver => {
        on conflict (organization_id) do update set
         access_token = excluded.access_token,
         refresh_token = excluded.refresh_token,
-        client_token = excluded.client_token`,
+        client_token = excluded.client_token,
+        expires_date_utc = excluded.expires_date_utc,
+        expires_in_seconds = excluded.expires_in_seconds`,
     ).run(organizationId, accessToken, refreshToken, clientToken);
 
     db.close();
   };
 
-  const getCredentialsByClientToken = async (clientToken: string) => {
+  const getCredentialsByClientToken = async (clientToken: string): Promise<OAuthCredentials | null> => {
     const db = openDB(config?.sqlite?.path || DEF_SQLITE_PATH, config?.sqlite?.options);
 
     const queryRes: {
@@ -48,13 +52,17 @@ export const SqliteStorage = (config?: StorageConfig): StorageDriver => {
       refresh_token: string;
       organization_id: number;
       client_token: string;
+      expires_date_utc: string;
+      expires_in_seconds: number;
     } = db
       .prepare(
         `select 
            access_token, 
            refresh_token, 
            organization_id,
-           client_token
+           client_token,
+           expires_date_utc,
+           expires_in_seconds
          from oauth_credentials 
          where client_token = ?`,
       )
@@ -69,6 +77,8 @@ export const SqliteStorage = (config?: StorageConfig): StorageDriver => {
     return {
       accessToken: queryRes.access_token,
       refreshToken: queryRes.refresh_token,
+      expiresDateUTC: new Date(queryRes.expires_date_utc),
+      expiresInSeconds: queryRes.expires_in_seconds,
       organizationId: queryRes.organization_id,
       clientToken,
     };
@@ -82,12 +92,16 @@ export const SqliteStorage = (config?: StorageConfig): StorageDriver => {
       refresh_token: string;
       organization_id: number;
       client_token: string;
+      expires_date_utc: string;
+      expires_in_seconds: number;
     } = db
       .prepare(
         `select
             access_token,
             refresh_token,
             organization_id,
+            expires_date_utc,
+            expires_in_seconds,
             client_token
           from oauth_credentials
           where organization_id = ?`,
@@ -105,6 +119,8 @@ export const SqliteStorage = (config?: StorageConfig): StorageDriver => {
       refreshToken: queryRes.refresh_token,
       organizationId: queryRes.organization_id,
       clientToken: queryRes.client_token,
+      expiresDateUTC: new Date(queryRes.expires_date_utc),
+      expiresInSeconds: queryRes.expires_in_seconds,
     };
   };
 

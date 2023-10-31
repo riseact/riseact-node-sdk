@@ -10,3 +10,8 @@ export const DEF_HMR_CLIENT_PORT = 443;
 export const DEF_HMR_PORT = 3030;
 export const DEF_HMR_HOST = `http://localhost:${DEF_HMR_PORT}`;
 export const DEF_FRONTEND_SRC_PATH = 'src/frontend';
+
+export const DEF_HOSTS = {
+  accounts: DEF_RISEACT_ACCOUNTS_URL,
+  core: DEF_RISEACT_CORE_URL,
+};

@@ -5,6 +5,14 @@ import { IncomingMessage } from 'http';
 import internal from 'stream';
 import { Connect, InlineConfig } from 'vite';
 
+/** Override the default Riseact hosts */
+export interface RiseactHosts {
+  /** Accounts host. Default to https://accounts.riseact.org */
+  accounts: string;
+  /** Core host. Default to https://core.riseact.org */
+  core: string;
+}
+
 /** Base configuration to connect your app to Riseact.
  *
  * See {@link https://help.riseact.org/en/manuale/applications/ docs} to get started with Riseact Apps
@@ -23,12 +31,7 @@ export interface RiseactConfig {
   disableDnsOrderOverride?: boolean;
 
   /** Override the default Riseact hosts */
-  hosts?: {
-    /** Accounts host. Default to https://accounts.riseact.org */
-    accounts?: string;
-    /** Core host. Default to https://core.riseact.org */
-    core?: string;
-  };
+  hosts?: RiseactHosts;
 }
 
 export interface RiseactInstance {
@@ -44,11 +47,6 @@ export interface RiseactAuth {
    * See {@link https://help.riseact.org/en/manuale/applications/ docs} to learn how to use it
    */
   authMiddleware: RequestHandler;
-
-  /** The request handler to use to start the OAuth flow, use instead of {@link RiseactAuth.authMiddleware} for a custom OAuth flow */
-  oauthInstallHandler: RequestHandler;
-  /** The request handler to use to complete the OAuth flow, use instead of {@link RiseactAuth.authMiddleware} for a custom OAuth flow */
-  oauthCallbackHandler: RequestHandler;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -81,6 +79,10 @@ export interface OAuthCredentials {
   organizationId: number;
   /** The token used to authenticate your users in the app */
   clientToken: string;
+  /** The timestamp when the access token expires */
+  expiresInSeconds: number;
+  /** The Date when the access token expires in UTC */
+  expiresDateUTC: Date;
 }
 
 /* -------------------------------------------------------------------------- */

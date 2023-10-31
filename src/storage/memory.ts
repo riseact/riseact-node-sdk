@@ -5,22 +5,26 @@ const MemoryStorageObj: {
     accessToken: string;
     refreshToken: string;
     clientToken: string;
+    expiresDateUTC: Date;
+    expiresInSeconds: number;
   };
 } = {};
 
 export const MemoryStorage = (): StorageDriver => {
   const saveCredentials = async (credentials: OAuthCredentials) => {
-    const { accessToken, refreshToken, organizationId, clientToken } = credentials;
+    const { accessToken, refreshToken, organizationId, clientToken, expiresDateUTC, expiresInSeconds } = credentials;
 
     MemoryStorageObj[organizationId] = {
       accessToken,
       refreshToken,
       clientToken,
+      expiresDateUTC,
+      expiresInSeconds,
     };
   };
 
   const getCredentialsByClientToken = async (token: string): Promise<OAuthCredentials | null> => {
-    let credentials;
+    let credentials: OAuthCredentials | undefined
 
     for (const organizationId in MemoryStorageObj) {
       const organization = MemoryStorageObj[organizationId];
@@ -30,6 +34,8 @@ export const MemoryStorage = (): StorageDriver => {
           refreshToken: organization.refreshToken,
           organizationId: Number(organizationId),
           clientToken: organization.clientToken,
+          expiresDateUTC: organization.expiresDateUTC,
+          expiresInSeconds: organization.expiresInSeconds,
         };
         break;
       }
@@ -49,6 +55,8 @@ export const MemoryStorage = (): StorageDriver => {
       refreshToken: organization.refreshToken,
       organizationId,
       clientToken: organization.clientToken,
+      expiresDateUTC: organization.expiresDateUTC,
+      expiresInSeconds: organization.expiresInSeconds,
     };
   };
 
