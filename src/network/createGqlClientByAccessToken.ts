@@ -42,7 +42,7 @@ export const createGqlClientByAccessToken = ({
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: createUploadLink({
-      uri: urlJoin(coreHost, '/graphql/'),
+      uri: urlJoin(coreHost, '/admin/graphql/'),
       credentials: 'include',
       fetch: authorizedFetch,
     }),

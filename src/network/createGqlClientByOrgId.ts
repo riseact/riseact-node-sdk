@@ -53,14 +53,14 @@ const createGqlClientByOrgId = async ({
         },
       });
     }
-    
+
     return res;
   };
 
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: createUploadLink({
-      uri: urlJoin(hosts.core, '/graphql/'),
+      uri: urlJoin(hosts.core, '/admin/graphql/'),
       credentials: 'include',
       fetch: authorizedFetch,
     }),

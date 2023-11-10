@@ -50,7 +50,7 @@ const createGqlRewriterHandler = (config: RiseactConfig, storage: StorageDriver)
       config.network!.gqlRewriterMiddleware(req, res, () => undefined);
     }
 
-    req.originalUrl = urlJoin(config.hosts!.core, '/graphql/');
+    req.originalUrl = urlJoin(config.hosts!.core, '/admin/graphql/');
 
     proxy(req, res, next);
   };
