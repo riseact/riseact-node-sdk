@@ -17,7 +17,7 @@ const createGqlRewriterHandler = (config: RiseactConfig, storage: StorageDriver)
 
   const gqlRewriterHandler: RequestHandler = async (req, res, next) => {
     cookieParser()(req, res, () => undefined);
-    const authorizePageUrl = '/oauth/authorize' + (req.user.organizationId ? `?__organization=${req.user.organizationSlug}` : '');
+    const authorizePageUrl = '/oauth/authorize' + (req.user?.organizationId ? `?__organization=${req.user.organizationSlug}` : '');
 
     // Get client token from cookie or header
     const token = req.cookies?.[TOKEN_COOKIE_NAME] || req.headers.authorization?.split(' ')[1];
