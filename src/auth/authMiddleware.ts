@@ -42,9 +42,13 @@ const initAuthMiddleware = (config: RiseactConfig, storage: StorageDriver): Requ
     }
 
     if (credentials.expiresDateUTC < new Date()) {
-      console.info('Token expired, redirecting to authorize page');
-      credentials = await renewToken(config.auth.clientId, config.auth.clientSecret, credentials, config.hosts!, storage);
-      return res.redirect(authorizePageUrl);
+      console.info('Token expired, try to renew it');
+      try {
+        credentials = await renewToken(config.auth.clientId, config.auth.clientSecret, credentials, config.hosts!, storage);
+      } catch (e) {
+        console.error('Error while renewing token', e);
+        return res.redirect(authorizePageUrl);
+      }
     }
 
     req.user = {
