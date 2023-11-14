@@ -75,11 +75,11 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
       });
 
       if (config.auth.onInstall) {
-        config.auth.onInstall(organizationId, clientToken);
+        await config.auth.onInstall(organizationId, clientToken);
       }
     } else {
       if (config.auth.onLogin) {
-        config.auth.onLogin(organizationId, clientToken);
+        await config.auth.onLogin(organizationId, clientToken);
       }
     }
 
