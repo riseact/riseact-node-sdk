@@ -65,7 +65,7 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
     const clientToken = org?.clientToken || v4();
 
     if (!org) {
-      storage.saveCredentials({
+      await storage.saveCredentials({
         refreshToken,
         accessToken,
         organizationId,
