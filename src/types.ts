@@ -53,6 +53,16 @@ export interface RiseactAuth {
 /*                                    Auth                                    */
 /* -------------------------------------------------------------------------- */
 
+export interface OnAuthenticatedParams {
+  gqlClient: ApolloClient<unknown>;
+  organizationId: number;
+  clientToken: string;
+  refreshToken: string;
+  accessToken: string;
+  expiresDateUTC: Date;
+  expiresInSeconds: number;
+}
+
 export interface AuthConfig {
   /** Client ID generated from Riseact. See {@link https://help.riseact.org/en/manuale/applications/ docs} to learn how to create one */
   clientId: string;
@@ -63,10 +73,10 @@ export interface AuthConfig {
   redirectUri?: string;
 
   /** Callback to run after a successful installation of the app */
-  onInstall?: (organizationId: number, clientToken: string) => Promise<void>;
+  onInstall?: (callbackParams: OnAuthenticatedParams) => Promise<void>;
 
   /** Callback to run after a successful login of the user */
-  onLogin?: (organizationId: number, clientToken: string) => Promise<void>;
+  onLogin?: (callbackParams: OnAuthenticatedParams) => Promise<void>;
 }
 
 /** Credentials returned by Riseact after a successful OAuth flow */

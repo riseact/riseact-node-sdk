@@ -104,12 +104,14 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
         expiresInSeconds,
       });
 
+      const gqlClient = createGqlClientByAccessToken({ accessToken, coreHost: config.hosts!.core });
+
       if (config.auth.onInstall) {
-        await config.auth.onInstall(organizationId, clientToken);
+        await config.auth.onInstall({ gqlClient, organizationId, clientToken, refreshToken, accessToken, expiresDateUTC, expiresInSeconds });
       }
     } else {
       if (config.auth.onLogin) {
-        await config.auth.onLogin(organizationId, clientToken);
+        await config.auth.onLogin({ gqlClient, organizationId, clientToken, refreshToken, accessToken, expiresDateUTC, expiresInSeconds });
       }
     }
 
