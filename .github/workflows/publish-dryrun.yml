@@ -3,7 +3,7 @@ name: Publish package to npm
 on:
   push:
     branches:
-      - master
+      - develop
 
 jobs:
   build:
@@ -16,6 +16,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm install
       - run: npm run build
-      - run: npm publish --access public
+      - run: npm publish --dry-run
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
