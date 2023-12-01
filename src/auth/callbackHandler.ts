@@ -18,7 +18,10 @@ const ORGANIZATION_QUERY = gql`
 
 const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): RequestHandler => {
   const oauthCallbackHandler: RequestHandler = async (req: Request, res: Response) => {
-    if (!req.cookies?.[COOKIE_CODE_VERIFIER]) {
+    const codeVerifier = req.cookies?.[COOKIE_CODE_VERIFIER];
+
+    if (!codeVerifier) {
+      console.error('No code verifier found in client cookies');
       return res.sendStatus(401);
     }
 
@@ -31,7 +34,7 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
     const params = client.callbackParams(req);
 
     const tokenSet = await client.callback(config.auth.redirectUri, params, {
-      code_verifier: req.cookies?.[COOKIE_CODE_VERIFIER],
+      code_verifier: codeVerifier,
     });
 
     const refreshToken = tokenSet.refresh_token;
@@ -39,12 +42,21 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
     const expiresInSeconds = tokenSet.expires_in;
 
     if (!refreshToken || !accessToken || !expiresInSeconds) {
+      console.error('No refresh_token, access_token or expires_in provided from authorization server. Details below:', {
+        refreshToken,
+        accessToken,
+        expiresInSeconds,
+        riseactConfig: config,
+        callbackParams: params,
+        codeVerifier: codeVerifier,
+        tokenSet,
+      });
       return res.sendStatus(500);
     }
 
     const expiresDateUTC = new Date(Date.now() + expiresInSeconds * 1000);
 
-    const gqlClient = createGqlClientByAccessToken({ accessToken, coreHost: config.hosts!.core! });
+    const gqlClient = createGqlClientByAccessToken({ accessToken, coreHost: config.hosts!.core });
 
     let orgRes: ApolloQueryResult<{ organization: { id: number } }>;
     try {
@@ -52,12 +64,30 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
         query: ORGANIZATION_QUERY,
       });
     } catch (e) {
+      console.error('Error during GraphQL request to Riseact. Details below', e, {
+        refreshToken,
+        accessToken,
+        expiresInSeconds,
+        riseactConfig: config,
+        callbackParams: params,
+        codeVerifier: codeVerifier,
+        tokenSet,
+      });
       return res.sendStatus(500);
     }
 
     const organizationId = orgRes.data.organization.id;
 
     if (!organizationId) {
+      console.error('No organization ID provided from Riseact. Details below', {
+        refreshToken,
+        accessToken,
+        expiresInSeconds,
+        riseactConfig: config,
+        callbackParams: params,
+        codeVerifier: codeVerifier,
+        tokenSet,
+      });
       return res.sendStatus(500);
     }
 
