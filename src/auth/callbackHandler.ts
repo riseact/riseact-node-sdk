@@ -5,6 +5,7 @@ import { v4 } from 'uuid';
 import { COOKIE_CODE_VERIFIER, COOKIE_REFRESH_TOKEN, TOKEN_COOKIE_NAME } from '../config/consts';
 import { createGqlClientByAccessToken } from '../network/createGqlClientByAccessToken';
 import { RiseactConfig, StorageDriver } from '../types';
+import safeAsyncHandler from '../utils/safeAsyncHandler';
 import urlJoin from '../utils/urlJoin';
 import { getOAuthClient } from './oauth';
 
@@ -17,7 +18,7 @@ const ORGANIZATION_QUERY = gql`
 `;
 
 const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): RequestHandler => {
-  const oauthCallbackHandler: RequestHandler = async (req: Request, res: Response) => {
+  const oauthCallbackHandler: RequestHandler = safeAsyncHandler(async (req: Request, res: Response) => {
     const codeVerifier = req.cookies?.[COOKIE_CODE_VERIFIER];
 
     if (!codeVerifier) {
@@ -121,7 +122,7 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
     res.cookie(TOKEN_COOKIE_NAME, clientToken, { path: '/', secure: true, sameSite: 'none' /* , httpOnly: true */ });
 
     res.redirect('/');
-  };
+  });
 
   return oauthCallbackHandler;
 };

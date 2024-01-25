@@ -2,11 +2,12 @@ import { Request, RequestHandler, Response } from 'express';
 
 import { COOKIE_CODE_VERIFIER } from '../config/consts';
 import { RiseactConfig } from '../types';
+import safeAsyncHandler from '../utils/safeAsyncHandler';
 import urlJoin from '../utils/urlJoin';
 import { getAuthorizationData, getOAuthClient } from './oauth';
 
 const initAuthorizeHandler = (config: RiseactConfig): RequestHandler => {
-  const oauthAuthorizeHandler: RequestHandler = async (req: Request, res: Response) => {
+  const oauthAuthorizeHandler: RequestHandler = safeAsyncHandler(async (req: Request, res: Response) => {
     const organization = req.query['__organization'] as string | undefined;
 
     if (!config.auth.redirectUri) {
@@ -22,7 +23,7 @@ const initAuthorizeHandler = (config: RiseactConfig): RequestHandler => {
     });
 
     return res.redirect(authorization.url);
-  };
+  });
 
   return oauthAuthorizeHandler;
 };

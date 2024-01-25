@@ -6,12 +6,13 @@ import { RiseactConfig, StorageDriver } from '../types';
 import initAuthorizeHandler from './authorizeHandler';
 import initCallbackHandler from './callbackHandler';
 import { renewToken } from './oauth';
+import safeAsyncHandler from '../utils/safeAsyncHandler';
 
 const initAuthMiddleware = (config: RiseactConfig, storage: StorageDriver): RequestHandler => {
   const callbackHandler = initCallbackHandler(config, storage);
   const authorizeHandler = initAuthorizeHandler(config);
 
-  const authMiddleware: RequestHandler = async (req: Request, res: Response, next: NextFunction) => {
+  const authMiddleware: RequestHandler = safeAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     await new Promise((resolve) => {
       cookieParser()(req, res, resolve);
     });
@@ -59,7 +60,7 @@ const initAuthMiddleware = (config: RiseactConfig, storage: StorageDriver): Requ
 
     req.app.enable('trust proxy');
     next();
-  };
+  });
 
   return authMiddleware;
 };
