@@ -58,7 +58,7 @@ export async function renewToken(
     refresh_token: oldCredentials.refreshToken,
   };
 
-  const urlFormDataArr = [];
+  const urlFormDataArr: Array<string> = [];
   for (const property in urlFormDataObj) {
     const encodedKey = encodeURIComponent(property);
     const encodedValue = encodeURIComponent(urlFormDataObj[property as keyof typeof urlFormDataObj]);

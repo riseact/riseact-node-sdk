@@ -1,5 +1,5 @@
 function normalize(strArray: Array<string | undefined>) {
-  const resultArray = [];
+  const resultArray: Array<any> = [];
   if (strArray.length === 0) {
     return '';
   }
