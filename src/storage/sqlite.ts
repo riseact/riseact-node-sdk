@@ -1,9 +1,7 @@
-import sqliteDriver from 'better-sqlite3';
-
 import { DEF_SQLITE_PATH } from '../config/consts';
 import { OAuthCredentials, SqliteOptions, StorageConfig, StorageDriver } from '../types';
 
-const initDB = (db: sqliteDriver.Database) => {
+const initDB = (db: any) => {
   db.prepare(
     `create table if not exists oauth_credentials (
        organization_id int not null primary key, 
@@ -17,7 +15,9 @@ const initDB = (db: sqliteDriver.Database) => {
   db.pragma('journal_mode = WAL');
 };
 
-const openDB = (path = DEF_SQLITE_PATH, options?: SqliteOptions) => {
+const openDB = async (path = DEF_SQLITE_PATH, options?: SqliteOptions) => {
+  const sqliteDriver = await import('better-sqlite3').then((mod) => mod.default);
+
   const db = sqliteDriver(path, options);
   return Object.assign(db, { init: () => initDB(db) });
 };
@@ -28,7 +28,7 @@ export const SqliteStorage = (config?: StorageConfig): StorageDriver => {
 
   const saveCredentials = async (credentials: OAuthCredentials) => {
     const { refreshToken, accessToken, organizationId, clientToken } = credentials;
-    const db = openDB(config?.sqlite?.path || DEF_SQLITE_PATH, config?.sqlite?.options);
+    const db = await openDB(config?.sqlite?.path || DEF_SQLITE_PATH, config?.sqlite?.options);
 
     db.prepare(
       `insert into oauth_credentials (organization_id, access_token, refresh_token, client_token)
@@ -45,7 +45,7 @@ export const SqliteStorage = (config?: StorageConfig): StorageDriver => {
   };
 
   const getCredentialsByClientToken = async (clientToken: string): Promise<OAuthCredentials | null> => {
-    const db = openDB(config?.sqlite?.path || DEF_SQLITE_PATH, config?.sqlite?.options);
+    const db = await openDB(config?.sqlite?.path || DEF_SQLITE_PATH, config?.sqlite?.options);
 
     const queryRes: {
       access_token: string;
@@ -85,7 +85,7 @@ export const SqliteStorage = (config?: StorageConfig): StorageDriver => {
   };
 
   const getCredentialsByOrganizationId = async (organizationId: number): Promise<OAuthCredentials | null> => {
-    const db = openDB(config?.sqlite?.path || DEF_SQLITE_PATH, config?.sqlite?.options);
+    const db = await openDB(config?.sqlite?.path || DEF_SQLITE_PATH, config?.sqlite?.options);
 
     const queryRes: {
       access_token: string;
