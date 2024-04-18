@@ -1,9 +1,18 @@
 import { ApolloClient, ApolloClientOptions } from '@apollo/client/core';
-import { Options } from 'better-sqlite3';
 import { RequestHandler } from 'express';
 import { IncomingMessage } from 'http';
 import internal from 'stream';
 import { Connect, InlineConfig } from 'vite';
+import registerWebhook from './network/registerWebhook';
+
+/* type from peer dependency better-sqlite3 */
+interface Options {
+  readonly?: boolean | undefined;
+  fileMustExist?: boolean | undefined;
+  timeout?: number | undefined;
+  verbose?: ((message?: any, ...additionalArgs: any[]) => void) | undefined;
+  nativeBinding?: string | undefined;
+}
 
 /** Override the default Riseact hosts */
 export interface RiseactHosts {
@@ -142,6 +151,9 @@ export interface RiseactNetwork {
 
   /** The Apollo client to use to make GraphQL requests to Riseact from your backend. */
   createGqlClient: (organizationId: number, options?: ApolloClientOptions<unknown>) => Promise<ApolloClient<unknown>>;
+
+  /** Register a webhook to listen to Riseact events */
+  registerWebhook: typeof registerWebhook;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -165,4 +177,243 @@ export type ServerEventListener = (req: IncomingMessage, socket: internal.Duplex
 export interface RiseactDevTools {
   devMiddleware: Connect.Server;
   hmrProxyHandler: ServerEventListener;
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                                Webhook types                               */
+/* -------------------------------------------------------------------------- */
+
+export enum WebhookEventTopic {
+  CampaignCreated = 'CAMPAIGN_CREATED',
+  CampaignDeleted = 'CAMPAIGN_DELETED',
+  CampaignUpdated = 'CAMPAIGN_UPDATED',
+  CheckoutClosed = 'CHECKOUT_CLOSED',
+  CheckoutCreated = 'CHECKOUT_CREATED',
+  CheckoutPaid = 'CHECKOUT_PAID',
+  CheckoutUpdated = 'CHECKOUT_UPDATED',
+  DonationCreated = 'DONATION_CREATED',
+  DonationUpdated = 'DONATION_UPDATED',
+  PaymentCreated = 'PAYMENT_CREATED',
+  PaymentUpdated = 'PAYMENT_UPDATED',
+  SupporterCreated = 'SUPPORTER_CREATED',
+  SupporterDeleted = 'SUPPORTER_DELETED',
+  SupporterUpdated = 'SUPPORTER_UPDATED',
+}
+
+export enum Visibility {
+  Unpublished = 'unpublished',
+  Published = 'published',
+  Archived = 'archived',
+}
+
+export enum CampaignType {
+  Lead = 'LEAD',
+  Donation = 'DONATION',
+}
+
+export interface CampaignPayload {
+  id: number;
+  create_date: string;
+  update_date: string;
+  title: string;
+  cover: string | null;
+  excerpt: string | null;
+  content: string | null;
+  visibility: Visibility;
+  publish_on: string | null;
+  slug: string;
+  seo_title: string | null;
+  seo_description: string | null;
+  type: CampaignType;
+  goal: number | null;
+  is_goal_enabled: boolean;
+  allow_peer_to_peer: boolean;
+  tags: string[];
+}
+
+export enum SupporterType {
+  Individual = 'INDIVIDUAL',
+  Company = 'COMPANY',
+  Organization = 'ORGANIZATION',
+  Family = 'FAMILY',
+  Group = 'GROUP',
+}
+
+export interface SupporterPayload {
+  id: number;
+  business_name: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  title: string | null;
+  job: string | null;
+  sex: string | null;
+  ssn: string | null;
+  vat: string | null;
+  city: string | null;
+  code: string | null;
+  note: string | null;
+  tags: string[];
+  email: string | null;
+  image: string | null;
+  phone: string | null;
+  mobile: string | null;
+  address: string | null;
+  country: string | null;
+  privacy: string | null;
+  address2: string | null;
+  locality: string | null;
+  create_date: string;
+  postal_code: string | null;
+  update_date: string;
+  external_ref: string | null;
+  date_of_birth: string | null;
+  place_of_birth: string | null;
+  supporter_type: SupporterType;
+  email_marketing: boolean;
+  phone_marketing: boolean;
+  sms_marketing: boolean;
+  source_campaign: number | null;
+  postal_marketing: boolean;
+  certification_url: string | null;
+  stripe_customer_id: string | null;
+}
+
+export enum CheckoutState {
+  Open = 'OPEN',
+  Closed = 'CLOSED',
+}
+
+export enum Frequency {
+  Oneoff = 0,
+  Monthly = 12,
+}
+
+export interface CheckoutPayload {
+  id: number;
+  create_date: string;
+  update_date: string;
+  state: CheckoutState;
+  amount: number | null;
+  completed_date: string | null;
+  donation: number | null;
+  supporter: number | null;
+  frequency: Frequency | null;
+  peer_campaign: number | null;
+  payment_method_processor: string | null;
+  payment_method_label: string | null;
+  payment_method_id: number | null;
+}
+
+export enum DonationState {
+  Draft = 'draft',
+  Pending = 'pending',
+  Active = 'active',
+  PastDue = 'past_due',
+  Done = 'done',
+  Revoked = 'revoked',
+}
+
+export interface DonationPayload {
+  id: number;
+  create_date: string;
+  update_date: string;
+  code: string;
+  state: DonationState;
+  amount: number;
+  frequency: Frequency;
+  completed_date: string | null;
+  campaign: number | null;
+  peer_campaign: number | null;
+  supporter: number;
+  tags: string[];
+  payment_method_label: string | null;
+  payment_method_processor: string | null;
+}
+
+export interface PaymentPayload {
+  id: number;
+  create_date: string;
+  update_date: string;
+  state: string;
+  amount: number;
+  payment_date: string;
+  payment_method_id: number | null;
+  payment_method_label: string | null;
+  payment_method_processor: string | null;
+  frequency: Frequency;
+  stripe_intent_id: string | null;
+  donation: number;
+  supporter: number;
+  peer_campaign: number | null;
+}
+
+export interface WebhookDataSupporterCreated {
+  event: WebhookEventTopic.SupporterCreated;
+  data: SupporterPayload;
+}
+
+export interface WebhookDataSupporterUpdated {
+  event: WebhookEventTopic.SupporterUpdated;
+  data: SupporterPayload;
+}
+
+export interface WebhookDataSupporterDeleted {
+  event: WebhookEventTopic.SupporterDeleted;
+  data: SupporterPayload;
+}
+
+export interface WebhookDataCampaignCreated {
+  event: WebhookEventTopic.CampaignCreated;
+  data: CampaignPayload;
+}
+
+export interface WebhookDataCampaignDeleted {
+  event: WebhookEventTopic.CampaignDeleted;
+  data: CampaignPayload;
+}
+
+export interface WebhookDataCampaignUpdated {
+  event: WebhookEventTopic.CampaignUpdated;
+  data: CampaignPayload;
+}
+
+export interface WebhookDataCheckoutClosed {
+  event: WebhookEventTopic.CheckoutClosed;
+  data: CheckoutPayload;
+}
+
+export interface WebhookDataCheckoutCreated {
+  event: WebhookEventTopic.CheckoutCreated;
+  data: CheckoutPayload;
+}
+
+export interface WebhookDataCheckoutPaid {
+  event: WebhookEventTopic.CheckoutPaid;
+  data: CheckoutPayload;
+}
+
+export interface WebhookDataCheckoutUpdated {
+  event: WebhookEventTopic.CheckoutUpdated;
+  data: CheckoutPayload;
+}
+
+export interface WebhookDataDonationCreated {
+  event: WebhookEventTopic.DonationCreated;
+  data: DonationPayload;
+}
+
+export interface WebhookDataDonationUpdated {
+  event: WebhookEventTopic.DonationUpdated;
+  data: DonationPayload;
+}
+
+export interface WebhookDataPaymentCreated {
+  event: WebhookEventTopic.PaymentCreated;
+  data: PaymentPayload;
+}
+
+export interface WebhookDataPaymentUpdated {
+  event: WebhookEventTopic.PaymentUpdated;
+  data: PaymentPayload;
 }

@@ -3,11 +3,10 @@ import { ApolloClientOptions } from '@apollo/client/core';
 import { RiseactConfig, RiseactNetwork, StorageDriver } from '../types';
 import createGqlClientByOrgId from './createGqlClientByOrgId';
 import createGqlRewriterHandler from './gqlRewriterHandler';
+import registerWebhook from './registerWebhook';
 
 const initNetwork = async (config: RiseactConfig, storage: StorageDriver, clientId: string, clientSecret: string): Promise<RiseactNetwork> => {
-  if (!config.network) {
-    config.network = {};
-  }
+  // ! todo reset webhooks from riseact
 
   const createGqlClient = async (organizationId: number, options?: ApolloClientOptions<unknown>) => {
     return createGqlClientByOrgId({
@@ -23,6 +22,7 @@ const initNetwork = async (config: RiseactConfig, storage: StorageDriver, client
   return {
     gqlRewriterHandler: createGqlRewriterHandler(config, storage),
     createGqlClient,
+    registerWebhook,
   };
 };
 
