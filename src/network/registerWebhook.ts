@@ -67,8 +67,9 @@ function registerWebhook(
     if (req.url === url) {
       callback(req.body);
       res.sendStatus(200);
+    } else {
+      next();
     }
-    next();
   };
 }
 
