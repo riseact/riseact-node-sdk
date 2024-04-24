@@ -46,8 +46,8 @@ const createGqlRewriterHandler = (config: RiseactConfig, storage: StorageDriver)
     req.headers.authorization = `Bearer ${credentials.accessToken}`;
 
     // Call the custom middleware if exists
-    if (config.network!.gqlRewriterMiddleware) {
-      config.network!.gqlRewriterMiddleware(req, res, () => undefined);
+    if (config.network?.gqlRewriterMiddleware) {
+      config.network.gqlRewriterMiddleware(req, res, () => undefined);
     }
 
     req.originalUrl = urlJoin(config.hosts!.core, '/admin/graphql/');
