@@ -350,70 +350,98 @@ export interface PaymentPayload {
 
 export interface WebhookDataSupporterCreated {
   event: WebhookEventTopic.SupporterCreated;
-  data: SupporterPayload;
+  object: SupporterPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataSupporterUpdated {
   event: WebhookEventTopic.SupporterUpdated;
-  data: SupporterPayload;
+  object: SupporterPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataSupporterDeleted {
   event: WebhookEventTopic.SupporterDeleted;
-  data: SupporterPayload;
+  object: SupporterPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataCampaignCreated {
   event: WebhookEventTopic.CampaignCreated;
-  data: CampaignPayload;
+  object: CampaignPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataCampaignDeleted {
   event: WebhookEventTopic.CampaignDeleted;
-  data: CampaignPayload;
+  object: CampaignPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataCampaignUpdated {
   event: WebhookEventTopic.CampaignUpdated;
-  data: CampaignPayload;
+  object: CampaignPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataCheckoutClosed {
   event: WebhookEventTopic.CheckoutClosed;
-  data: CheckoutPayload;
+  object: CheckoutPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataCheckoutCreated {
   event: WebhookEventTopic.CheckoutCreated;
-  data: CheckoutPayload;
+  object: CheckoutPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataCheckoutPaid {
   event: WebhookEventTopic.CheckoutPaid;
-  data: CheckoutPayload;
+  object: CheckoutPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataCheckoutUpdated {
   event: WebhookEventTopic.CheckoutUpdated;
-  data: CheckoutPayload;
+  object: CheckoutPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataDonationCreated {
   event: WebhookEventTopic.DonationCreated;
-  data: DonationPayload;
+  object: DonationPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataDonationUpdated {
   event: WebhookEventTopic.DonationUpdated;
-  data: DonationPayload;
+  object: DonationPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataPaymentCreated {
   event: WebhookEventTopic.PaymentCreated;
-  data: PaymentPayload;
+  object: PaymentPayload;
+  organization: string;
+  idempotency_key: string;
 }
 
 export interface WebhookDataPaymentUpdated {
   event: WebhookEventTopic.PaymentUpdated;
-  data: PaymentPayload;
+  object: PaymentPayload;
+  organization: string;
+  idempotency_key: string;
 }
