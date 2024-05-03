@@ -447,7 +447,7 @@ export interface WebhookDataPaymentUpdated {
 
 export interface WebhookDataMixedPayload {
   event: WebhookEventTopic;
-  data: SupporterPayload & CampaignPayload & CheckoutPayload & PaymentPayload & DonationPayload;
+  object: SupporterPayload & CampaignPayload & CheckoutPayload & PaymentPayload & DonationPayload;
   organization: string;
   idempotency_key: string;
 }
