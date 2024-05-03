@@ -15,6 +15,7 @@ import {
   WebhookDataCheckoutUpdated,
   WebhookDataDonationCreated,
   WebhookDataDonationUpdated,
+  WebhookDataMixedPayload,
   WebhookDataPaymentCreated,
   WebhookDataPaymentUpdated,
   WebhookDataSupporterCreated,
@@ -37,14 +38,8 @@ function registerWebhook(event: WebhookEventTopic.DonationCreated, callback: (pa
 function registerWebhook(event: WebhookEventTopic.DonationUpdated, callback: (payload: WebhookDataDonationUpdated) => any): RequestHandler;
 function registerWebhook(event: WebhookEventTopic.PaymentCreated, callback: (payload: WebhookDataPaymentCreated) => any): RequestHandler;
 function registerWebhook(event: WebhookEventTopic.PaymentUpdated, callback: (payload: WebhookDataPaymentUpdated) => any): RequestHandler;
+function registerWebhook(event: Array<WebhookEventTopic>, callback: (payload: WebhookDataMixedPayload) => any): RequestHandler;
 
-function registerWebhook(
-  event: Array<WebhookEventTopic>,
-  callback: (payload: {
-    event: WebhookEventTopic;
-    data: SupporterPayload & CampaignPayload & CheckoutPayload & PaymentPayload & DonationPayload;
-  }) => any,
-): RequestHandler;
 function registerWebhook(
   event: WebhookEventTopic | Array<WebhookEventTopic>,
   callback: (data: SupporterPayload & CampaignPayload & CheckoutPayload & PaymentPayload & DonationPayload) => any,

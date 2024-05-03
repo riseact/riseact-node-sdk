@@ -179,7 +179,6 @@ export interface RiseactDevTools {
   hmrProxyHandler: ServerEventListener;
 }
 
-
 /* -------------------------------------------------------------------------- */
 /*                                Webhook types                               */
 /* -------------------------------------------------------------------------- */
@@ -442,6 +441,13 @@ export interface WebhookDataPaymentCreated {
 export interface WebhookDataPaymentUpdated {
   event: WebhookEventTopic.PaymentUpdated;
   object: PaymentPayload;
+  organization: string;
+  idempotency_key: string;
+}
+
+export interface WebhookDataMixedPayload {
+  event: WebhookEventTopic;
+  data: SupporterPayload & CampaignPayload & CheckoutPayload & PaymentPayload & DonationPayload;
   organization: string;
   idempotency_key: string;
 }
