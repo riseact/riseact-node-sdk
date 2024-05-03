@@ -13,7 +13,7 @@ const ORGANIZATION_QUERY = gql`
   query Organization {
     organization {
       id
-      slug
+      domain
     }
   }
 `;
@@ -60,7 +60,7 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
 
     const gqlClient = createGqlClientByAccessToken({ accessToken, coreHost: config.hosts!.core });
 
-    let orgRes: ApolloQueryResult<{ organization: { id: number; slug: string } }>;
+    let orgRes: ApolloQueryResult<{ organization: { id: number; domain: string } }>;
     try {
       orgRes = await gqlClient.query({
         query: ORGANIZATION_QUERY,
@@ -79,7 +79,7 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
     }
 
     const organizationId = orgRes.data.organization.id;
-    const organizationSlug = orgRes.data.organization.slug;
+    const organizationSlug = orgRes.data.organization.domain;
 
     if (!organizationId) {
       console.error('No organization ID provided from Riseact. Details below', {
