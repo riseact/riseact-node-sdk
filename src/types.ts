@@ -445,9 +445,15 @@ export interface WebhookDataPaymentUpdated {
   idempotency_key: string;
 }
 
+export type MixedPayload = Partial<SupporterPayload> &
+  Partial<CampaignPayload> &
+  Partial<CheckoutPayload> &
+  Partial<PaymentPayload> &
+  Partial<DonationPayload>;
+
 export interface WebhookDataMixedPayload {
   event: WebhookEventTopic;
-  object: SupporterPayload & CampaignPayload & CheckoutPayload & PaymentPayload & DonationPayload;
+  object: MixedPayload;
   organization: string;
   idempotency_key: string;
 }
