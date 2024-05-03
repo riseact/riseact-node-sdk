@@ -85,6 +85,7 @@ export async function renewToken(
   const newCredentials: OAuthCredentials = {
     clientToken: oldCredentials.clientToken,
     organizationId: oldCredentials.organizationId,
+    organizationSlug: oldCredentials.organizationSlug,
     accessToken: oauthResData.access_token,
     refreshToken: oauthResData.refresh_token,
     expiresInSeconds: oauthResData.expires_in,

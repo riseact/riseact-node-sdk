@@ -65,6 +65,7 @@ export interface RiseactAuth {
 export interface OnAuthenticatedParams {
   gqlClient: ApolloClient<unknown>;
   organizationId: number;
+  organizationSlug: string;
   clientToken: string;
   refreshToken: string;
   accessToken: string;
@@ -92,11 +93,13 @@ export interface AuthConfig {
 export interface OAuthCredentials {
   /** The token used to refresh the access token */
   refreshToken: string;
-  /** The token used to authenticate your app in the Riseact API */
+  /** The token used to authenticate your Riseact Organization */
   accessToken: string;
-  /** Organization ID of the user */
+  /** Organization ID of the Riseact Organization */
   organizationId: number;
-  /** The token used to authenticate your users in the app */
+  /** Organization slug of the Riseact Organization */
+  organizationSlug: string;
+  /** The token used to authenticate your app in the Riseact API */
   clientToken: string;
   /** The timestamp when the access token expires */
   expiresInSeconds: number;

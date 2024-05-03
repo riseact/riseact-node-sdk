@@ -13,6 +13,7 @@ const ORGANIZATION_QUERY = gql`
   query Organization {
     organization {
       id
+      slug
     }
   }
 `;
@@ -59,7 +60,7 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
 
     const gqlClient = createGqlClientByAccessToken({ accessToken, coreHost: config.hosts!.core });
 
-    let orgRes: ApolloQueryResult<{ organization: { id: number } }>;
+    let orgRes: ApolloQueryResult<{ organization: { id: number; slug: string } }>;
     try {
       orgRes = await gqlClient.query({
         query: ORGANIZATION_QUERY,
@@ -78,6 +79,7 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
     }
 
     const organizationId = orgRes.data.organization.id;
+    const organizationSlug = orgRes.data.organization.slug;
 
     if (!organizationId) {
       console.error('No organization ID provided from Riseact. Details below', {
@@ -100,6 +102,7 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
         refreshToken,
         accessToken,
         organizationId,
+        organizationSlug,
         clientToken,
         expiresDateUTC,
         expiresInSeconds,
@@ -108,11 +111,29 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageDriver): Req
       const gqlClient = createGqlClientByAccessToken({ accessToken, coreHost: config.hosts!.core });
 
       if (config.auth.onInstall) {
-        await config.auth.onInstall({ gqlClient, organizationId, clientToken, refreshToken, accessToken, expiresDateUTC, expiresInSeconds });
+        await config.auth.onInstall({
+          gqlClient,
+          organizationId,
+          organizationSlug,
+          clientToken,
+          refreshToken,
+          accessToken,
+          expiresDateUTC,
+          expiresInSeconds,
+        });
       }
     } else {
       if (config.auth.onLogin) {
-        await config.auth.onLogin({ gqlClient, organizationId, clientToken, refreshToken, accessToken, expiresDateUTC, expiresInSeconds });
+        await config.auth.onLogin({
+          gqlClient,
+          organizationId,
+          organizationSlug,
+          clientToken,
+          refreshToken,
+          accessToken,
+          expiresDateUTC,
+          expiresInSeconds,
+        });
       }
     }
 

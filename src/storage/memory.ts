@@ -2,6 +2,7 @@ import { OAuthCredentials, StorageDriver } from '../types';
 
 const MemoryStorageObj: {
   [key: number]: {
+    organizationSlug: string;
     accessToken: string;
     refreshToken: string;
     clientToken: string;
@@ -12,7 +13,7 @@ const MemoryStorageObj: {
 
 export const MemoryStorage = (): StorageDriver => {
   const saveCredentials = async (credentials: OAuthCredentials) => {
-    const { accessToken, refreshToken, organizationId, clientToken, expiresDateUTC, expiresInSeconds } = credentials;
+    const { accessToken, refreshToken, organizationId, organizationSlug, clientToken, expiresDateUTC, expiresInSeconds } = credentials;
 
     MemoryStorageObj[organizationId] = {
       accessToken,
@@ -20,6 +21,7 @@ export const MemoryStorage = (): StorageDriver => {
       clientToken,
       expiresDateUTC,
       expiresInSeconds,
+      organizationSlug,
     };
   };
 
@@ -33,6 +35,7 @@ export const MemoryStorage = (): StorageDriver => {
           accessToken: organization.accessToken,
           refreshToken: organization.refreshToken,
           organizationId: Number(organizationId),
+          organizationSlug: organization.organizationSlug,
           clientToken: organization.clientToken,
           expiresDateUTC: organization.expiresDateUTC,
           expiresInSeconds: organization.expiresInSeconds,
@@ -54,6 +57,7 @@ export const MemoryStorage = (): StorageDriver => {
       accessToken: organization.accessToken,
       refreshToken: organization.refreshToken,
       organizationId,
+      organizationSlug: organization.organizationSlug,
       clientToken: organization.clientToken,
       expiresDateUTC: organization.expiresDateUTC,
       expiresInSeconds: organization.expiresInSeconds,
