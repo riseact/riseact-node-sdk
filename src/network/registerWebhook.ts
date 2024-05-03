@@ -40,10 +40,7 @@ function registerWebhook(event: WebhookEventTopic.PaymentCreated, callback: (pay
 function registerWebhook(event: WebhookEventTopic.PaymentUpdated, callback: (payload: WebhookDataPaymentUpdated) => any): RequestHandler;
 function registerWebhook(event: Array<WebhookEventTopic>, callback: (payload: WebhookDataMixedPayload) => any): RequestHandler;
 
-function registerWebhook(
-  event: WebhookEventTopic | Array<WebhookEventTopic>,
-  callback: (data: SupporterPayload & CampaignPayload & CheckoutPayload & PaymentPayload & DonationPayload) => any,
-): RequestHandler {
+function registerWebhook(event: WebhookEventTopic | Array<WebhookEventTopic>, callback: (payload: any) => any): RequestHandler {
   if (!Array.isArray(event)) {
     event = [event];
   }
