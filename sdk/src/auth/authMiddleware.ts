@@ -50,7 +50,8 @@ const initAuthMiddleware = (config: RiseactConfig, storage: StorageAdapters): Re
       return res.redirect(authorizePageUrl);
     }
 
-    if (credentials.organizationDomain !== tokenCookie.organizationDomain) {
+    // Check if the organization domain in the token cookie matches the one in the request query in first load from iframe
+    if (req.query['__organization'] && req.query['__organization'] !== tokenCookie.organizationDomain) {
       console.warn('[RA-SDK] Organization domain mismatch in client token cookie, redirecting to authorize page');
       res.clearCookie(COOKIE_CLIENT_TOKEN, { path: '/', sameSite: 'none', secure: true });
       return res.redirect(authorizePageUrl);
