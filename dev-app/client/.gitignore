@@ -1,0 +1,9 @@
+node_modules
+build
+.devbuild
+lib
+.vite
+.log
+yarn.lock
+package-lock.json
+data

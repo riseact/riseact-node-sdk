@@ -95,3 +95,8 @@ dist
 
 # TernJS port file
 .tern-port
+
+credentials.json
+.env
+todo
+/sdk/lib

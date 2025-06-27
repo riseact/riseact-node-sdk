@@ -1,0 +1,13 @@
+{
+  // Enable/disable default JavaScript formatter (For Prettier)
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.organizeImports": false,
+  },
+  // Hide node_modules and .devbuild folders from the explorer
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.devbuild": true,
+  },
+}

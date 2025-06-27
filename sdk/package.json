@@ -1,0 +1,50 @@
+{
+  "name": "@riseact/riseact-node-sdk",
+  "version": "5.0.0",
+  "description": "Riseact SDK for Nodejs",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
+  "jsnext:main": "lib/esm/index.js",
+  "sideEffects": false,
+  "types": "./lib/esm/index.d.ts",
+  "engines": {
+    "node": ">=18"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "repository": "https://github.com/riseact/riseact-node-sdk",
+  "author": "Riseact",
+  "license": "MIT",
+  "scripts": {
+    "build": "rm -rf ./lib/* && concurrently \"npm run build:cjs \" \"npm run build:esm \" && npm run build:type-extension",
+    "build:cjs": "rm -rf ./lib/cjs && tsc -p tsconfig.build.json --outDir ./lib/cjs --module commonjs --target es2017",
+    "build:esm": "rm -rf ./lib/esm && tsc -p tsconfig.build.json --outDir ./lib/esm --module esnext --target esnext",
+    "build:type-extension": "cp ./TypeExtensions.d.ts ./lib/TypeExtensions.d.ts",
+    "lint": "eslint --ext .ts,.tsx .",
+    "lint:fix": "eslint --ext .ts,.tsx . --fix",
+    "tsc": "tsc",
+    "check-unused-deps": "depcheck",
+    "check-updates": "ncu",
+    "upgrade-minors": "ncu -u --target minor",
+    "ts-guard": "ts-auto-guard ./src/types.ts && eslint --fix ./src/types.guard.ts"
+  },
+  "peerDependencies": {
+    "express": "^4.18"
+  },
+  "devDependencies": {
+    "express": "^4.18"
+  },
+  "dependencies": {
+    "graphql": "^16.6",
+    "@apollo/client": "^3.7",
+    "body-parser": "^1.20.1",
+    "cookie-parser": "^1.4.6",
+    "cross-fetch": "^3.1.5",
+    "express-session": "^1.17.3",
+    "http-proxy-middleware": "^2.0.6",
+    "openid-client": "^5.4.0",
+    "uuid": "^9.0.0",
+    "vite": "^4.1.1"
+  }
+}
