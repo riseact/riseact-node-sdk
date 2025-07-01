@@ -1,6 +1,6 @@
 {
   "name": "@riseact/riseact-node-sdk",
-  "version": "5.0.1",
+  "version": "5.0.2",
   "description": "Riseact SDK for Nodejs",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
@@ -11,7 +11,9 @@
     "node": ">=20.19.0"
   },
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "README.md",
+    "LICENSE"
   ],
   "repository": "https://github.com/riseact/riseact-node-sdk",
   "author": "Riseact",
