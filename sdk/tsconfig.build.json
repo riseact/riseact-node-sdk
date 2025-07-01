@@ -1,21 +1,17 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "module": "CommonJS",
+    "lib": ["ES2017", "DOM"],
+    "module": "CommonJS",          
+    "moduleResolution": "node",    
     "declaration": true,
     "outDir": "./lib",
     "strict": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
+    "skipLibCheck": true,
     "removeComments": true,
     "sourceMap": true
   },
-  "include": [
-    "src/**/*",
-    "TypeExtensions.d.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "lib"
-  ]
+  "include": ["src/**/*", "TypeExtensions.d.ts"],
+  "exclude": ["node_modules", "lib"]
 }
