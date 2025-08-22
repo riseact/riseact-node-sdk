@@ -37,27 +37,9 @@ import {
   WebhookEventTopic,
 } from './types';
 
+export { CampaignType, CheckoutState, DonationState, Frequency, Visibility, SupporterType, WebhookEventTopic };
+
 export type {
-  AuthConfig,
-  OAuthCredentials,
-  StorageConfig,
-  StorageAdapters,
-  NetworkConfig,
-  RiseactNetwork,
-  RiseactConfig,
-  RiseactInstance,
-  RiseactAuth,
-  CampaignPayload,
-  DonationPayload,
-  PaymentPayload,
-  CheckoutPayload,
-  SupporterPayload,
-  CampaignType,
-  CheckoutState,
-  DonationState,
-  Frequency,
-  Visibility,
-  SupporterType,
   WebhookDataCampaignCreated,
   WebhookDataCampaignDeleted,
   WebhookDataCampaignUpdated,
@@ -72,6 +54,20 @@ export type {
   WebhookDataSupporterCreated,
   WebhookDataSupporterDeleted,
   WebhookDataSupporterUpdated,
-  WebhookEventTopic,
+  AuthConfig,
+  OAuthCredentials,
+  StorageConfig,
+  StorageAdapters,
+  NetworkConfig,
+  RiseactNetwork,
+  RiseactConfig,
+  RiseactInstance,
+  RiseactAuth,
+  CampaignPayload,
+  DonationPayload,
+  PaymentPayload,
+  CheckoutPayload,
+  SupporterPayload,
 };
+
 export default initRiseactSDK;

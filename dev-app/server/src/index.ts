@@ -1,8 +1,7 @@
 import express, { Express } from 'express';
-import initRiseactSDK from '@sdk';
+import initRiseactSDK, { WebhookEventTopic } from '@sdk';
 import RiseactConfig from '@config/riseact';
 import { OrganizationCredentialsHandler, OrganizationInfoHandler } from '@controllers/organization';
-import { WebhookEventTopic } from '@common/gql/graphql';
 
 async function createServer() {
   const app: Express = express();

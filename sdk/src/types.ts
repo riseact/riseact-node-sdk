@@ -178,7 +178,7 @@ export interface RiseactDevTools {
 /*                                Webhook types                               */
 /* -------------------------------------------------------------------------- */
 
-export enum WebhookEventTopic {
+export const enum WebhookEventTopic {
   CampaignCreated = 'CAMPAIGN_CREATED',
   CampaignDeleted = 'CAMPAIGN_DELETED',
   CampaignUpdated = 'CAMPAIGN_UPDATED',
