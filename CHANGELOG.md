@@ -24,6 +24,9 @@ Complete rewrite of the package
 - Created the `startRiseactApp` function to condense the app start logic
 - Now `appPublicUrl` is mandatory
 
-### 5.1.0
+### 5.0.4
 - Added `onInstall` callback with `gqlClient`, `domain` and `credentials` parameters
 - Fixed some type issues
+
+### 5.1.0
+- Separate `onInstall` and `setCredentials` calls to ensure `onInstall` is called with fresh credentials before storing with `setCredentials`

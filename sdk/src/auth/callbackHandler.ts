@@ -62,15 +62,6 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageAdapters): R
     // check if the organization is already stored in the storage
     const oldCredentials = await storage.getCredentialsByOrganizationDomain(codeVerifierCookie.organizationDomain);
 
-    await storage.setCredentials({
-      organizationDomain: codeVerifierCookie.organizationDomain,
-      refreshToken,
-      accessToken,
-      expiresDateUTC,
-      expiresInSeconds,
-      clientToken: oldCredentials?.clientToken || newClientToken,
-    });
-
     if (!oldCredentials?.organizationDomain && config?.auth?.onInstall) {
       // It's supposed to be a new fresh token
       const gqlClient = await dangerouslyCreateGqlClientByAccessToken(accessToken);
@@ -87,6 +78,15 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageAdapters): R
         gqlClient,
       });
     }
+
+    await storage.setCredentials({
+      organizationDomain: codeVerifierCookie.organizationDomain,
+      refreshToken,
+      accessToken,
+      expiresDateUTC,
+      expiresInSeconds,
+      clientToken: oldCredentials?.clientToken || newClientToken,
+    });
 
     const authTokenCookie: ClientTokenCookie = {
       token: oldCredentials?.clientToken || newClientToken,

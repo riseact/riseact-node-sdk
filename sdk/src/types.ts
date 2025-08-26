@@ -86,11 +86,11 @@ export interface AuthConfig {
   /** Client secret generated from Riseact. See {@link https://help.riseact.org/en/manuale/applications/ docs} to learn how to create one */
   clientSecret: string;
 
-  /** Callback to run after a successful installation of the app */
+  /** Callback to run after a successful installation of the app. Called before setCredential adapter if provided */
   onInstall?: (onInstallParams: {
     domain: string;
     gqlClient: ApolloClient<NormalizedCacheObject>;
-    credentials?: OAuthCredentials;
+    credentials: OAuthCredentials;
   }) => Promise<void> | void;
 }
 
