@@ -6,6 +6,7 @@ import { ClientTokenCookie, CodeVerifierCookie, RiseactConfig, StorageAdapters }
 import safeAsyncHandler from '../utils/safeAsyncHandler';
 import urlJoin from '../utils/urlJoin';
 import { getOAuthClient } from './oauth';
+import { dangerouslyCreateGqlClientByAccessToken } from '../network/createGqlClient';
 
 const initCallbackHandler = (config: RiseactConfig, storage: StorageAdapters): RequestHandler => {
   const oauthCallbackHandler: RequestHandler = safeAsyncHandler(async (req: Request, res: Response) => {
@@ -70,8 +71,21 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageAdapters): R
       clientToken: oldCredentials?.clientToken || newClientToken,
     });
 
-    if (!oldCredentials?.organizationDomain) {
-      config?.auth?.onInstall?.(codeVerifierCookie.organizationDomain);
+    if (!oldCredentials?.organizationDomain && config?.auth?.onInstall) {
+      // It's supposed to be a new fresh token
+      const gqlClient = await dangerouslyCreateGqlClientByAccessToken(accessToken);
+      config?.auth?.onInstall?.({
+        domain: codeVerifierCookie.organizationDomain,
+        credentials: {
+          organizationDomain: codeVerifierCookie.organizationDomain,
+          accessToken,
+          refreshToken,
+          expiresInSeconds,
+          expiresDateUTC,
+          clientToken: newClientToken,
+        },
+        gqlClient,
+      });
     }
 
     const authTokenCookie: ClientTokenCookie = {

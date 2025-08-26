@@ -1,4 +1,4 @@
-import { ApolloClient, ApolloClientOptions } from '@apollo/client/core';
+import { ApolloClient, ApolloClientOptions, NormalizedCacheObject } from '@apollo/client/core';
 import { RequestHandler, Router, Express } from 'express';
 import { IncomingMessage } from 'http';
 import internal from 'stream';
@@ -87,7 +87,11 @@ export interface AuthConfig {
   clientSecret: string;
 
   /** Callback to run after a successful installation of the app */
-  onInstall?: (organizationDomain: string) => Promise<void>;
+  onInstall?: (onInstallParams: {
+    domain: string;
+    gqlClient: ApolloClient<NormalizedCacheObject>;
+    credentials?: OAuthCredentials;
+  }) => Promise<void> | void;
 }
 
 /** Credentials returned by Riseact after a successful OAuth flow */
@@ -122,10 +126,10 @@ export interface StorageConfig {
 
 /** Interface to implement to use a custom storage driver */
 export interface StorageAdapters {
-  getCredentialsByClientToken: (token: string) => Promise<OAuthCredentials | null>;
-  getCredentialsByOrganizationDomain: (organizationDomain: string) => Promise<OAuthCredentials | null>;
-  setCredentials: (credentials: OAuthCredentials) => Promise<void>;
-  removeCredentials: (organizationDomain: string) => Promise<void>;
+  getCredentialsByClientToken: (token: string) => Promise<OAuthCredentials | null> | OAuthCredentials | null;
+  getCredentialsByOrganizationDomain: (organizationDomain: string) => Promise<OAuthCredentials | null> | OAuthCredentials | null;
+  setCredentials: (credentials: OAuthCredentials) => Promise<void> | void;
+  removeCredentials: (organizationDomain: string) => Promise<void> | void;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -178,7 +182,7 @@ export interface RiseactDevTools {
 /*                                Webhook types                               */
 /* -------------------------------------------------------------------------- */
 
-export const enum WebhookEventTopic {
+export enum WebhookEventTopic {
   CampaignCreated = 'CAMPAIGN_CREATED',
   CampaignDeleted = 'CAMPAIGN_DELETED',
   CampaignUpdated = 'CAMPAIGN_UPDATED',

@@ -70,4 +70,7 @@ export type {
   SupporterPayload,
 };
 
+import { dangerouslyCreateGqlClientByAccessToken } from './network/createGqlClient';
+export { dangerouslyCreateGqlClientByAccessToken };
+
 export default initRiseactSDK;

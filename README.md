@@ -247,6 +247,22 @@ Riseact backend do not throw errors. If user is not authenticated, it respond wi
 }
 ```
 
+#### SDK Development
+
+Create a `.env` file in the root of your project and add the following lines:
+
+``` 
+CLIENT_ID=<your-app-client-id>
+CLIENT_SECRET=<your-app-client-secret>
+```
+
+Run the development server with:
+
+```bash
+riseact app dev
+```
+
+Now the changes you make to the SDK will be reflected in the dev app.
 
 ## License
 

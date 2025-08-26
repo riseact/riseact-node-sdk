@@ -23,3 +23,7 @@ Complete rewrite of the package
 - Documentation improvements
 - Created the `startRiseactApp` function to condense the app start logic
 - Now `appPublicUrl` is mandatory
+
+### 5.1.0
+- Added `onInstall` callback with `gqlClient`, `domain` and `credentials` parameters
+- Fixed some type issues

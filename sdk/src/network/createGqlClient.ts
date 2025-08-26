@@ -1,4 +1,4 @@
-import { ApolloClient, HttpLink, InMemoryCache, from, Observable, ApolloClientOptions } from '@apollo/client/core';
+import { ApolloClient, HttpLink, InMemoryCache, from, Observable, ApolloClientOptions, NormalizedCacheObject } from '@apollo/client/core';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 
@@ -95,5 +95,25 @@ const initCreateGqlClient = async ({ storage, organizationDomain, clientId, clie
     ...options,
   });
 };
+
+/* 
+Create a GQL client directly from an access token. It does not handle token renewal.
+This is intended for usage outside express routes, e.g. riseact config initialization.
+*/
+export async function dangerouslyCreateGqlClientByAccessToken<T = unknown>(accessToken: string, options: Partial<ApolloClientOptions<T>> = {}) {
+  const httpLink = new HttpLink({
+    uri: urlJoin(RISEACT_CORE_URL, RISEACT_GQL_ENDPOINT),
+    fetchOptions: { mode: 'cors', credentials: 'omit' },
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return new ApolloClient<NormalizedCacheObject>({
+    ssrMode: true,
+    link: from([httpLink]),
+    cache: new InMemoryCache(),
+    ...(options as any),
+  });
+}
 
 export default initCreateGqlClient;

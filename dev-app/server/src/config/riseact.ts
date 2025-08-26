@@ -1,6 +1,7 @@
-import type { RiseactConfig } from '@sdk';
+import { type RiseactConfig } from '@sdk';
 import path from 'path';
 import dotenv from 'dotenv';
+import { gql } from '@apollo/client';
 
 dotenv.config(process.env.NODE_ENV ? { path: path.join(process.cwd(), './../../.env') } : {});
 
@@ -9,6 +10,23 @@ const RiseactConfig: RiseactConfig = {
   auth: {
     clientId: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,
+
+    onInstall: async (onInstallParams) => {
+      console.log('App installed on organization:', onInstallParams.domain, onInstallParams.credentials);
+
+      const res = await onInstallParams.gqlClient.query({
+        query: gql`
+          query GetOrgData {
+            organization {
+              domain
+              name
+            }
+          }
+        `,
+      });
+
+      console.log('Gql client initialized successfully. Fetched data:', res.data.organization);
+    },
   },
   storage: {
     type: 'file',

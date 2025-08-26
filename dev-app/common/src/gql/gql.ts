@@ -18,6 +18,7 @@ const documents = {
     "\n  query GetOrganizationInfo {\n    organization {\n      name\n      logo {\n        square\n      }\n    }\n  }\n": types.GetOrganizationInfoDocument,
     "\n  query Campaign($campaignId: Int!) {\n    campaign(id: $campaignId) {\n      id\n      title\n      content\n      visibility\n      slug\n      type\n      cover {\n        id\n        small\n        url\n      }\n      createDate\n    }\n  }\n": types.CampaignDocument,
     "\n  mutation CampaignUpdateDetail($id: Int!, $data: CampaignInput!) {\n    campaignUpdate(id: $id, data: $data) {\n      campaign {\n        id\n        title\n      }\n      userErrors {\n        code\n        field\n        message\n      }\n    }\n  }\n": types.CampaignUpdateDetailDocument,
+    "\n          query GetOrgData {\n            organization {\n              domain\n              name\n            }\n          }\n        ": types.GetOrgDataDocument,
 };
 
 /**
@@ -40,6 +41,10 @@ export function graphql(source: "\n  query Campaign($campaignId: Int!) {\n    ca
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "\n  mutation CampaignUpdateDetail($id: Int!, $data: CampaignInput!) {\n    campaignUpdate(id: $id, data: $data) {\n      campaign {\n        id\n        title\n      }\n      userErrors {\n        code\n        field\n        message\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CampaignUpdateDetail($id: Int!, $data: CampaignInput!) {\n    campaignUpdate(id: $id, data: $data) {\n      campaign {\n        id\n        title\n      }\n      userErrors {\n        code\n        field\n        message\n      }\n    }\n  }\n"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "\n          query GetOrgData {\n            organization {\n              domain\n              name\n            }\n          }\n        "): (typeof documents)["\n          query GetOrgData {\n            organization {\n              domain\n              name\n            }\n          }\n        "];
 
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.

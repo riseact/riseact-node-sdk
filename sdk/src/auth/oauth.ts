@@ -10,9 +10,20 @@ interface AuthorizationData {
 }
 
 export async function getOAuthClient(config: RiseactConfig): Promise<BaseClient> {
-  const riseactIssuer = await Issuer.discover(urlJoin(RISEACT_ACCOUNTS_URL, '/oauth/.well-known/openid-configuration/'));
+  let riseactIssuer;
+
+  try {
+    riseactIssuer = await Issuer.discover(urlJoin(RISEACT_ACCOUNTS_URL, '/oauth/.well-known/openid-configuration/'));
+  } catch (error) {
+    console.error(
+      `Error during OAuth issuer discovery. Call to ${urlJoin(RISEACT_ACCOUNTS_URL, '/oauth/.well-known/openid-configuration/')} failed. Details below:`,
+      error,
+    );
+    throw Error('Could not discover OAuth issuer from Riseact accounts server');
+  }
 
   if (!config.auth.clientId || !config.auth.clientSecret || !config.network.appPublicUrl) {
+    console.error('OAuth client ID, client secret or app public URL not provided in RiseactConfig');
     throw Error('OAuth client not valid. Check OAuth credentials');
   }
 
