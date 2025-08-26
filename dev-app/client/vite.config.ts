@@ -20,6 +20,10 @@ export default defineConfig({
     tsconfigPaths(),
   ],
 
+  server: {
+    allowedHosts: true,
+  },
+
   build: {
     outDir: path.resolve(__dirname, '..', 'build', 'client'),
   },
