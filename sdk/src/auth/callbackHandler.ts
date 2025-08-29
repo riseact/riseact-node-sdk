@@ -13,7 +13,7 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageAdapters): R
     const codeVerifierCookieString = req.cookies?.[COOKIE_CODE_VERIFIER];
 
     if (!codeVerifierCookieString) {
-      console.error('No code verifier found in client cookies');
+      console.error('[RISEACT-SDK] No code verifier found in client cookies. Have you added a cookie parser middleware in your express chain?');
       return res.sendStatus(401);
     }
 
@@ -27,7 +27,7 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageAdapters): R
         code_verifier: codeVerifierCookie.code,
       })
       .catch((e) => {
-        console.error('Error during OAuth callback with Riseact accounts server. Details below:', e, {
+        console.error('[RISEACT-SDK] Error during OAuth callback with Riseact accounts server. Details below:', e, {
           riseactConfig: config,
           callbackParams: params,
           codeVerifier: codeVerifierCookie.code,
@@ -43,7 +43,7 @@ const initCallbackHandler = (config: RiseactConfig, storage: StorageAdapters): R
     const expiresInSeconds = tokenSet.expires_in;
 
     if (!refreshToken || !accessToken || !expiresInSeconds) {
-      console.error('No refresh_token, access_token or expires_in provided from authorization server. Details below:', {
+      console.error('[RISEACT-SDK] No refresh_token, access_token or expires_in provided from authorization server. Details below:', {
         refreshToken,
         accessToken,
         expiresInSeconds,

@@ -70,7 +70,7 @@ const initCreateGqlClient = async ({ storage, organizationDomain, clientId, clie
           });
         } catch (err) {
           // Something terrible happened, we can't recover from this. Try to remove credentials to force user to re-authenticate.
-          console.error('[RA-SDK] Failed to refresh token, removing credentials for organization:', organizationDomain);
+          console.error('[RISEACT-SDK] Failed to refresh token, removing credentials for organization:', organizationDomain);
           storage.removeCredentials(organizationDomain);
           currentCredentials = null;
           observer.error(err);

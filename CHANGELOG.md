@@ -30,3 +30,7 @@ Complete rewrite of the package
 
 ### 5.1.0
 - Separate `onInstall` and `setCredentials` calls to ensure `onInstall` is called with fresh credentials before storing with `setCredentials`
+
+### 5.1.1
+- Minors on logging
+- Remove strict restrictions on node version

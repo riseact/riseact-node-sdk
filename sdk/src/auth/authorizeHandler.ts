@@ -30,6 +30,12 @@ const initAuthorizeHandler = (config: RiseactConfig): RequestHandler => {
       secure: true,
     });
 
+    // Check if the cookie is set correctly
+    if (res.getHeader('Set-Cookie') === undefined) {
+      console.error('[RISEACT-SDK] Could not set code verifier cookie');
+      return res.status(500).send('Could not set code verifier cookie');
+    }
+
     return res.redirect(authorization.url);
   });
 

@@ -31,7 +31,7 @@ const initAuthMiddleware = (config: RiseactConfig, storage: StorageAdapters): Re
     const tokenCookieString = req.cookies?.[COOKIE_CLIENT_TOKEN]; // || req.headers.authorization?.split(' ')[1];
 
     if (!tokenCookieString) {
-      console.info('[RA-SDK] No client token found, redirecting to authorize page');
+      console.info('[RISEACT-SDK] No client token found, redirecting to authorize page');
       return res.redirect(authorizePageUrl);
     }
 
@@ -45,25 +45,25 @@ const initAuthMiddleware = (config: RiseactConfig, storage: StorageAdapters): Re
     const credentials = await storage.getCredentialsByClientToken(tokenCookie.token);
 
     if (!credentials) {
-      console.info('[RA-SDK] No credentials found in storage, redirecting to authorize page');
+      console.info('[RISEACT-SDK] No credentials found in storage, redirecting to authorize page');
       res.clearCookie(COOKIE_CLIENT_TOKEN, { path: '/', sameSite: 'none', secure: true });
       return res.redirect(authorizePageUrl);
     }
 
     // Check if the organization domain in the token cookie matches the one in the request query in first load from iframe
     if (req.query['__organization'] && req.query['__organization'] !== tokenCookie.organizationDomain) {
-      console.warn('[RA-SDK] Organization domain mismatch in client token cookie, redirecting to authorize page');
+      console.warn('[RISEACT-SDK] Organization domain mismatch in client token cookie, redirecting to authorize page');
       res.clearCookie(COOKIE_CLIENT_TOKEN, { path: '/', sameSite: 'none', secure: true });
       return res.redirect(authorizePageUrl);
     }
 
     // todo use a fail-first approach to check if the token is expired
     // if (credentials.expiresDateUTC < new Date()) {
-    //   console.info('[RA-SDK] Token expired, try to renew it');
+    //   console.info('[RISEACT-SDK] Token expired, try to renew it');
     //   try {
     //     credentials = await renewToken(config.auth.clientId, config.auth.clientSecret, credentials, storage);
     //   } catch (e) {
-    //     console.error('[RA-SDK] Error while renewing token', e);
+    //     console.error('[RISEACT-SDK] Error while renewing token', e);
     //     return res.redirect(authorizePageUrl);
     //   }
     // }
