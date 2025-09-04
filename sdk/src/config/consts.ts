@@ -1,5 +1,5 @@
-export const RISEACT_ACCOUNTS_URL = process.env.RA_ACCOUNTS_HOST || 'https://accounts.riseact.org';
-export const RISEACT_CORE_URL = process.env.RA_CORE_HOST || 'https://core.riseact.org';
+export const RISEACT_ACCOUNTS_URL = process.env.RISEACT_ACCOUNTS_URL || 'https://accounts.riseact.org';
+export const RISEACT_CORE_URL = process.env.RISEACT_CORE_URL || 'https://core.riseact.org';
 
 export const RISEACT_GQL_ENDPOINT = '/admin/graphql/';
 
