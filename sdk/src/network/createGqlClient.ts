@@ -69,11 +69,27 @@ const initCreateGqlClient = async ({ storage, organizationDomain, clientId, clie
             complete: () => observer.complete(),
           });
         } catch (err) {
-          // Something terrible happened, we can't recover from this. Try to remove credentials to force user to re-authenticate.
-          console.error('[RISEACT-SDK] Failed to refresh token, removing credentials for organization:', organizationDomain);
-          storage.removeCredentials(organizationDomain);
-          currentCredentials = null;
-          observer.error(err);
+          // Check if this is a refresh token expiration/authentication error
+          const isAuthError =
+            err instanceof Error && (err.message.includes('401') || err.message.includes('403') || err.message.includes('Failed to refresh token'));
+
+          if (isAuthError) {
+            // Create a proper 401 error for expired/invalid refresh token
+            const authError = new Error('Authentication failed: refresh token expired or invalid');
+            (authError as any).statusCode = 401;
+            (authError as any).code = 'UNAUTHENTICATED';
+
+            console.error('[RISEACT-SDK] Refresh token expired/invalid, removing credentials for organization:', organizationDomain);
+            storage.removeCredentials(organizationDomain);
+            currentCredentials = null;
+            observer.error(authError);
+          } else {
+            // Something terrible happened, we can't recover from this. Try to remove credentials to force user to re-authenticate.
+            console.error('[RISEACT-SDK] Failed to refresh token, removing credentials for organization:', organizationDomain);
+            storage.removeCredentials(organizationDomain);
+            currentCredentials = null;
+            observer.error(err);
+          }
         }
       })();
 

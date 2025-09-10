@@ -11,7 +11,7 @@ const oauthAuthorizeHandler: RequestHandler = safeAsyncHandler(async (req: Reque
 
   if (!organization) {
     console.warn('[RISEACT-SDK] No organization specified in request query');
-    return res.status(400).send('Organization not specified');
+    return res.status(400).send('Organization not specified. Try to refresh the page.');
   }
 
   const client = await getOAuthClient(config);
