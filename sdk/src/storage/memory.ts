@@ -27,7 +27,7 @@ export const MemoryStorage = (): StorageAdapters => {
     if (MemoryStorageObj[organizationDomain]) {
       delete MemoryStorageObj[organizationDomain];
     } else {
-      console.warn(`[RA-SDK] No credentials found for organization ${organizationDomain} to remove`);
+      console.warn(`[RISEACT-SDK] No credentials found for organization ${organizationDomain} to remove`);
     }
   };
 

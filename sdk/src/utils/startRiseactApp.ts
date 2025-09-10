@@ -1,4 +1,3 @@
-import cookieParser from 'cookie-parser';
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 import { RiseactInstance, RiseactToolsMiddlewareOptions } from '../types';
 import serveStatic from 'serve-static';
@@ -6,24 +5,30 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import path from 'path';
 import http from 'http';
+import oauthCallbackHandler from '../auth/callbackHandler';
+import oauthAuthorizeHandler from '../auth/authorizeHandler';
+import sidExchangeHandler from '../auth/sidExchange';
+import { existsSync } from 'fs';
 
 const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, options?: RiseactToolsMiddlewareOptions) => {
+  const libStaticPath = getLibStaticPath();
   const server = http.createServer(expressInstance);
 
-  expressInstance.use(cookieParser());
   expressInstance.use(
+    // cookieParser(),
     cors({
       origin: true,
-      credentials: true,
+      credentials: true, // is it needed?
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       maxAge: 86400, // 24 h
     }),
+    express.json(),
   );
-  expressInstance.use(express.json());
 
   expressInstance.use((req: Request, _res: Response, next: NextFunction) => {
     req.riseact = riseact;
+    console.debug(`[RISEACT-SDK] Incoming request: ${req.method} ${req.path}`);
     next();
   });
 
@@ -38,18 +43,29 @@ const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, opt
   // for each defined, use create webhook mutation
   // for each defined, create webhook handlers in express
 
-  // public endpoints
+  // OAuth endpoints for be-app/riseact authentication
+  expressInstance.use('/oauth/authorize', oauthAuthorizeHandler);
+  expressInstance.use('/oauth/callback', oauthCallbackHandler);
+
+  // Client auth endpoints for be-app/fe-app authentication
+  expressInstance.use('/auth/get-token', serveStatic(libStaticPath + '/get-token.html'));
+  expressInstance.use('/auth/sid-exchange', sidExchangeHandler);
+
+  // Public endpoints
   if (options?.publicRouter) {
     expressInstance.use(options.publicRouter);
   }
 
-  expressInstance.use(riseact.auth.authMiddleware);
-  expressInstance.use('/graphql', riseact.network.gqlProxy);
-
-  // private endpoints
+  // Private endpoints
   if (options?.protectedRouter) {
-    expressInstance.use(options.protectedRouter);
+    options?.protectedRouter.stack.map((layer) => {
+      console.log(`[RISEACT-SDK] Protected route registered: ${layer.route?.path}`);
+      expressInstance.use(layer.route?.path, riseact.auth.authMiddleware, layer.handle);
+    });
   }
+
+  // GraphQL proxy endpoint
+  expressInstance.use('/graphql', riseact.auth.authMiddleware, riseact.network.gqlProxy);
 
   if (!riseact.devTools) {
     // === process.env.NODE_ENV === 'production'
@@ -64,6 +80,19 @@ const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, opt
   server.listen(options?.serverPort || 3000, () => {
     console.log(`⚡️ Server is running on port ${options?.serverPort || 3000}. Open your app from Riseact admin panel.`);
   });
+};
+
+const getLibStaticPath = () => {
+  const serveStaticPathCandidates = [
+    path.resolve(__dirname, '../../static'),
+    path.resolve(__dirname, './static'),
+    path.resolve(process.cwd(), 'node_modules/@riseact/riseact-node-sdk/static'),
+  ];
+  const serveStaticPath = serveStaticPathCandidates.find((p) => existsSync(p));
+  if (!serveStaticPath) {
+    throw new Error('[RISEACT-SDK] Could not find static static files. Checked paths: ' + serveStaticPathCandidates.join(', '));
+  }
+  return serveStaticPath;
 };
 
 export default startRiseactApp;

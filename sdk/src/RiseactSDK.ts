@@ -1,11 +1,11 @@
 import dns from 'node:dns';
 
-import { initAuth } from './auth';
 import initNetwork from './network';
 import initStorage from './storage';
 import initDevTools from './tools';
 import { RiseactConfig, RiseactDevTools, RiseactInstance } from './types';
 import startRiseactApp from './utils/startRiseactApp';
+import authMiddleware from './auth/authMiddleware';
 
 async function initRiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
   if (!config.auth.clientId) {
@@ -22,7 +22,9 @@ async function initRiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
   dns.setDefaultResultOrder('ipv4first');
 
   const storage = initStorage(config.storage);
-  const auth = initAuth(config, storage);
+  const auth = {
+    authMiddleware,
+  };
   const network = await initNetwork(config, storage);
   const utils = {
     startRiseactApp,

@@ -54,6 +54,7 @@
     "express-session": "^1.17.3",
     "graphql": "^16.6",
     "http-proxy-middleware": "^2.0.6",
+    "lru-cache": "^11.2.1",
     "openid-client": "^5.4.0",
     "uuid": "^9.0.0"
   }

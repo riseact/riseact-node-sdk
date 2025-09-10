@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client authentication</title>
+</head>
+
+<body>
+    <script>
+        // First land after OAuth redirect -> served from authMiddleware
+        (async () => {
+            const hashParams = new URLSearchParams(location.hash.slice(1));
+            const sid = hashParams.get('sid');
+            if (!sid) { console.error('No sid'); return location.replace('/'); }
+
+            try {
+                const r = await fetch('/auth/sid-exchange', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'omit',
+                    body: JSON.stringify({ sid })
+                });
+                if (!r.ok) throw new Error("HTTP " + r.status);
+                const { client_token, organization } = await r.json();
+                if (!client_token || !organization) throw new Error('Invalid payload');
+
+                // sessionStorage.setItem('ra_app_client_token', client_token);
+                // sessionStorage.setItem('ra_app_organization', organization);
+                localStorage.setItem('ra_app_client_token', client_token);
+                localStorage.setItem('ra_app_organization', organization);
+
+                location.replace('/?__organization=' + organization);
+            } catch (e) {
+                console.error('SID exchange failed', e);
+                document.body.innerHTML('Authentication failed. Please try again.');
+            }
+        })();
+    </script>
+</body>
+
+</html>

@@ -71,6 +71,8 @@ export type {
 };
 
 import { dangerouslyCreateGqlClientByAccessToken } from './network/createGqlClient';
-export { dangerouslyCreateGqlClientByAccessToken };
+import { RISEACT_ORGANIZATION_HEADER } from './config/consts';
+
+export { dangerouslyCreateGqlClientByAccessToken, RISEACT_ORGANIZATION_HEADER };
 
 export default initRiseactSDK;

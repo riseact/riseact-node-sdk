@@ -1,85 +1,40 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
 
-import { COOKIE_CLIENT_TOKEN } from '../config/consts';
-import { ClientTokenCookie, RiseactConfig, StorageAdapters } from '../types';
-import initAuthorizeHandler from './authorizeHandler';
-import initCallbackHandler from './callbackHandler';
 import safeAsyncHandler from '../utils/safeAsyncHandler';
 
-const initAuthMiddleware = (config: RiseactConfig, storage: StorageAdapters): RequestHandler => {
-  const authorizeHandler = initAuthorizeHandler(config);
-  const callbackHandler = initCallbackHandler(config, storage);
+const authMiddleware: RequestHandler = safeAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+  const storage = req.riseact.storage;
 
-  const authMiddleware: RequestHandler = safeAsyncHandler(async (req: Request, res: Response, next: NextFunction) => {
-    // Reply to / requests from iframe in riseact admin application page
-    // riseact admin add a query parameter __organization in the request
+  // Create OAuth redirect link
+  const authorizePageUrl = '/oauth/authorize?__organization=' + (req.query['__organization'] || '');
 
-    // Intercept OAuth authorization and callback requests
-    if (req.path.match(/^\/oauth\/authorize/)) {
-      return authorizeHandler(req, res, next);
-    }
+  // Get token from Authorization header
+  const token = req.headers.authorization?.split(' ')[1];
 
-    // Intercept OAuth callback requests
-    if (req.path.match(/^\/oauth\/callback/)) {
-      return callbackHandler(req, res, next);
-    }
+  if (!token) {
+    console.info('[RISEACT-SDK] No client token provided, redirecting to authorize page');
+    return res.redirect(authorizePageUrl);
+  }
 
-    // Create OAuth redirect link
-    const authorizePageUrl = '/oauth/authorize?__organization=' + (req.query['__organization'] || '');
+  const credentials = await storage.getCredentialsByClientToken(token);
 
-    // Get token from cookies or authorization header
-    const tokenCookieString = req.cookies?.[COOKIE_CLIENT_TOKEN]; // || req.headers.authorization?.split(' ')[1];
+  if (!credentials) {
+    console.info('[RISEACT-SDK] No credentials found in storage, redirecting to authorize page');
+    // return res.redirect(authorizePageUrl);
+    return res.status(401).send('Invalid client token');
+  }
 
-    if (!tokenCookieString) {
-      console.info('[RISEACT-SDK] No client token found, redirecting to authorize page');
-      return res.redirect(authorizePageUrl);
-    }
+  // Check if the organization domain in the token cookie matches the one in the request query in first load from iframe
+  // note: __organization is provided only in the first request from riseact admin application iframe
+  if (req.query['__organization'] && req.query['__organization'] !== credentials.organizationDomain) {
+    console.warn('[RISEACT-SDK] Organization domain mismatch in saved credentials, redirecting to authorize page');
+    return res.redirect(authorizePageUrl);
+  }
 
-    let tokenCookie: ClientTokenCookie;
-    try {
-      tokenCookie = JSON.parse(tokenCookieString) as ClientTokenCookie;
-    } catch {
-      return res.redirect(authorizePageUrl);
-    }
+  req.organizationDomain = credentials.organizationDomain;
 
-    const credentials = await storage.getCredentialsByClientToken(tokenCookie.token);
+  req.app.enable('trust proxy');
+  next();
+});
 
-    if (!credentials) {
-      console.info('[RISEACT-SDK] No credentials found in storage, redirecting to authorize page');
-      res.clearCookie(COOKIE_CLIENT_TOKEN, { path: '/', sameSite: 'none', secure: true });
-      return res.redirect(authorizePageUrl);
-    }
-
-    // Check if the organization domain in the token cookie matches the one in the request query in first load from iframe
-    if (req.query['__organization'] && req.query['__organization'] !== tokenCookie.organizationDomain) {
-      console.warn('[RISEACT-SDK] Organization domain mismatch in client token cookie, redirecting to authorize page');
-      res.clearCookie(COOKIE_CLIENT_TOKEN, { path: '/', sameSite: 'none', secure: true });
-      return res.redirect(authorizePageUrl);
-    }
-
-    // todo use a fail-first approach to check if the token is expired
-    // if (credentials.expiresDateUTC < new Date()) {
-    //   console.info('[RISEACT-SDK] Token expired, try to renew it');
-    //   try {
-    //     credentials = await renewToken(config.auth.clientId, config.auth.clientSecret, credentials, storage);
-    //   } catch (e) {
-    //     console.error('[RISEACT-SDK] Error while renewing token', e);
-    //     return res.redirect(authorizePageUrl);
-    //   }
-    // }
-
-    req.organizationDomain = credentials.organizationDomain;
-
-    // remove residual cookies
-    // if (req.cookies?.[COOKIE_CODE_VERIFIER]) {
-    //   res.clearCookie(COOKIE_CODE_VERIFIER, { path: '/', sameSite: 'none', secure: true });
-    // }
-
-    req.app.enable('trust proxy');
-    next();
-  });
-
-  return authMiddleware;
-};
-
-export default initAuthMiddleware;
+export default authMiddleware;

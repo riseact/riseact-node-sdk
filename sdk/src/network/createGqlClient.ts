@@ -2,7 +2,7 @@ import { ApolloClient, HttpLink, InMemoryCache, from, Observable, ApolloClientOp
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
 
-import { renewToken } from '../auth/oauth';
+import { renewToken } from '../auth/authUtils';
 import { StorageAdapters, OAuthCredentials } from '../types';
 import urlJoin from '../utils/urlJoin';
 import { RISEACT_CORE_URL, RISEACT_GQL_ENDPOINT } from '../config/consts';

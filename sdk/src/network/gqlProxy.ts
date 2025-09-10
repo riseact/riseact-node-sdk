@@ -2,10 +2,10 @@ import cookieParser from 'cookie-parser';
 import { RequestHandler } from 'express';
 import { Readable } from 'stream';
 // import { Headers } from 'node-fetch'; // Node ≥18 global
-import { RISEACT_CORE_URL, RISEACT_GQL_ENDPOINT, COOKIE_CLIENT_TOKEN } from '../config/consts';
-import { ClientTokenCookie, OAuthCredentials, RiseactConfig, StorageAdapters } from '../types';
+import { RISEACT_CORE_URL, RISEACT_GQL_ENDPOINT } from '../config/consts';
+import { OAuthCredentials, RiseactConfig, StorageAdapters } from '../types';
 import urlJoin from '../utils/urlJoin';
-import { renewToken } from '../auth/oauth';
+import { renewToken } from '../auth/authUtils';
 
 const REFRESH_LOCKS = new Map<string, Promise<OAuthCredentials>>();
 
@@ -85,18 +85,24 @@ const initGqlProxy = (config: RiseactConfig, storage: StorageAdapters): RequestH
     const authorizeUrl = '/oauth/authorize' + `?__organization=${req.organizationDomain}`;
 
     /* Retrieve client-token */
-    const tokenStr = req.cookies?.[COOKIE_CLIENT_TOKEN]; //|| req.headers.authorization?.split(' ')[1];
-    if (!tokenStr) return res.redirect(authorizeUrl);
+    // const tokenStr = req.cookies?.[COOKIE_CLIENT_TOKEN]; //|| req.headers.authorization?.split(' ')[1];
+    // if (!tokenStr) return res.redirect(authorizeUrl);
 
-    let token: ClientTokenCookie;
-    try {
-      token = JSON.parse(tokenStr);
-    } catch {
+    // let token: ClientTokenCookie;
+    // try {
+    //   token = JSON.parse(tokenStr);
+    // } catch {
+    //   return res.redirect(authorizeUrl);
+    // }
+    const token = req.headers.authorization?.split(' ')[1] as string | undefined;
+
+    if (!token) {
+      console.warn('[RISEACT-SDK] No client token provided in request');
       return res.redirect(authorizeUrl);
     }
 
     /* Retrieve Riseact credentials */
-    const credentials = await storage.getCredentialsByClientToken(token.token);
+    const credentials = await storage.getCredentialsByClientToken(token);
     if (!credentials) return res.redirect(authorizeUrl);
 
     /* Read request body (express.json/express.raw must have run) */

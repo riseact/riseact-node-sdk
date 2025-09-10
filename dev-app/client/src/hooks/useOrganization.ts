@@ -1,4 +1,5 @@
-import axios, { AxiosError } from 'axios';
+import { apiClient } from '@config/network';
+import { AxiosError } from 'axios';
 import { useEffect, useState } from 'react';
 
 interface ResponseBody {
@@ -13,7 +14,7 @@ function useOrganizationInfo() {
   const [error, setError] = useState<null | AxiosError>(null);
 
   useEffect(() => {
-    axios
+    apiClient
       .get<ResponseBody>('/api/organization-info')
       .then((response) => {
         setData(response.data);

@@ -49,7 +49,7 @@ export const FileStorage = (): StorageAdapters => {
       delete store[organizationDomain];
       await writeStore(store);
     } else {
-      console.warn(`[RA-SDK] No credentials found for organization ${organizationDomain} to remove
+      console.warn(`[RISEACT-SDK] No credentials found for organization ${organizationDomain} to remove
 `);
     }
   };

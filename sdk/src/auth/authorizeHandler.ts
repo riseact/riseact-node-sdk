@@ -1,45 +1,42 @@
 import { Request, RequestHandler, Response } from 'express';
 
-import { COOKIE_CODE_VERIFIER } from '../config/consts';
-import { CodeVerifierCookie, RiseactConfig } from '../types';
 import safeAsyncHandler from '../utils/safeAsyncHandler';
-import { getAuthorizationData, getOAuthClient } from './oauth';
+import { getOAuthClient } from './authUtils';
+import { generators } from 'openid-client';
+import { PkceRecord, savePkce } from '../utils/lruCache';
 
-const initAuthorizeHandler = (config: RiseactConfig): RequestHandler => {
-  const oauthAuthorizeHandler: RequestHandler = safeAsyncHandler(async (req: Request, res: Response) => {
-    const organization = req.query['__organization'] as string | undefined;
+const oauthAuthorizeHandler: RequestHandler = safeAsyncHandler(async (req: Request, res: Response) => {
+  const config = req.riseact.config;
+  const organization = req.query['__organization'] as string | undefined;
 
-    if (!organization) {
-      console.warn('[RA-SDK] No organization specified in request query');
-      return res.status(400).send('Organization not specified');
-    }
+  if (!organization) {
+    console.warn('[RISEACT-SDK] No organization specified in request query');
+    return res.status(400).send('Organization not specified');
+  }
 
-    const client = await getOAuthClient(config);
-    const authorization = getAuthorizationData(client, organization);
+  const client = await getOAuthClient(config);
 
-    const codeVerifierCookie: CodeVerifierCookie = {
-      code: authorization.codeVerifier,
-      organizationDomain: organization,
-    };
+  const codeVerifier = generators.codeVerifier();
+  const codeChallenge = generators.codeChallenge(codeVerifier);
 
-    const codeVerifierCookieString = JSON.stringify(codeVerifierCookie);
+  const state = generators.state();
+  const pkceRecord: PkceRecord = {
+    codeVerifier,
+    organizationDomain: organization,
+  };
 
-    res.cookie(COOKIE_CODE_VERIFIER, codeVerifierCookieString, {
-      sameSite: 'none',
-      httpOnly: true,
-      secure: true,
-    });
+  // Store the PKCE record in the cache with a TTL of 10 minutes
+  savePkce(state, pkceRecord);
 
-    // Check if the cookie is set correctly
-    if (res.getHeader('Set-Cookie') === undefined) {
-      console.error('[RISEACT-SDK] Could not set code verifier cookie');
-      return res.status(500).send('Could not set code verifier cookie');
-    }
-
-    return res.redirect(authorization.url);
+  const authorityRedirectUrl = client.authorizationUrl({
+    code_challenge: codeChallenge,
+    code_challenge_method: 'S256',
+    state,
+    // This is a custom param used by Riseact Accounts to directly login to the specified organization
+    __organization: organization,
   });
 
-  return oauthAuthorizeHandler;
-};
+  return res.redirect(authorityRedirectUrl);
+});
 
-export default initAuthorizeHandler;
+export default oauthAuthorizeHandler;

@@ -1,16 +1,11 @@
-import { BaseClient, Issuer, generators } from 'openid-client';
+import { BaseClient, Issuer } from 'openid-client';
 
 import { OAuthCredentials, RiseactConfig, StorageAdapters } from '../types';
 import urlJoin from '../utils/urlJoin';
 import { OAUTH_REDIRECT_URI, RISEACT_ACCOUNTS_URL } from '../config/consts';
 
-interface AuthorizationData {
-  url: string;
-  codeVerifier: string;
-}
-
 export async function getOAuthClient(config: RiseactConfig): Promise<BaseClient> {
-  let riseactIssuer;
+  let riseactIssuer: Issuer<BaseClient>;
 
   try {
     riseactIssuer = await Issuer.discover(urlJoin(RISEACT_ACCOUNTS_URL, '/oauth/.well-known/openid-configuration/'));
@@ -35,22 +30,6 @@ export async function getOAuthClient(config: RiseactConfig): Promise<BaseClient>
   });
 
   return client;
-}
-
-export function getAuthorizationData(client: BaseClient, organization?: string): AuthorizationData {
-  const codeVerifier = generators.codeVerifier();
-  const codeChallenge = generators.codeChallenge(codeVerifier);
-
-  return {
-    codeVerifier,
-    url: client.authorizationUrl({
-      code_challenge: codeChallenge,
-      code_challenge_method: 'S256',
-      ...(organization && {
-        __organization: organization,
-      }),
-    }),
-  };
 }
 
 export async function renewToken(
