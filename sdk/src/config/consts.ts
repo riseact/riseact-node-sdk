@@ -25,7 +25,7 @@ export const APP_HOST = `http://localhost:${APP_PORT}`;
 /* ------------------------------- Development ------------------------------ */
 
 export const HMR_PORT = 3030;
-export const HMR_CLIENT_PORT = IS_INTERNAL_DEV ? 3031 : 443;
+export const HMR_CLIENT_PORT = IS_INTERNAL_DEV ? 3030 : 443;
 
 export const HMR_HOST = `http://localhost:${HMR_PORT}`;
 export const FRONTEND_SRC_PATH = 'src/frontend';

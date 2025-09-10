@@ -43,8 +43,6 @@ const RiseactConfig: RiseactConfig = {
         root: path.join(process.cwd(), '../client'),
         configFile: path.join(process.cwd(), '../client/vite.config.ts'),
       },
-
-      hmrClientPort: 3030,
     },
   }),
 };
