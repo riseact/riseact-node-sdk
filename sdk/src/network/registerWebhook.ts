@@ -42,7 +42,7 @@ function registerWebhook(event: WebhookEventTopic | Array<WebhookEventTopic>, ca
   }
 
   // Create webhook url
-  const url = '/webhooks/' + hashString(event.join());
+  const url = '/webhooks/' + 'wh_' + hashString(event.join());
 
   // Register webhook in riseact
   // !! all webhooks must be cleared on server start. not now

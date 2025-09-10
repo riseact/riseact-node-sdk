@@ -4,7 +4,7 @@ import initNetwork from './network';
 import initStorage from './storage';
 import initDevTools from './tools';
 import { RiseactConfig, RiseactDevTools, RiseactInstance } from './types';
-import startRiseactApp from './utils/startRiseactApp';
+import startRiseactApp from './startRiseactApp';
 import authMiddleware from './auth/authMiddleware';
 
 async function initRiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {

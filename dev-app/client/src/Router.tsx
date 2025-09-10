@@ -28,19 +28,23 @@ const ProtectedRoute: FC = () => {
   }
 
   if (!token || !organization || organization !== __organization) {
-    return (
-      <div>
-        non authorized, click the link above to authorize
-        <br />
-        <button
-          onClick={() => {
-            window.location.href = `/oauth/authorize?__organization=${__organization || ''}`;
-          }}
-        >
-          Authorize
-        </button>
-      </div>
-    );
+    window.location.href = `/oauth/authorize?__organization=${__organization || ''}`;
+
+    // return (
+    //   <div>
+    //     non authorized, click the link above to authorize
+    //     <br />
+    //     <button
+    //       onClick={() => {
+    //         window.location.href = `/oauth/authorize?__organization=${__organization || ''}`;
+    //       }}
+    //     >
+    //       Authorize
+    //     </button>
+    //   </div>
+    // );
+
+    return null;
   }
 
   return <Outlet />;

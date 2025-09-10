@@ -20,8 +20,8 @@ async function createServer() {
   privateEpsRouter.get('/api/hello', (req, res) => {
     res.send('Hello World!');
   });
-  privateEpsRouter.get('/api/organization-info', OrganizationInfoHandler(riseact));
-  privateEpsRouter.get('/api/organization-credentials', OrganizationCredentialsHandler());
+  privateEpsRouter.get('/api/organization-info', OrganizationInfoHandler);
+  privateEpsRouter.get('/api/organization-credentials', OrganizationCredentialsHandler);
 
   riseact.utils.startRiseactApp(app, riseact, {
     publicRouter: publicEpsRouter,

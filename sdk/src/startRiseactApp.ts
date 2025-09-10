@@ -1,13 +1,13 @@
 import { NextFunction, Request, RequestHandler, Response } from 'express';
-import { RiseactInstance, RiseactToolsMiddlewareOptions } from '../types';
+import { RiseactInstance, RiseactToolsMiddlewareOptions } from './types';
 import serveStatic from 'serve-static';
 import express, { Express } from 'express';
 import cors from 'cors';
 import path from 'path';
 import http from 'http';
-import oauthCallbackHandler from '../auth/callbackHandler';
-import oauthAuthorizeHandler from '../auth/authorizeHandler';
-import sidExchangeHandler from '../auth/sidExchange';
+import oauthCallbackHandler from './auth/callbackHandler';
+import oauthAuthorizeHandler from './auth/authorizeHandler';
+import sidExchangeHandler from './auth/sidExchange';
 import { existsSync } from 'fs';
 
 const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, options?: RiseactToolsMiddlewareOptions) => {
@@ -15,10 +15,8 @@ const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, opt
   const server = http.createServer(expressInstance);
 
   expressInstance.use(
-    // cookieParser(),
     cors({
-      origin: true,
-      credentials: true, // is it needed?
+      origin: true, // riseact.config.network.appPublicUrl + localhost ?
       methods: ['GET', 'POST', 'PUT', 'DELETE'],
       allowedHeaders: ['Content-Type', 'Authorization'],
       maxAge: 86400, // 24 h
@@ -84,7 +82,7 @@ const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, opt
 
 const getLibStaticPath = () => {
   const serveStaticPathCandidates = [
-    path.resolve(__dirname, '../../static'),
+    path.resolve(__dirname, '../static'),
     path.resolve(__dirname, './static'),
     path.resolve(process.cwd(), 'node_modules/@riseact/riseact-node-sdk/static'),
   ];
