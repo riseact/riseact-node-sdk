@@ -33,4 +33,8 @@ Complete rewrite of the package
 
 ### 5.1.1
 - Minors on logging
-- Remove strict restrictions on node version
+- Removes strict restrictions on node version
+
+### 6.0.0
+- Auth flow refactor. Removed state cookies for oauth, now using internal server side cache. (details in src/auth/README.md)
+- Now using only Authorization headers with Bearer tokens for rest and graphql clients
