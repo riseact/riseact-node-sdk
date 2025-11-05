@@ -19,6 +19,8 @@ const oauthCallbackHandler: RequestHandler = safeAsyncHandler(async (req: Reques
 
   const state = params.state;
 
+  console.info('[RISEACT-SDK] Received OAuth callback request with state:', state);
+
   if (!state) {
     console.error('[RISEACT-SDK] No state provided in OAuth callback request');
     return res.sendStatus(400);

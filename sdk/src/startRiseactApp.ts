@@ -26,7 +26,6 @@ const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, opt
 
   expressInstance.use((req: Request, _res: Response, next: NextFunction) => {
     req.riseact = riseact;
-    console.debug(`[RISEACT-SDK] Incoming request: ${req.method} ${req.path}`);
     next();
   });
 

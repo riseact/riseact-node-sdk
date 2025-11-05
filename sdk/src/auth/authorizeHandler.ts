@@ -14,6 +14,8 @@ const oauthAuthorizeHandler: RequestHandler = safeAsyncHandler(async (req: Reque
     return res.status(400).send('Organization not specified. Try to refresh the page.');
   }
 
+  console.info(`[RISEACT-SDK] Initiating OAuth authorize flow for organization: ${organization}`);
+
   const client = await getOAuthClient(config);
 
   const codeVerifier = generators.codeVerifier();
