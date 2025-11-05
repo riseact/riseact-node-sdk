@@ -1,5 +1,7 @@
 import { LRUCache } from 'lru-cache';
 
+/* ---------------------------------- OAUTH --------------------------------- */
+
 export type PkceRecord = { codeVerifier: string; organizationDomain: string };
 
 export const pkceStore = new LRUCache<string, PkceRecord>({
@@ -18,6 +20,8 @@ export function popPkce(state: string): PkceRecord | undefined {
   return rec;
 }
 
+/* ----------------------------------- SID ---------------------------------- */
+
 export type SidRecord = { organizationDomain: string; clientToken: string };
 
 export const sidStore = new LRUCache<string, SidRecord>({
@@ -35,3 +39,27 @@ export function popSid(state: string): SidRecord | undefined {
   if (rec) sidStore.delete(state);
   return rec;
 }
+
+/* ----------------------------- REFRESH LOCK ------------------------------ */
+
+export type RefreshLockState = {
+  organizationDomain: string;
+  status: 'pending' | 'completed';
+  updatedAt: number;
+};
+
+export const refreshLockStore = new LRUCache<string, RefreshLockState>({
+  max: 200,
+  ttl: 5 * 60 * 1000, // 5 minutes
+});
+
+export const updateRefreshLock = (organizationDomain: string, status: RefreshLockState['status']) =>
+  refreshLockStore.set(organizationDomain, {
+    organizationDomain,
+    status,
+    updatedAt: Date.now(),
+  });
+
+export const deleteRefreshLock = (organizationDomain: string) => refreshLockStore.delete(organizationDomain);
+
+export const getRefreshLockState = (organizationDomain: string): RefreshLockState | undefined => refreshLockStore.get(organizationDomain);

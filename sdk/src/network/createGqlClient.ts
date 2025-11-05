@@ -79,7 +79,7 @@ const initCreateGqlClient = async ({ storage, organizationDomain, clientId, clie
             (authError as any).statusCode = 401;
             (authError as any).code = 'UNAUTHENTICATED';
 
-            console.error('[RISEACT-SDK] Refresh token expired/invalid, removing credentials for organization:', organizationDomain);
+            console.error('[RISEACT-SDK] Refresh token expired/invalid, there is nothing to do. Removing credentials for organization:', organizationDomain);
             storage.removeCredentials(organizationDomain);
             currentCredentials = null;
             observer.error(authError);

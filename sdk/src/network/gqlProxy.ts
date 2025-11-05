@@ -7,17 +7,15 @@ import { OAuthCredentials, RiseactConfig, StorageAdapters } from '../types';
 import urlJoin from '../utils/urlJoin';
 import { renewToken } from '../auth/authUtils';
 
-const REFRESH_LOCKS = new Map<string, Promise<OAuthCredentials>>();
-
 const initGqlProxy = (config: RiseactConfig, storage: StorageAdapters): RequestHandler => {
   /**
    * Sends the GraphQL request to Riseact and streams the response.
    * If “User is not authenticated” is detected, performs the
    * refresh-and-retry logic.
    */
-  const forward = async (creds: OAuthCredentials, req: Parameters<RequestHandler>[0], res: Parameters<RequestHandler>[1], body: string) => {
-    const doFetch = async (accessToken: string) => {
-      const fetchRes = await fetch(urlJoin(RISEACT_CORE_URL, RISEACT_GQL_ENDPOINT), {
+  const forward = async (credentials: OAuthCredentials, req: Parameters<RequestHandler>[0], res: Parameters<RequestHandler>[1], body: string) => {
+    const performFetch = async (accessToken: string) => {
+      const fetchResponse = await fetch(urlJoin(RISEACT_CORE_URL, RISEACT_GQL_ENDPOINT), {
         method: req.method,
         headers: {
           ...req.headers,
@@ -26,37 +24,29 @@ const initGqlProxy = (config: RiseactConfig, storage: StorageAdapters): RequestH
         } as any,
         body,
       });
-      return fetchRes;
+      return fetchResponse;
     };
 
-    let riseactRes = await doFetch(creds.accessToken);
+    let riseactResponse = await performFetch(credentials.accessToken);
 
-    const isJson = riseactRes.headers.get('content-type')?.includes('application/json') ?? false;
+    const isJson = riseactResponse.headers.get('content-type')?.includes('application/json') ?? false;
 
-    if (riseactRes.ok && isJson) {
-      const cloned = riseactRes.clone();
+    if (riseactResponse.ok && isJson) {
+      const cloned = riseactResponse.clone();
       try {
         const payload = await cloned.json();
 
         const unauth = payload?.errors?.some((e: any) => e?.message.includes('User is not authenticated'));
 
         if (unauth) {
-          /* ---- single-flight refresh latch ---- */
-          const key = creds.clientToken;
-          let lock = REFRESH_LOCKS.get(key);
-          if (!lock) {
-            lock = renewToken(config.auth.clientId!, config.auth.clientSecret!, creds, storage).finally(() => REFRESH_LOCKS.delete(key));
-            REFRESH_LOCKS.set(key, lock);
-          }
-
-          let newCreds: OAuthCredentials;
+          let renewedCredentials: OAuthCredentials;
           try {
-            newCreds = await lock;
+            renewedCredentials = await renewToken(config.auth.clientId!, config.auth.clientSecret!, credentials, storage);
           } catch {
             return res.redirect(`/oauth/authorize?__organization=${req.organizationDomain}`);
           }
 
-          riseactRes = await doFetch(newCreds.accessToken);
+          riseactResponse = await performFetch(renewedCredentials.accessToken);
         }
       } catch {
         /* ignore JSON-parse errors – treat response as opaque */
@@ -64,12 +54,12 @@ const initGqlProxy = (config: RiseactConfig, storage: StorageAdapters): RequestH
     }
 
     /* ---- stream the Riseact response unchanged ---- */
-    res.status(riseactRes.status);
-    riseactRes.headers.forEach((v, k) => res.setHeader(k, v));
+    res.status(riseactResponse.status);
+    riseactResponse.headers.forEach((v, k) => res.setHeader(k, v));
 
-    if (riseactRes.body) {
+    if (riseactResponse.body) {
       // fromWeb() trasforma il ReadableStream Web in uno Readable Node
-      Readable.fromWeb(riseactRes.body as any).pipe(res);
+      Readable.fromWeb(riseactResponse.body as any).pipe(res);
     } else {
       res.end();
     }
