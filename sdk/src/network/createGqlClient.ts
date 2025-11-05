@@ -47,9 +47,14 @@ const initCreateGqlClient = async ({ storage, organizationDomain, clientId, clie
   }));
 
   const errorLink = onError(({ graphQLErrors, operation, forward }) => {
-    const unauth = graphQLErrors?.some((e) => e?.message === 'User is not authenticated');
+    const unauth = graphQLErrors?.some((e) => e?.message?.includes('User is not authenticated'));
 
-    if (!unauth) return;
+    if (!unauth) {
+      if (graphQLErrors?.length) {
+        console.error('[RISEACT-SDK] GraphQL error while executing', operation.operationName || 'anonymous operation', graphQLErrors);
+      }
+      return;
+    }
 
     return new Observable((observer) => {
       (async () => {
@@ -79,7 +84,10 @@ const initCreateGqlClient = async ({ storage, organizationDomain, clientId, clie
             (authError as any).statusCode = 401;
             (authError as any).code = 'UNAUTHENTICATED';
 
-            console.error('[RISEACT-SDK] Refresh token expired/invalid, there is nothing to do. Removing credentials for organization:', organizationDomain);
+            console.error(
+              '[RISEACT-SDK] Refresh token expired/invalid, there is nothing to do. Removing credentials for organization:',
+              organizationDomain,
+            );
             storage.removeCredentials(organizationDomain);
             currentCredentials = null;
             observer.error(authError);
