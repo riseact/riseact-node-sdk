@@ -46,10 +46,13 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 
   if (shouldLogout) {
+    const lastOrg = localStorage.getItem(ORGANIZATION_KEY);
+
     localStorage.removeItem(CLIENT_TOKEN_KEY);
     localStorage.removeItem(ORGANIZATION_KEY);
 
-    document.location.href = '/';
+    document.location.href = lastOrg ? `/?__organization=${lastOrg}` : '/';
+    // note: / will trigger an "Organization not specified. Try to refresh the page"
   }
 });
 
@@ -74,10 +77,13 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
+      const lastOrg = localStorage.getItem(ORGANIZATION_KEY);
+
       localStorage.removeItem(CLIENT_TOKEN_KEY);
       localStorage.removeItem(ORGANIZATION_KEY);
 
-      document.location.href = '/';
+      document.location.href = lastOrg ? `/?__organization=${lastOrg}` : '/';
+      // note: / will trigger an "Organization not specified. Try to refresh the page"
     }
     return Promise.reject(error);
   },
