@@ -82,7 +82,7 @@ const oauthCallbackHandler: RequestHandler = safeAsyncHandler(async (req: Reques
     console.info('[RISEACT-SDK] Running onInstall hook for organization', storedState.organizationDomain);
     // It's supposed to be a new fresh token
     const gqlClient = await dangerouslyCreateGqlClientByAccessToken(accessToken);
-    config?.auth?.onInstall?.({
+    await config?.auth?.onInstall?.({
       domain: storedState.organizationDomain,
       credentials: {
         organizationDomain: storedState.organizationDomain,
