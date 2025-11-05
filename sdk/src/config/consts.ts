@@ -6,8 +6,8 @@ export const IS_INTERNAL_DEV = process.env.RISEACT_ACCOUNTS_URL?.includes('local
 export const DEFAULT_RISEACT_ACCOUNTS_URL = 'https://accounts.riseact.org';
 export const DEFAULT_RISEACT_CORE_URL = 'https://core.riseact.org';
 
-export const RISEACT_ACCOUNTS_URL = process.env.RISEACT_ACCOUNTS_URL || DEFAULT_RISEACT_ACCOUNTS_URL;
-export const RISEACT_CORE_URL = process.env.RISEACT_CORE_URL || DEFAULT_RISEACT_CORE_URL;
+export const RISEACT_ACCOUNTS_URL = process.env.RISEACT_ACCOUNTS_URL?.replaceAll('"', '') || DEFAULT_RISEACT_ACCOUNTS_URL;
+export const RISEACT_CORE_URL = process.env.RISEACT_CORE_URL?.replaceAll('"', '') || DEFAULT_RISEACT_CORE_URL;
 
 export const RISEACT_GQL_ENDPOINT = '/admin/graphql/';
 export const OAUTH_REDIRECT_URI = '/oauth/callback';

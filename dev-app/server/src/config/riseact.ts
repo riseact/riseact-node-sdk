@@ -8,8 +8,8 @@ dotenv.config(process.env.NODE_ENV ? { path: path.join(process.cwd(), './../../.
 const RiseactConfig: RiseactConfig = {
   // Provide your application ID and secret from Riseact
   auth: {
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
+    clientId: process.env.CLIENT_ID?.replaceAll('"', ''),
+    clientSecret: process.env.CLIENT_SECRET?.replaceAll('"', ''),
 
     onInstall: async (onInstallParams) => {
       console.log('App installed on organization:', onInstallParams.domain, onInstallParams.credentials);
@@ -33,7 +33,7 @@ const RiseactConfig: RiseactConfig = {
   },
 
   network: {
-    appPublicUrl: process.env.RISEACT_APP_URL || 'http://localhost:3000',
+    appPublicUrl: process.env.RISEACT_APP_URL?.replaceAll('"', '') || 'http://localhost:3000',
   },
 
   ...(process.env.NODE_ENV === 'development' && {

@@ -27,7 +27,6 @@ const authLink = setContext((_, { headers }) => {
   };
 });
 
-// + add this
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   let shouldLogout = false;
 
