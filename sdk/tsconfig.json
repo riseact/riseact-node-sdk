@@ -5,7 +5,8 @@
     "strict": true,
     "baseUrl": "./src",
     "outDir": "./lib",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "target": "es2021",
   },
   "include": [
     "src/**/*",
