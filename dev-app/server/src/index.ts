@@ -17,7 +17,7 @@ async function createServer() {
   );
 
   const privateEpsRouter = express.Router();
-  privateEpsRouter.get('/api/hello', (req, res) => {
+  privateEpsRouter.get('/hello', (req, res) => {
     res.send('Hello World!');
   });
   privateEpsRouter.get('/api/organization-info', OrganizationInfoHandler);

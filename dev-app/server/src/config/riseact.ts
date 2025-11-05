@@ -12,7 +12,7 @@ const RiseactConfig: RiseactConfig = {
     clientSecret: process.env.CLIENT_SECRET?.replaceAll('"', ''),
 
     onInstall: async (onInstallParams) => {
-      console.log('App installed on organization:', onInstallParams.domain, onInstallParams.credentials);
+      console.log('[DEV-APP] App installed on organization:', onInstallParams.domain, onInstallParams.credentials);
 
       const res = await onInstallParams.gqlClient.query({
         query: gql`
@@ -25,7 +25,7 @@ const RiseactConfig: RiseactConfig = {
         `,
       });
 
-      console.log('Gql client initialized successfully. Fetched data:', res.data.organization);
+      console.log('[DEV-APP] Gql client initialized successfully. Fetched data:', res.data.organization);
     },
   },
   storage: {

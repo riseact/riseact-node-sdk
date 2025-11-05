@@ -49,11 +49,13 @@ const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, opt
   expressInstance.use('/auth/get-token', serveStatic(libStaticPath + '/get-token.html'));
   expressInstance.use('/auth/sid-exchange', sidExchangeHandler);
 
+  // TODO feat: must accept express routers and single routes
   // Public endpoints
   if (options?.publicRouter) {
     expressInstance.use(options.publicRouter);
   }
 
+  // TODO feat: must accept express routers and single routes
   // Private endpoints
   if (options?.protectedRouter) {
     options?.protectedRouter.stack.map((layer) => {

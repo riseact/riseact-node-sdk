@@ -19,7 +19,7 @@ const authMiddleware: RequestHandler = safeAsyncHandler(async (req: Request, res
   const credentials = await storage.getCredentialsByClientToken(token);
 
   if (!credentials) {
-    console.info('[RISEACT-SDK] No credentials found in storage, redirecting to authorize page');
+    console.info(`[RISEACT-SDK] No credentials found in storage for token ${token}, redirecting to riseact accounts authorize page`);
     // return res.redirect(authorizePageUrl);
     return res.status(401).send('Invalid client token');
   }

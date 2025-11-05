@@ -663,6 +663,1393 @@ export type CommentUpdateInput = {
   body: Scalars['String'];
 };
 
+export type CoreMutation = {
+  __typename?: 'CoreMutation';
+  activityCreate: ActivityResponse;
+  activityDelete: ActivityResponse;
+  activityDone: ActivityResponse;
+  activityUndone: ActivityResponse;
+  activityUpdate: ActivityResponse;
+  applicationCreatePrivate: Application;
+  applicationPrivateRefreshToken: AccessToken;
+  applicationUninstall: Application;
+  applicationUpdatePrivate: Application;
+  articlesCreate: ArticlesResponse;
+  articlesDelete: ArticlesResponse;
+  articlesUpdate: ArticlesResponse;
+  assetCreate: Asset;
+  assetDelete: Asset;
+  assetDuplicate: Asset;
+  assetUpdate: Asset;
+  billingCancelChangePlan: ChangePlanResponse;
+  billingChangePlan: ChangePlanResponse;
+  billingCreateCheckoutSession: CheckoutSession;
+  blogsCreate: BlogsResponse;
+  blogsDelete: BlogsResponse;
+  blogsUpdate: BlogsResponse;
+  campaignCommentCreate: CampaignCommentResponse;
+  campaignCommentDelete: CampaignCommentResponse;
+  campaignCommentUpdate: CampaignCommentResponse;
+  campaignCreate: CampaignResponse;
+  campaignDelete: CampaignResponse;
+  campaignDuplicate: CampaignResponse;
+  campaignUpdate: CampaignResponse;
+  checkoutComplete: CheckoutResponse;
+  checkoutCreate: CheckoutResponse;
+  checkoutRegisterPayment: CheckoutResponse;
+  checkoutSendRecoveryEmail: CheckoutResponse;
+  checkoutUpdate: CheckoutResponse;
+  commentCreate: CommentResponse;
+  commentDelete: CommentResponse;
+  commentUpdate: CommentResponse;
+  customfieldDefinitionCreate: CustomFieldDefinitionResponse;
+  customfieldDefinitionDelete: CustomFieldDefinitionResponse;
+  customfieldDefinitionUpdate: CustomFieldDefinitionResponse;
+  domainsCheckStatus: DomainsResponse;
+  domainsConnectExisting: DomainsResponse;
+  domainsDelete: DomainsResponse;
+  domainsSetPrimary: DomainsResponse;
+  donationBulkDelete: Scalars['Boolean'];
+  donationDelete: Donation;
+  donationExport: Scalars['String'];
+  donationImport: Task;
+  donationReceiptSend: Scalars['Boolean'];
+  donationRegisterPayment: DonationResponse;
+  donationRevoke: Donation;
+  donationUpdate: Donation;
+  inviteCreate: Invite;
+  inviteResend: Invite;
+  inviteRevoke: Invite;
+  inviteUpdate: Invite;
+  manualPaymentMethodCreate: PaymentMethodResponse;
+  manualPaymentMethodDelete: PaymentMethodResponse;
+  manualPaymentMethodUpdate: PaymentMethodResponse;
+  mediaCreate: Media;
+  mediaDelete: MediaResponse;
+  menuCreate: MenuResponse;
+  menuDelete: MenuResponse;
+  menuUpdate: MenuResponse;
+  notificationCreate: Notification;
+  notificationSend: Notification;
+  notificationUpdate: Notification;
+  organizationUpdate: OrganizationResponse;
+  organizationUpdateLegalData: OrganizationResponse;
+  pagesCreate: PagesResponse;
+  pagesDelete: PagesResponse;
+  pagesUpdate: PagesResponse;
+  paperDocumentUpdate: PaperDocument;
+  partnerInviteUpdate: Invite;
+  paymentExport: Scalars['String'];
+  paymentRefund: PaymentResponse;
+  paymentUpdate: PaymentResponse;
+  paypalAccountReset?: Maybe<Scalars['Void']>;
+  paypalActivate: PayPalAccount;
+  paypalGenerateOnboardingLink: PayPalLink;
+  paypalRefreshOrganizationAccount?: Maybe<Scalars['Void']>;
+  peerCampaignCreate: PeerCampaignResponse;
+  peerCampaignDelete: PeerCampaignResponse;
+  peerCampaignUpdate: PeerCampaignResponse;
+  privacyDefinitionCreate: PrivacyDefinitionResponse;
+  privacyDefinitionDelete: PrivacyDefinitionResponse;
+  privacyDefinitionUpdate: PrivacyDefinitionResponse;
+  projectCreate: ProjectResponse;
+  projectDelete: ProjectResponse;
+  projectRemoveItem: ProjectResponse;
+  projectUpdate: ProjectResponse;
+  projectUpdateItems: ProjectResponse;
+  redirectsCreate: RedirectResponse;
+  redirectsDelete: RedirectResponse;
+  redirectsUpdate: RedirectResponse;
+  satispayActivate: SatispayAccount;
+  satispayPaymentCreate: SatispayPaymentResponse;
+  segmentCreate: SegmentResponse;
+  segmentDelete: SegmentResponse;
+  segmentUpdate: SegmentResponse;
+  staffSendPasswordReset: StaffResponse;
+  staffSetPermissions: StaffResponse;
+  staffUpdate: StaffResponse;
+  storeThemeInstall: Theme;
+  stripeActivate: StripeAccount;
+  stripeCheckoutIntentCreate: StripeCheckoutResponse;
+  stripeGenerateDashboardLink: StripeLink;
+  stripeGenerateOnboardingLink: StripeLink;
+  stripeTerminalCheckoutIntentCreate: StripeCheckoutResponse;
+  sumupAccountCreate: SumUpAccount;
+  sumupAccountUpdate: SumUpAccount;
+  supporterBulkTags: Scalars['Boolean'];
+  supporterCreate: Supporter;
+  supporterDelete: Supporter;
+  supporterExport: Scalars['String'];
+  supporterImport: Task;
+  supporterMerge: Supporter;
+  supporterRemovePrivacy: SupporterResponse;
+  supporterSendTaxCertificate: Supporter;
+  supporterSetPrivacy: SupporterResponse;
+  supporterUpdate: Supporter;
+  templateClone: Asset;
+  terminalConnectionTokenCreate: Scalars['String'];
+  terminalDelete: Scalars['String'];
+  terminalLocationCreate: StripeTerminalLocation;
+  terminalLocationDelete?: Maybe<Scalars['Void']>;
+  terminalLocationUpdate: StripeTerminalLocation;
+  terminalRegister: StripeTerminal;
+  terminalUpdateLabel: StripeTerminal;
+  themeCreate: Theme;
+  themeDelete: Theme;
+  themeDuplicate: Theme;
+  themeGenerateDownload: Scalars['String'];
+  themeInitDevelopment: Theme;
+  themePublish: Theme;
+  themePublishDevelopment: Theme;
+  themeUpdate: Theme;
+  themeUpgrade: Theme;
+  themeUpload: ThemeUploadResponse;
+  totemDelete: TotemResponse;
+  totemRegister: TotemResponse;
+  webhooksCreate: Webhook;
+  webhooksDelete: Webhook;
+  webhooksUpdate: Webhook;
+  websiteUpdate: Website;
+};
+
+
+export type CoreMutationActivityCreateArgs = {
+  data: ActivityCreateInput;
+};
+
+
+export type CoreMutationActivityDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationActivityDoneArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationActivityUndoneArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationActivityUpdateArgs = {
+  data: ActivityUpdateInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationApplicationCreatePrivateArgs = {
+  data: ApplicationPrivateInput;
+};
+
+
+export type CoreMutationApplicationPrivateRefreshTokenArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationApplicationUninstallArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationApplicationUpdatePrivateArgs = {
+  data: ApplicationPrivateInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationArticlesCreateArgs = {
+  data: ArticleInput;
+};
+
+
+export type CoreMutationArticlesDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationArticlesUpdateArgs = {
+  data: ArticleInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationAssetCreateArgs = {
+  data: AssetInput;
+};
+
+
+export type CoreMutationAssetDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationAssetDuplicateArgs = {
+  name: Scalars['String'];
+  sourceId: Scalars['Int'];
+};
+
+
+export type CoreMutationAssetUpdateArgs = {
+  data: AssetInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationBillingChangePlanArgs = {
+  planType: BillingPlanType;
+};
+
+
+export type CoreMutationBillingCreateCheckoutSessionArgs = {
+  planType: BillingPlanType;
+};
+
+
+export type CoreMutationBlogsCreateArgs = {
+  data: BlogInput;
+};
+
+
+export type CoreMutationBlogsDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationBlogsUpdateArgs = {
+  data: BlogInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationCampaignCommentCreateArgs = {
+  data: CampaignCommentCreateInput;
+};
+
+
+export type CoreMutationCampaignCommentDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationCampaignCommentUpdateArgs = {
+  data: CampaignCommentUpdateInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationCampaignCreateArgs = {
+  data: CampaignInput;
+};
+
+
+export type CoreMutationCampaignDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationCampaignDuplicateArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationCampaignUpdateArgs = {
+  data: CampaignInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationCheckoutCompleteArgs = {
+  data: CheckoutCompleteInput;
+  token: Scalars['String'];
+};
+
+
+export type CoreMutationCheckoutCreateArgs = {
+  data: CheckoutInput;
+};
+
+
+export type CoreMutationCheckoutRegisterPaymentArgs = {
+  data: CheckoutPaymentInput;
+  token: Scalars['String'];
+};
+
+
+export type CoreMutationCheckoutSendRecoveryEmailArgs = {
+  token: Scalars['String'];
+};
+
+
+export type CoreMutationCheckoutUpdateArgs = {
+  data: CheckoutInput;
+  token: Scalars['String'];
+};
+
+
+export type CoreMutationCommentCreateArgs = {
+  data: CommentCreateInput;
+};
+
+
+export type CoreMutationCommentDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationCommentUpdateArgs = {
+  data: CommentUpdateInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationCustomfieldDefinitionCreateArgs = {
+  data: CustomFieldDefinitionCreateInput;
+};
+
+
+export type CoreMutationCustomfieldDefinitionDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationCustomfieldDefinitionUpdateArgs = {
+  data: CustomFieldDefinitionUpdateInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationDomainsCheckStatusArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationDomainsConnectExistingArgs = {
+  data: ExistingDomainInput;
+};
+
+
+export type CoreMutationDomainsDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationDomainsSetPrimaryArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationDonationBulkDeleteArgs = {
+  filters: DonationFiltersInput;
+};
+
+
+export type CoreMutationDonationDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationDonationExportArgs = {
+  domain: DonationDomain;
+  format: ExportFormat;
+};
+
+
+export type CoreMutationDonationImportArgs = {
+  createMissingCampaigns: Scalars['Boolean'];
+  createMissingPaymentMethod: Scalars['Boolean'];
+  fallbackCampaignId?: InputMaybe<Scalars['Int']>;
+  file: Scalars['Upload'];
+  importAnonymousPayments: Scalars['Boolean'];
+};
+
+
+export type CoreMutationDonationReceiptSendArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationDonationRegisterPaymentArgs = {
+  data: DonationPaymentInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationDonationRevokeArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationDonationUpdateArgs = {
+  data: DonationInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationInviteCreateArgs = {
+  data: InviteInput;
+};
+
+
+export type CoreMutationInviteResendArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationInviteRevokeArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationInviteUpdateArgs = {
+  data: InviteInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationManualPaymentMethodCreateArgs = {
+  data: ManualPaymentMethodInput;
+};
+
+
+export type CoreMutationManualPaymentMethodDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationManualPaymentMethodUpdateArgs = {
+  data: ManualPaymentMethodInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationMediaCreateArgs = {
+  file: Scalars['Upload'];
+};
+
+
+export type CoreMutationMediaDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationMenuCreateArgs = {
+  data: MenuInput;
+};
+
+
+export type CoreMutationMenuDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationMenuUpdateArgs = {
+  data: MenuInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationNotificationCreateArgs = {
+  code: NotificationCode;
+  data: CustomNotificationInput;
+};
+
+
+export type CoreMutationNotificationSendArgs = {
+  code: NotificationCode;
+  data: NotificationSendInput;
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type CoreMutationNotificationUpdateArgs = {
+  code: NotificationCode;
+  data: NotificationInput;
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type CoreMutationOrganizationUpdateArgs = {
+  data: OrganizationInput;
+};
+
+
+export type CoreMutationOrganizationUpdateLegalDataArgs = {
+  data: OrganizationLegalInput;
+};
+
+
+export type CoreMutationPagesCreateArgs = {
+  data: PageInput;
+};
+
+
+export type CoreMutationPagesDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationPagesUpdateArgs = {
+  data: PageInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationPaperDocumentUpdateArgs = {
+  code: PaperDocumentCode;
+  data: PaperDocumentInput;
+  key?: InputMaybe<Scalars['String']>;
+};
+
+
+export type CoreMutationPartnerInviteUpdateArgs = {
+  id: Scalars['Int'];
+  state: StaffInvitationStatus;
+};
+
+
+export type CoreMutationPaymentExportArgs = {
+  domain: PaymentDomain;
+  format: ExportFormat;
+};
+
+
+export type CoreMutationPaymentRefundArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationPaymentUpdateArgs = {
+  data: ManualPaymentInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationPeerCampaignCreateArgs = {
+  data: PeerCampaignInput;
+};
+
+
+export type CoreMutationPeerCampaignDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationPeerCampaignUpdateArgs = {
+  data: PeerCampaignInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationPrivacyDefinitionCreateArgs = {
+  data: PrivacyDefinitionCreateInput;
+};
+
+
+export type CoreMutationPrivacyDefinitionDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationPrivacyDefinitionUpdateArgs = {
+  data: PrivacyDefinitionUpdateInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationProjectCreateArgs = {
+  data: ProjectInput;
+};
+
+
+export type CoreMutationProjectDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationProjectRemoveItemArgs = {
+  campaignId: Scalars['Int'];
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationProjectUpdateArgs = {
+  data: ProjectInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationProjectUpdateItemsArgs = {
+  campaignIds: Array<Scalars['Int']>;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationRedirectsCreateArgs = {
+  data: RedirectInput;
+};
+
+
+export type CoreMutationRedirectsDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationRedirectsUpdateArgs = {
+  data: RedirectInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationSatispayActivateArgs = {
+  authenticationCode: Scalars['String'];
+};
+
+
+export type CoreMutationSatispayPaymentCreateArgs = {
+  checkoutToken: Scalars['String'];
+};
+
+
+export type CoreMutationSegmentCreateArgs = {
+  data: SegmentInput;
+};
+
+
+export type CoreMutationSegmentDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationSegmentUpdateArgs = {
+  data: SegmentInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationStaffSendPasswordResetArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationStaffSetPermissionsArgs = {
+  id: Scalars['Int'];
+  permissions: Array<StaffPermission>;
+};
+
+
+export type CoreMutationStaffUpdateArgs = {
+  data: StaffInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationStoreThemeInstallArgs = {
+  uuid: Scalars['String'];
+};
+
+
+export type CoreMutationStripeCheckoutIntentCreateArgs = {
+  checkoutToken: Scalars['String'];
+  paymentTypes: StripePaymentTypeInput;
+};
+
+
+export type CoreMutationStripeTerminalCheckoutIntentCreateArgs = {
+  checkoutToken: Scalars['String'];
+};
+
+
+export type CoreMutationSumupAccountCreateArgs = {
+  data: SumUpAccountInput;
+};
+
+
+export type CoreMutationSumupAccountUpdateArgs = {
+  data: SumUpAccountInput;
+};
+
+
+export type CoreMutationSupporterBulkTagsArgs = {
+  action: SupporterBulkTagAction;
+  filters: SupporterFiltersInput;
+  tags: Array<Scalars['String']>;
+};
+
+
+export type CoreMutationSupporterCreateArgs = {
+  data: SupporterInput;
+};
+
+
+export type CoreMutationSupporterDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationSupporterExportArgs = {
+  domain: SupporterDomain;
+  format: ExportFormat;
+};
+
+
+export type CoreMutationSupporterImportArgs = {
+  file: Scalars['Upload'];
+  overrideSupporters: Scalars['Boolean'];
+};
+
+
+export type CoreMutationSupporterMergeArgs = {
+  data: SupporterInput;
+  duplicatesIds: Array<Scalars['Int']>;
+  masterId: Scalars['Int'];
+};
+
+
+export type CoreMutationSupporterRemovePrivacyArgs = {
+  code: Scalars['String'];
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationSupporterSendTaxCertificateArgs = {
+  id: Scalars['Int'];
+  method: NotificationMethods;
+};
+
+
+export type CoreMutationSupporterSetPrivacyArgs = {
+  data: SupporterPrivacyInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationSupporterUpdateArgs = {
+  data: SupporterInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationTemplateCloneArgs = {
+  name: Scalars['String'];
+  parentThemeUuid: Scalars['String'];
+  sourceId: Scalars['Int'];
+};
+
+
+export type CoreMutationTerminalConnectionTokenCreateArgs = {
+  locationId?: InputMaybe<Scalars['String']>;
+};
+
+
+export type CoreMutationTerminalDeleteArgs = {
+  id: Scalars['String'];
+};
+
+
+export type CoreMutationTerminalLocationCreateArgs = {
+  data: TerminalLocationInput;
+};
+
+
+export type CoreMutationTerminalLocationDeleteArgs = {
+  id: Scalars['String'];
+};
+
+
+export type CoreMutationTerminalLocationUpdateArgs = {
+  data: TerminalLocationInput;
+  id: Scalars['String'];
+};
+
+
+export type CoreMutationTerminalRegisterArgs = {
+  data: TerminalRegisterInput;
+};
+
+
+export type CoreMutationTerminalUpdateLabelArgs = {
+  id: Scalars['String'];
+  label: Scalars['String'];
+};
+
+
+export type CoreMutationThemeCreateArgs = {
+  data: ThemeInput;
+};
+
+
+export type CoreMutationThemeDeleteArgs = {
+  uuid: Scalars['String'];
+};
+
+
+export type CoreMutationThemeDuplicateArgs = {
+  uuid: Scalars['String'];
+};
+
+
+export type CoreMutationThemeGenerateDownloadArgs = {
+  uuid: Scalars['String'];
+};
+
+
+export type CoreMutationThemeInitDevelopmentArgs = {
+  uuid: Scalars['String'];
+};
+
+
+export type CoreMutationThemePublishArgs = {
+  uuid: Scalars['String'];
+};
+
+
+export type CoreMutationThemePublishDevelopmentArgs = {
+  devUuid: Scalars['String'];
+  themeUuid: Scalars['String'];
+};
+
+
+export type CoreMutationThemeUpdateArgs = {
+  data: ThemeInput;
+  uuid: Scalars['String'];
+};
+
+
+export type CoreMutationThemeUpgradeArgs = {
+  uuid: Scalars['String'];
+};
+
+
+export type CoreMutationThemeUploadArgs = {
+  file: Scalars['Upload'];
+};
+
+
+export type CoreMutationTotemDeleteArgs = {
+  deviceId: Scalars['String'];
+};
+
+
+export type CoreMutationTotemRegisterArgs = {
+  data: TotemInput;
+};
+
+
+export type CoreMutationWebhooksCreateArgs = {
+  data: WebhookInput;
+};
+
+
+export type CoreMutationWebhooksDeleteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationWebhooksUpdateArgs = {
+  data: WebhookInput;
+  id: Scalars['Int'];
+};
+
+
+export type CoreMutationWebsiteUpdateArgs = {
+  data: WebsiteInput;
+};
+
+export type CoreQuery = {
+  __typename?: 'CoreQuery';
+  activities: ActivityConnection;
+  activity: Activity;
+  application: Application;
+  applications: Array<Application>;
+  applicationsAvailable: Array<Application>;
+  article: Article;
+  articles: ArticleConnection;
+  asset?: Maybe<Asset>;
+  assetLayout?: Maybe<Asset>;
+  assets: Array<Asset>;
+  billingPlans?: Maybe<Plan>;
+  blog: Blog;
+  blogs: BlogConnection;
+  campaign: Campaign;
+  campaignComment: CampaignComment;
+  campaignComments: CampaignCommentConnection;
+  campaignTags: StrConnection;
+  campaigns: CampaignConnection;
+  checkout: Checkout;
+  checkouts: CheckoutConnection;
+  checkoutsAbandoned: CheckoutConnection;
+  checkoutsAdminGenerated: CheckoutConnection;
+  countries: CountryResponse;
+  customerPortal: CustomerPortal;
+  customfieldDefinition: CustomFieldDefinition;
+  customfieldDefinitions: Array<CustomFieldDefinition>;
+  customfieldDefinitionsEntitiesUsage: Array<CustomEntityUsage>;
+  domain?: Maybe<Domain>;
+  domains: Array<Domain>;
+  donation: Donation;
+  donationTags: StrConnection;
+  donations: DonationConnection;
+  invite: Invite;
+  invites: Array<Invite>;
+  manualPaymentMethod: PaymentMethod;
+  manualPaymentMethods: Array<PaymentMethod>;
+  media: MediaConnection;
+  mediaSingle: Media;
+  menu: Menu;
+  menuByHandle: Menu;
+  menus: Array<Menu>;
+  notification: Notification;
+  notifications: Array<Notification>;
+  organization: Organization;
+  organizations: Array<Organization>;
+  owner: Staff;
+  page: Page;
+  pages: PageConnection;
+  paperDocument: PaperDocument;
+  payment: Payment;
+  paymentMethods: Array<PaymentMethod>;
+  payments: PaymentConnection;
+  paypal?: Maybe<PayPalAccount>;
+  peerCampaign: PeerCampaign;
+  peerCampaigns: PeerCampaignConnection;
+  plan?: Maybe<Plan>;
+  privacyDefinition: PrivacyDefinition;
+  privacyDefinitions: PrivacyDefinitionConnection;
+  project: Project;
+  projects: ProjectConnection;
+  redirect: Redirect;
+  redirects: RedirectConnection;
+  satispay?: Maybe<SatispayAccount>;
+  segment: Segment;
+  segments: SegmentConnection;
+  staff: Staff;
+  staffs: Array<Staff>;
+  storeTheme: StoreTheme;
+  storeThemes: Array<StoreTheme>;
+  stripe?: Maybe<StripeAccount>;
+  stripeCustomerCards: Array<StripeCard>;
+  sumupAccount?: Maybe<SumUpAccount>;
+  supporter: Supporter;
+  supporterSavedCards: Array<StripeCard>;
+  supporterTags: StrConnection;
+  supporters: SupporterConnection;
+  terminal: StripeTerminal;
+  terminalLocation: StripeTerminalLocation;
+  terminalLocations: Array<StripeTerminalLocation>;
+  terminals: Array<StripeTerminal>;
+  terminalsByLocation: Array<StripeTerminal>;
+  theme: Theme;
+  themeCurrent: Theme;
+  themeSections: Array<SectionSchemaItem>;
+  themeSettings: Array<SectionSchemaItem>;
+  themes: Array<Theme>;
+  timeline: EventsConnection;
+  totem: Totem;
+  totems: TotemConnection;
+  unsplash: UnsplashResults;
+  user: Staff;
+  webhook: Webhook;
+  webhooks: Array<Webhook>;
+  website: Website;
+};
+
+
+export type CoreQueryActivitiesArgs = {
+  filters?: InputMaybe<ActivityFilters>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryActivityArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryApplicationArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryApplicationsArgs = {
+  filters?: InputMaybe<ApplicationFilters>;
+};
+
+
+export type CoreQueryArticleArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryArticlesArgs = {
+  filters?: InputMaybe<ArticlesFiltersInput>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryAssetArgs = {
+  key: Scalars['String'];
+  themeUuid: Scalars['String'];
+};
+
+
+export type CoreQueryAssetLayoutArgs = {
+  templateKey: Scalars['String'];
+  themeUuid: Scalars['String'];
+};
+
+
+export type CoreQueryAssetsArgs = {
+  filters: AssetsFiltersInput;
+};
+
+
+export type CoreQueryBlogArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryBlogsArgs = {
+  filters?: InputMaybe<BlogsFiltersInput>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryCampaignArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryCampaignCommentArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryCampaignCommentsArgs = {
+  filters?: InputMaybe<CampaignCommentsFilters>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryCampaignTagsArgs = {
+  pagination?: InputMaybe<PaginationInput>;
+  q?: InputMaybe<Scalars['String']>;
+};
+
+
+export type CoreQueryCampaignsArgs = {
+  filters?: InputMaybe<CampaignFilters>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryCheckoutArgs = {
+  token: Scalars['String'];
+};
+
+
+export type CoreQueryCheckoutsArgs = {
+  filters?: InputMaybe<CheckoutFilters>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryCheckoutsAbandonedArgs = {
+  filters?: InputMaybe<CheckoutFilters>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryCheckoutsAdminGeneratedArgs = {
+  filters?: InputMaybe<CheckoutFilters>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryCountriesArgs = {
+  filters?: InputMaybe<CountryFilters>;
+};
+
+
+export type CoreQueryCustomfieldDefinitionArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryCustomfieldDefinitionsArgs = {
+  filters?: InputMaybe<CustomFieldFilters>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryDomainArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryDonationArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryDonationTagsArgs = {
+  pagination?: InputMaybe<PaginationInput>;
+  q?: InputMaybe<Scalars['String']>;
+};
+
+
+export type CoreQueryDonationsArgs = {
+  filters?: InputMaybe<DonationFiltersInput>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryInviteArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryInvitesArgs = {
+  filters: StaffInviteFilters;
+};
+
+
+export type CoreQueryManualPaymentMethodArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryMediaArgs = {
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryMediaSingleArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryMenuArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryMenuByHandleArgs = {
+  handle: Scalars['String'];
+};
+
+
+export type CoreQueryNotificationArgs = {
+  code: NotificationCode;
+  id?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type CoreQueryNotificationsArgs = {
+  filters?: InputMaybe<NotificationFilters>;
+};
+
+
+export type CoreQueryOrganizationsArgs = {
+  filters?: InputMaybe<OrganizationsFilters>;
+};
+
+
+export type CoreQueryPageArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryPagesArgs = {
+  filters?: InputMaybe<PagesFiltersInput>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryPaperDocumentArgs = {
+  code: PaperDocumentCode;
+  key?: InputMaybe<Scalars['String']>;
+};
+
+
+export type CoreQueryPaymentArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryPaymentsArgs = {
+  filters?: InputMaybe<PaymentFiltersInput>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryPeerCampaignArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryPeerCampaignsArgs = {
+  filters?: InputMaybe<PeerCampaignFilters>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryPrivacyDefinitionArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryPrivacyDefinitionsArgs = {
+  filters?: InputMaybe<PrivacyDefinitionFilters>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryProjectArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryProjectsArgs = {
+  filters?: InputMaybe<ProjectFilters>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryRedirectArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryRedirectsArgs = {
+  filters?: InputMaybe<RedirectsFiltersInput>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQuerySegmentArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQuerySegmentsArgs = {
+  filters?: InputMaybe<SegmentFiltersInput>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryStaffArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQueryStaffsArgs = {
+  filters?: InputMaybe<StaffFiltersInput>;
+};
+
+
+export type CoreQueryStoreThemeArgs = {
+  uuid: Scalars['String'];
+};
+
+
+export type CoreQueryStripeCustomerCardsArgs = {
+  stripeCustomerId: Scalars['String'];
+};
+
+
+export type CoreQuerySupporterArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type CoreQuerySupporterSavedCardsArgs = {
+  id: Scalars['Int'];
+  limit?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type CoreQuerySupporterTagsArgs = {
+  pagination?: InputMaybe<PaginationInput>;
+  q?: InputMaybe<Scalars['String']>;
+};
+
+
+export type CoreQuerySupportersArgs = {
+  filters?: InputMaybe<SupporterFiltersInput>;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryTerminalArgs = {
+  id: Scalars['String'];
+};
+
+
+export type CoreQueryTerminalLocationArgs = {
+  id: Scalars['String'];
+};
+
+
+export type CoreQueryTerminalLocationsArgs = {
+  filters?: InputMaybe<TerminalLocationFilters>;
+};
+
+
+export type CoreQueryTerminalsByLocationArgs = {
+  locationId: Scalars['String'];
+};
+
+
+export type CoreQueryThemeArgs = {
+  uuid: Scalars['String'];
+};
+
+
+export type CoreQueryThemeSectionsArgs = {
+  themeUuid: Scalars['String'];
+};
+
+
+export type CoreQueryThemeSettingsArgs = {
+  themeUuid: Scalars['String'];
+};
+
+
+export type CoreQueryThemesArgs = {
+  filters?: InputMaybe<ThemesFiltersInput>;
+};
+
+
+export type CoreQueryTimelineArgs = {
+  filters: TimelineFilterInput;
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryTotemArgs = {
+  deviceId: Scalars['String'];
+};
+
+
+export type CoreQueryTotemsArgs = {
+  pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryUnsplashArgs = {
+  page?: Scalars['Int'];
+  perPage?: Scalars['Int'];
+  query: Scalars['String'];
+};
+
+
+export type CoreQueryWebhookArgs = {
+  id: Scalars['Int'];
+};
+
 export type CostExample = {
   __typename?: 'CostExample';
   amount: Scalars['Float'];
@@ -1041,65 +2428,6 @@ export enum FlowType {
   SupporterDataRequired = 'SUPPORTER_DATA_REQUIRED'
 }
 
-export type Form = {
-  __typename?: 'Form';
-  allowCustomAmount: Scalars['Boolean'];
-  allowCustomSubscriptionAmount: Scalars['Boolean'];
-  asks: Array<Scalars['Float']>;
-  asksSubscription: Array<Scalars['Float']>;
-  defaultAmount?: Maybe<Scalars['Float']>;
-  defaultSubscriptionAmount?: Maybe<Scalars['Float']>;
-  hasOneOff: Scalars['Boolean'];
-  hasSubscription: Scalars['Boolean'];
-  hasSubscriptionCustomOptions: Scalars['Boolean'];
-  id: Scalars['Int'];
-  maxAmount?: Maybe<Scalars['Float']>;
-  maxSubscriptionAmount?: Maybe<Scalars['Float']>;
-  minAmount?: Maybe<Scalars['Float']>;
-  minSubscriptionAmount?: Maybe<Scalars['Float']>;
-  name: Scalars['String'];
-  note?: Maybe<Scalars['String']>;
-  requiredFields: Array<Scalars['String']>;
-  shownFields: Array<Scalars['String']>;
-};
-
-export type FormConnection = {
-  __typename?: 'FormConnection';
-  edges: Array<FormEdge>;
-  pageInfo: PageInfo;
-};
-
-export type FormEdge = {
-  __typename?: 'FormEdge';
-  cursor: Scalars['String'];
-  node: Form;
-};
-
-export type FormFilters = {
-  order?: InputMaybe<Scalars['String']>;
-  q?: InputMaybe<Scalars['String']>;
-};
-
-export type FormInput = {
-  allowCustomAmount?: InputMaybe<Scalars['Boolean']>;
-  allowCustomSubscriptionAmount?: InputMaybe<Scalars['Boolean']>;
-  asks: Array<Scalars['Float']>;
-  asksSubscription: Array<Scalars['Float']>;
-  defaultAmount?: InputMaybe<Scalars['Float']>;
-  defaultSubscriptionAmount?: InputMaybe<Scalars['Float']>;
-  hasOneOff?: InputMaybe<Scalars['Boolean']>;
-  hasSubscription?: InputMaybe<Scalars['Boolean']>;
-  hasSubscriptionCustomOptions?: InputMaybe<Scalars['Boolean']>;
-  maxAmount?: InputMaybe<Scalars['Float']>;
-  maxSubscriptionAmount?: InputMaybe<Scalars['Float']>;
-  minAmount?: InputMaybe<Scalars['Float']>;
-  minSubscriptionAmount?: InputMaybe<Scalars['Float']>;
-  name: Scalars['String'];
-  note?: InputMaybe<Scalars['String']>;
-  requiredFields: Array<Scalars['String']>;
-  shownFields: Array<Scalars['String']>;
-};
-
 export enum Frequency {
   Annually = 'ANNUALLY',
   Monthly = 'MONTHLY',
@@ -1223,902 +2551,6 @@ export type MenuResponse = {
   userErrors?: Maybe<Array<UserError>>;
 };
 
-export type Mutation = {
-  __typename?: 'Mutation';
-  activityCreate: ActivityResponse;
-  activityDelete: ActivityResponse;
-  activityDone: ActivityResponse;
-  activityUndone: ActivityResponse;
-  activityUpdate: ActivityResponse;
-  applicationCreatePrivate: Application;
-  applicationPrivateRefreshToken: AccessToken;
-  applicationUninstall: Application;
-  applicationUpdatePrivate: Application;
-  articlesCreate: ArticlesResponse;
-  articlesDelete: ArticlesResponse;
-  articlesUpdate: ArticlesResponse;
-  assetCreate: Asset;
-  assetDelete: Asset;
-  assetDuplicate: Asset;
-  assetUpdate: Asset;
-  billingCancelChangePlan: ChangePlanResponse;
-  billingChangePlan: ChangePlanResponse;
-  billingCreateCheckoutSession: CheckoutSession;
-  blogsCreate: BlogsResponse;
-  blogsDelete: BlogsResponse;
-  blogsUpdate: BlogsResponse;
-  campaignCommentCreate: CampaignCommentResponse;
-  campaignCommentDelete: CampaignCommentResponse;
-  campaignCommentUpdate: CampaignCommentResponse;
-  campaignCreate: CampaignResponse;
-  campaignDelete: CampaignResponse;
-  campaignDuplicate: CampaignResponse;
-  campaignUpdate: CampaignResponse;
-  checkoutComplete: CheckoutResponse;
-  checkoutCreate: CheckoutResponse;
-  checkoutRegisterPayment: CheckoutResponse;
-  checkoutSendRecoveryEmail: CheckoutResponse;
-  checkoutUpdate: CheckoutResponse;
-  commentCreate: CommentResponse;
-  commentDelete: CommentResponse;
-  commentUpdate: CommentResponse;
-  customfieldDefinitionCreate: CustomFieldDefinitionResponse;
-  customfieldDefinitionDelete: CustomFieldDefinitionResponse;
-  customfieldDefinitionUpdate: CustomFieldDefinitionResponse;
-  domainsCheckStatus: DomainsResponse;
-  domainsConnectExisting: DomainsResponse;
-  domainsDelete: DomainsResponse;
-  domainsSetPrimary: DomainsResponse;
-  donationBulkDelete: Scalars['Boolean'];
-  donationDelete: Donation;
-  donationExport: Scalars['String'];
-  donationImport: Task;
-  donationReceiptSend: Scalars['Boolean'];
-  donationRegisterPayment: DonationResponse;
-  donationRevoke: Donation;
-  donationUpdate: Donation;
-  formCreate: Form;
-  formDelete: Form;
-  formUpdate: Form;
-  inviteCreate: Invite;
-  inviteResend: Invite;
-  inviteRevoke: Invite;
-  inviteUpdate: Invite;
-  manualPaymentMethodCreate: PaymentMethodResponse;
-  manualPaymentMethodDelete: PaymentMethodResponse;
-  manualPaymentMethodUpdate: PaymentMethodResponse;
-  mediaCreate: Media;
-  mediaDelete: MediaResponse;
-  menuCreate: MenuResponse;
-  menuDelete: MenuResponse;
-  menuUpdate: MenuResponse;
-  notificationCreate: Notification;
-  notificationSend: Notification;
-  notificationUpdate: Notification;
-  organizationUpdate: OrganizationResponse;
-  organizationUpdateLegalData: OrganizationResponse;
-  pagesCreate: PagesResponse;
-  pagesDelete: PagesResponse;
-  pagesUpdate: PagesResponse;
-  paperDocumentUpdate: PaperDocument;
-  partnerInviteUpdate: Invite;
-  paymentExport: Scalars['String'];
-  paymentRefund: PaymentResponse;
-  paymentUpdate: PaymentResponse;
-  paypalAccountReset?: Maybe<Scalars['Void']>;
-  paypalActivate: PayPalAccount;
-  paypalGenerateOnboardingLink: PayPalLink;
-  paypalRefreshOrganizationAccount?: Maybe<Scalars['Void']>;
-  peerCampaignCreate: PeerCampaignResponse;
-  peerCampaignDelete: PeerCampaignResponse;
-  peerCampaignUpdate: PeerCampaignResponse;
-  privacyDefinitionCreate: PrivacyDefinitionResponse;
-  privacyDefinitionDelete: PrivacyDefinitionResponse;
-  privacyDefinitionUpdate: PrivacyDefinitionResponse;
-  projectCreate: ProjectResponse;
-  projectDelete: ProjectResponse;
-  projectRemoveItem: ProjectResponse;
-  projectUpdate: ProjectResponse;
-  projectUpdateItems: ProjectResponse;
-  redirectsCreate: RedirectResponse;
-  redirectsDelete: RedirectResponse;
-  redirectsUpdate: RedirectResponse;
-  satispayActivate: SatispayAccount;
-  segmentCreate: SegmentResponse;
-  segmentDelete: SegmentResponse;
-  segmentUpdate: SegmentResponse;
-  staffSendPasswordReset: StaffResponse;
-  staffSetPermissions: StaffResponse;
-  staffUpdate: StaffResponse;
-  storeThemeInstall: Theme;
-  stripeActivate: StripeAccount;
-  stripeCheckoutIntentCreate: StripeCheckoutResponse;
-  stripeGenerateDashboardLink: StripeLink;
-  stripeGenerateOnboardingLink: StripeLink;
-  stripeTerminalCheckoutIntentCreate: StripeCheckoutResponse;
-  supporterBulkTags: Scalars['Boolean'];
-  supporterCreate: Supporter;
-  supporterDelete: Supporter;
-  supporterExport: Scalars['String'];
-  supporterImport: Task;
-  supporterMerge: Supporter;
-  supporterRemovePrivacy: SupporterResponse;
-  supporterSendTaxCertificate: Supporter;
-  supporterSetPrivacy: SupporterResponse;
-  supporterUpdate: Supporter;
-  templateClone: Asset;
-  terminalConnectionTokenCreate: Scalars['String'];
-  terminalDelete: Scalars['String'];
-  terminalLocationCreate: StripeTerminalLocation;
-  terminalLocationDelete?: Maybe<Scalars['Void']>;
-  terminalLocationUpdate: StripeTerminalLocation;
-  terminalRegister: StripeTerminal;
-  terminalUpdateLabel: StripeTerminal;
-  themeCreate: Theme;
-  themeDelete: Theme;
-  themeDuplicate: Theme;
-  themeGenerateDownload: Scalars['String'];
-  themeInitDevelopment: Theme;
-  themePublish: Theme;
-  themePublishDevelopment: Theme;
-  themeUpdate: Theme;
-  themeUpgrade: Theme;
-  themeUpload: ThemeUploadResponse;
-  totemDelete: TotemResponse;
-  totemRegister: TotemResponse;
-  webhooksCreate: Webhook;
-  webhooksDelete: Webhook;
-  webhooksUpdate: Webhook;
-  websiteUpdate: Website;
-};
-
-
-export type MutationActivityCreateArgs = {
-  data: ActivityCreateInput;
-};
-
-
-export type MutationActivityDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationActivityDoneArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationActivityUndoneArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationActivityUpdateArgs = {
-  data: ActivityUpdateInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationApplicationCreatePrivateArgs = {
-  data: ApplicationPrivateInput;
-};
-
-
-export type MutationApplicationPrivateRefreshTokenArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationApplicationUninstallArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationApplicationUpdatePrivateArgs = {
-  data: ApplicationPrivateInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationArticlesCreateArgs = {
-  data: ArticleInput;
-};
-
-
-export type MutationArticlesDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationArticlesUpdateArgs = {
-  data: ArticleInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationAssetCreateArgs = {
-  data: AssetInput;
-};
-
-
-export type MutationAssetDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationAssetDuplicateArgs = {
-  name: Scalars['String'];
-  sourceId: Scalars['Int'];
-};
-
-
-export type MutationAssetUpdateArgs = {
-  data: AssetInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationBillingChangePlanArgs = {
-  planType: BillingPlanType;
-};
-
-
-export type MutationBillingCreateCheckoutSessionArgs = {
-  planType: BillingPlanType;
-};
-
-
-export type MutationBlogsCreateArgs = {
-  data: BlogInput;
-};
-
-
-export type MutationBlogsDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationBlogsUpdateArgs = {
-  data: BlogInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationCampaignCommentCreateArgs = {
-  data: CampaignCommentCreateInput;
-};
-
-
-export type MutationCampaignCommentDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationCampaignCommentUpdateArgs = {
-  data: CampaignCommentUpdateInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationCampaignCreateArgs = {
-  data: CampaignInput;
-};
-
-
-export type MutationCampaignDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationCampaignDuplicateArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationCampaignUpdateArgs = {
-  data: CampaignInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationCheckoutCompleteArgs = {
-  data: CheckoutCompleteInput;
-  token: Scalars['String'];
-};
-
-
-export type MutationCheckoutCreateArgs = {
-  data: CheckoutInput;
-};
-
-
-export type MutationCheckoutRegisterPaymentArgs = {
-  data: CheckoutPaymentInput;
-  token: Scalars['String'];
-};
-
-
-export type MutationCheckoutSendRecoveryEmailArgs = {
-  token: Scalars['String'];
-};
-
-
-export type MutationCheckoutUpdateArgs = {
-  data: CheckoutInput;
-  token: Scalars['String'];
-};
-
-
-export type MutationCommentCreateArgs = {
-  data: CommentCreateInput;
-};
-
-
-export type MutationCommentDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationCommentUpdateArgs = {
-  data: CommentUpdateInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationCustomfieldDefinitionCreateArgs = {
-  data: CustomFieldDefinitionCreateInput;
-};
-
-
-export type MutationCustomfieldDefinitionDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationCustomfieldDefinitionUpdateArgs = {
-  data: CustomFieldDefinitionUpdateInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationDomainsCheckStatusArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationDomainsConnectExistingArgs = {
-  data: ExistingDomainInput;
-};
-
-
-export type MutationDomainsDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationDomainsSetPrimaryArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationDonationBulkDeleteArgs = {
-  filters: DonationFiltersInput;
-};
-
-
-export type MutationDonationDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationDonationExportArgs = {
-  domain: DonationDomain;
-  format: ExportFormat;
-};
-
-
-export type MutationDonationImportArgs = {
-  createMissingCampaigns: Scalars['Boolean'];
-  createMissingPaymentMethod: Scalars['Boolean'];
-  fallbackCampaignId?: InputMaybe<Scalars['Int']>;
-  file: Scalars['Upload'];
-  importAnonymousPayments: Scalars['Boolean'];
-};
-
-
-export type MutationDonationReceiptSendArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationDonationRegisterPaymentArgs = {
-  data: DonationPaymentInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationDonationRevokeArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationDonationUpdateArgs = {
-  data: DonationInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationFormCreateArgs = {
-  data: FormInput;
-};
-
-
-export type MutationFormDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationFormUpdateArgs = {
-  data: FormInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationInviteCreateArgs = {
-  data: InviteInput;
-};
-
-
-export type MutationInviteResendArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationInviteRevokeArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationInviteUpdateArgs = {
-  data: InviteInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationManualPaymentMethodCreateArgs = {
-  data: ManualPaymentMethodInput;
-};
-
-
-export type MutationManualPaymentMethodDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationManualPaymentMethodUpdateArgs = {
-  data: ManualPaymentMethodInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationMediaCreateArgs = {
-  file: Scalars['Upload'];
-};
-
-
-export type MutationMediaDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationMenuCreateArgs = {
-  data: MenuInput;
-};
-
-
-export type MutationMenuDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationMenuUpdateArgs = {
-  data: MenuInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationNotificationCreateArgs = {
-  code: NotificationCode;
-  data: CustomNotificationInput;
-};
-
-
-export type MutationNotificationSendArgs = {
-  code: NotificationCode;
-  data: NotificationSendInput;
-  id?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type MutationNotificationUpdateArgs = {
-  code: NotificationCode;
-  data: NotificationInput;
-  id?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type MutationOrganizationUpdateArgs = {
-  data: OrganizationInput;
-};
-
-
-export type MutationOrganizationUpdateLegalDataArgs = {
-  data: OrganizationLegalInput;
-};
-
-
-export type MutationPagesCreateArgs = {
-  data: PageInput;
-};
-
-
-export type MutationPagesDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationPagesUpdateArgs = {
-  data: PageInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationPaperDocumentUpdateArgs = {
-  code: PaperDocumentCode;
-  data: PaperDocumentInput;
-  key?: InputMaybe<Scalars['String']>;
-};
-
-
-export type MutationPartnerInviteUpdateArgs = {
-  id: Scalars['Int'];
-  state: StaffInvitationStatus;
-};
-
-
-export type MutationPaymentExportArgs = {
-  domain: PaymentDomain;
-  format: ExportFormat;
-};
-
-
-export type MutationPaymentRefundArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationPaymentUpdateArgs = {
-  data: ManualPaymentInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationPeerCampaignCreateArgs = {
-  data: PeerCampaignInput;
-};
-
-
-export type MutationPeerCampaignDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationPeerCampaignUpdateArgs = {
-  data: PeerCampaignInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationPrivacyDefinitionCreateArgs = {
-  data: PrivacyDefinitionCreateInput;
-};
-
-
-export type MutationPrivacyDefinitionDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationPrivacyDefinitionUpdateArgs = {
-  data: PrivacyDefinitionUpdateInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationProjectCreateArgs = {
-  data: ProjectInput;
-};
-
-
-export type MutationProjectDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationProjectRemoveItemArgs = {
-  campaignId: Scalars['Int'];
-  id: Scalars['Int'];
-};
-
-
-export type MutationProjectUpdateArgs = {
-  data: ProjectInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationProjectUpdateItemsArgs = {
-  campaignIds: Array<Scalars['Int']>;
-  id: Scalars['Int'];
-};
-
-
-export type MutationRedirectsCreateArgs = {
-  data: RedirectInput;
-};
-
-
-export type MutationRedirectsDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationRedirectsUpdateArgs = {
-  data: RedirectInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationSatispayActivateArgs = {
-  authenticationCode: Scalars['String'];
-};
-
-
-export type MutationSegmentCreateArgs = {
-  data: SegmentInput;
-};
-
-
-export type MutationSegmentDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationSegmentUpdateArgs = {
-  data: SegmentInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationStaffSendPasswordResetArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationStaffSetPermissionsArgs = {
-  id: Scalars['Int'];
-  permissions: Array<StaffPermission>;
-};
-
-
-export type MutationStaffUpdateArgs = {
-  data: StaffInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationStoreThemeInstallArgs = {
-  uuid: Scalars['String'];
-};
-
-
-export type MutationStripeCheckoutIntentCreateArgs = {
-  checkoutToken: Scalars['String'];
-  paymentTypes: StripePaymentTypeInput;
-};
-
-
-export type MutationStripeTerminalCheckoutIntentCreateArgs = {
-  checkoutToken: Scalars['String'];
-};
-
-
-export type MutationSupporterBulkTagsArgs = {
-  action: SupporterBulkTagAction;
-  filters: SupporterFiltersInput;
-  tags: Array<Scalars['String']>;
-};
-
-
-export type MutationSupporterCreateArgs = {
-  data: SupporterInput;
-};
-
-
-export type MutationSupporterDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationSupporterExportArgs = {
-  domain: SupporterDomain;
-  format: ExportFormat;
-};
-
-
-export type MutationSupporterImportArgs = {
-  file: Scalars['Upload'];
-  overrideSupporters: Scalars['Boolean'];
-};
-
-
-export type MutationSupporterMergeArgs = {
-  data: SupporterInput;
-  duplicatesIds: Array<Scalars['Int']>;
-  masterId: Scalars['Int'];
-};
-
-
-export type MutationSupporterRemovePrivacyArgs = {
-  code: Scalars['String'];
-  id: Scalars['Int'];
-};
-
-
-export type MutationSupporterSendTaxCertificateArgs = {
-  id: Scalars['Int'];
-  method: NotificationMethods;
-};
-
-
-export type MutationSupporterSetPrivacyArgs = {
-  data: SupporterPrivacyInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationSupporterUpdateArgs = {
-  data: SupporterInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationTemplateCloneArgs = {
-  name: Scalars['String'];
-  parentThemeUuid: Scalars['String'];
-  sourceId: Scalars['Int'];
-};
-
-
-export type MutationTerminalConnectionTokenCreateArgs = {
-  locationId?: InputMaybe<Scalars['String']>;
-};
-
-
-export type MutationTerminalDeleteArgs = {
-  id: Scalars['String'];
-};
-
-
-export type MutationTerminalLocationCreateArgs = {
-  data: TerminalLocationInput;
-};
-
-
-export type MutationTerminalLocationDeleteArgs = {
-  id: Scalars['String'];
-};
-
-
-export type MutationTerminalLocationUpdateArgs = {
-  data: TerminalLocationInput;
-  id: Scalars['String'];
-};
-
-
-export type MutationTerminalRegisterArgs = {
-  data: TerminalRegisterInput;
-};
-
-
-export type MutationTerminalUpdateLabelArgs = {
-  id: Scalars['String'];
-  label: Scalars['String'];
-};
-
-
-export type MutationThemeCreateArgs = {
-  data: ThemeInput;
-};
-
-
-export type MutationThemeDeleteArgs = {
-  uuid: Scalars['String'];
-};
-
-
-export type MutationThemeDuplicateArgs = {
-  uuid: Scalars['String'];
-};
-
-
-export type MutationThemeGenerateDownloadArgs = {
-  uuid: Scalars['String'];
-};
-
-
-export type MutationThemeInitDevelopmentArgs = {
-  uuid: Scalars['String'];
-};
-
-
-export type MutationThemePublishArgs = {
-  uuid: Scalars['String'];
-};
-
-
-export type MutationThemePublishDevelopmentArgs = {
-  devUuid: Scalars['String'];
-  themeUuid: Scalars['String'];
-};
-
-
-export type MutationThemeUpdateArgs = {
-  data: ThemeInput;
-  uuid: Scalars['String'];
-};
-
-
-export type MutationThemeUpgradeArgs = {
-  uuid: Scalars['String'];
-};
-
-
-export type MutationThemeUploadArgs = {
-  file: Scalars['Upload'];
-};
-
-
-export type MutationTotemDeleteArgs = {
-  deviceId: Scalars['String'];
-};
-
-
-export type MutationTotemRegisterArgs = {
-  data: TotemInput;
-};
-
-
-export type MutationWebhooksCreateArgs = {
-  data: WebhookInput;
-};
-
-
-export type MutationWebhooksDeleteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type MutationWebhooksUpdateArgs = {
-  data: WebhookInput;
-  id: Scalars['Int'];
-};
-
-
-export type MutationWebsiteUpdateArgs = {
-  data: WebsiteInput;
-};
-
 export type Notification = {
   __typename?: 'Notification';
   code: NotificationCode;
@@ -2146,6 +2578,7 @@ export enum NotificationCode {
   P2PWelcome = 'P2P_WELCOME',
   StaffDonationReceived = 'STAFF_DONATION_RECEIVED',
   StaffDonationRefunded = 'STAFF_DONATION_REFUNDED',
+  SupporterLead = 'SUPPORTER_LEAD',
   SupporterLogin = 'SUPPORTER_LOGIN',
   TaxCertificate = 'TAX_CERTIFICATE'
 }
@@ -2441,7 +2874,8 @@ export enum PaymentProcessor {
   Manual = 'MANUAL',
   Paypal = 'PAYPAL',
   Satispay = 'SATISPAY',
-  Stripe = 'STRIPE'
+  Stripe = 'STRIPE',
+  Sumup = 'SUMUP'
 }
 
 export type PaymentResponse = {
@@ -2532,19 +2966,10 @@ export type PeerCampaignResponse = {
 export type Plan = {
   __typename?: 'Plan';
   interval: Scalars['String'];
-  items: Array<PlanItem>;
   nextPaymentAt: Scalars['Int'];
   nextPhasePlanType?: Maybe<BillingPlanType>;
   paymentMethod?: Maybe<PlanPaymentMethod>;
   planType: BillingPlanType;
-};
-
-export type PlanItem = {
-  __typename?: 'PlanItem';
-  amount: Scalars['Int'];
-  currency: Currencies;
-  name: Scalars['String'];
-  quantity: Scalars['Int'];
 };
 
 export type PlanPaymentMethod = {
@@ -2731,510 +3156,6 @@ export enum ProjectType {
   Manual = 'MANUAL'
 }
 
-export type Query = {
-  __typename?: 'Query';
-  activities: ActivityConnection;
-  activity: Activity;
-  application: Application;
-  applications: Array<Application>;
-  applicationsAvailable: Array<Application>;
-  article: Article;
-  articles: ArticleConnection;
-  asset?: Maybe<Asset>;
-  assetLayout?: Maybe<Asset>;
-  assets: Array<Asset>;
-  billingPlans?: Maybe<Plan>;
-  blog: Blog;
-  blogs: BlogConnection;
-  campaign: Campaign;
-  campaignComment: CampaignComment;
-  campaignComments: CampaignCommentConnection;
-  campaignTags: StrConnection;
-  campaigns: CampaignConnection;
-  checkout: Checkout;
-  checkouts: CheckoutConnection;
-  checkoutsAbandoned: CheckoutConnection;
-  checkoutsAdminGenerated: CheckoutConnection;
-  countries: CountryResponse;
-  customerPortal: CustomerPortal;
-  customfieldDefinition: CustomFieldDefinition;
-  customfieldDefinitions: Array<CustomFieldDefinition>;
-  customfieldDefinitionsEntitiesUsage: Array<CustomEntityUsage>;
-  domain?: Maybe<Domain>;
-  domains: Array<Domain>;
-  donation: Donation;
-  donationTags: StrConnection;
-  donations: DonationConnection;
-  form: Form;
-  forms: FormConnection;
-  invite: Invite;
-  invites: Array<Invite>;
-  manualPaymentMethod: PaymentMethod;
-  manualPaymentMethods: Array<PaymentMethod>;
-  media: MediaConnection;
-  mediaSingle: Media;
-  menu: Menu;
-  menuByHandle: Menu;
-  menus: Array<Menu>;
-  notification: Notification;
-  notifications: Array<Notification>;
-  organization: Organization;
-  organizations: Array<Organization>;
-  owner: Staff;
-  page: Page;
-  pages: PageConnection;
-  paperDocument: PaperDocument;
-  payment: Payment;
-  paymentMethods: Array<PaymentMethod>;
-  payments: PaymentConnection;
-  paypal?: Maybe<PayPalAccount>;
-  peerCampaign: PeerCampaign;
-  peerCampaigns: PeerCampaignConnection;
-  plan?: Maybe<Plan>;
-  privacyDefinition: PrivacyDefinition;
-  privacyDefinitions: PrivacyDefinitionConnection;
-  project: Project;
-  projects: ProjectConnection;
-  redirect: Redirect;
-  redirects: RedirectConnection;
-  satispay?: Maybe<SatispayAccount>;
-  segment: Segment;
-  segments: SegmentConnection;
-  staff: Staff;
-  staffs: Array<Staff>;
-  storeTheme: StoreTheme;
-  storeThemes: Array<StoreTheme>;
-  stripe?: Maybe<StripeAccount>;
-  stripeCustomerCards: Array<StripeCard>;
-  supporter: Supporter;
-  supporterSavedCards: Array<StripeCard>;
-  supporterTags: StrConnection;
-  supporters: SupporterConnection;
-  terminal: StripeTerminal;
-  terminalLocation: StripeTerminalLocation;
-  terminalLocations: Array<StripeTerminalLocation>;
-  terminals: Array<StripeTerminal>;
-  terminalsByLocation: Array<StripeTerminal>;
-  theme: Theme;
-  themeCurrent: Theme;
-  themeSections: Array<SectionSchemaItem>;
-  themeSettings: Array<SectionSchemaItem>;
-  themes: Array<Theme>;
-  timeline: EventsConnection;
-  totem: Totem;
-  totems: TotemConnection;
-  unsplash: UnsplashResults;
-  user: Staff;
-  webhook: Webhook;
-  webhooks: Array<Webhook>;
-  website: Website;
-};
-
-
-export type QueryActivitiesArgs = {
-  filters?: InputMaybe<ActivityFilters>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryActivityArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryApplicationArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryApplicationsArgs = {
-  filters?: InputMaybe<ApplicationFilters>;
-};
-
-
-export type QueryArticleArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryArticlesArgs = {
-  filters?: InputMaybe<ArticlesFiltersInput>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryAssetArgs = {
-  key: Scalars['String'];
-  themeUuid: Scalars['String'];
-};
-
-
-export type QueryAssetLayoutArgs = {
-  templateKey: Scalars['String'];
-  themeUuid: Scalars['String'];
-};
-
-
-export type QueryAssetsArgs = {
-  filters: AssetsFiltersInput;
-};
-
-
-export type QueryBlogArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryBlogsArgs = {
-  filters?: InputMaybe<BlogsFiltersInput>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryCampaignArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryCampaignCommentArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryCampaignCommentsArgs = {
-  filters?: InputMaybe<CampaignCommentsFilters>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryCampaignTagsArgs = {
-  pagination?: InputMaybe<PaginationInput>;
-  q?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QueryCampaignsArgs = {
-  filters?: InputMaybe<CampaignFilters>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryCheckoutArgs = {
-  token: Scalars['String'];
-};
-
-
-export type QueryCheckoutsArgs = {
-  filters?: InputMaybe<CheckoutFilters>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryCheckoutsAbandonedArgs = {
-  filters?: InputMaybe<CheckoutFilters>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryCheckoutsAdminGeneratedArgs = {
-  filters?: InputMaybe<CheckoutFilters>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryCountriesArgs = {
-  filters?: InputMaybe<CountryFilters>;
-};
-
-
-export type QueryCustomfieldDefinitionArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryCustomfieldDefinitionsArgs = {
-  filters?: InputMaybe<CustomFieldFilters>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryDomainArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryDonationArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryDonationTagsArgs = {
-  pagination?: InputMaybe<PaginationInput>;
-  q?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QueryDonationsArgs = {
-  filters?: InputMaybe<DonationFiltersInput>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryFormArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryFormsArgs = {
-  filters?: InputMaybe<FormFilters>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryInviteArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryInvitesArgs = {
-  filters: StaffInviteFilters;
-};
-
-
-export type QueryManualPaymentMethodArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryMediaArgs = {
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryMediaSingleArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryMenuArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryMenuByHandleArgs = {
-  handle: Scalars['String'];
-};
-
-
-export type QueryNotificationArgs = {
-  code: NotificationCode;
-  id?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type QueryNotificationsArgs = {
-  filters?: InputMaybe<NotificationFilters>;
-};
-
-
-export type QueryOrganizationsArgs = {
-  filters?: InputMaybe<OrganizationsFilters>;
-};
-
-
-export type QueryPageArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryPagesArgs = {
-  filters?: InputMaybe<PagesFiltersInput>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryPaperDocumentArgs = {
-  code: PaperDocumentCode;
-  key?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QueryPaymentArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryPaymentsArgs = {
-  filters?: InputMaybe<PaymentFiltersInput>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryPeerCampaignArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryPeerCampaignsArgs = {
-  filters?: InputMaybe<PeerCampaignFilters>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryPrivacyDefinitionArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryPrivacyDefinitionsArgs = {
-  filters?: InputMaybe<PrivacyDefinitionFilters>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryProjectArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryProjectsArgs = {
-  filters?: InputMaybe<ProjectFilters>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryRedirectArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryRedirectsArgs = {
-  filters?: InputMaybe<RedirectsFiltersInput>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QuerySegmentArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QuerySegmentsArgs = {
-  filters?: InputMaybe<SegmentFiltersInput>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryStaffArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryStaffsArgs = {
-  filters?: InputMaybe<StaffFiltersInput>;
-};
-
-
-export type QueryStoreThemeArgs = {
-  uuid: Scalars['String'];
-};
-
-
-export type QueryStripeCustomerCardsArgs = {
-  stripeCustomerId: Scalars['String'];
-};
-
-
-export type QuerySupporterArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QuerySupporterSavedCardsArgs = {
-  id: Scalars['Int'];
-  limit?: InputMaybe<Scalars['Int']>;
-};
-
-
-export type QuerySupporterTagsArgs = {
-  pagination?: InputMaybe<PaginationInput>;
-  q?: InputMaybe<Scalars['String']>;
-};
-
-
-export type QuerySupportersArgs = {
-  filters?: InputMaybe<SupporterFiltersInput>;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryTerminalArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryTerminalLocationArgs = {
-  id: Scalars['String'];
-};
-
-
-export type QueryTerminalLocationsArgs = {
-  filters?: InputMaybe<TerminalLocationFilters>;
-};
-
-
-export type QueryTerminalsByLocationArgs = {
-  locationId: Scalars['String'];
-};
-
-
-export type QueryThemeArgs = {
-  uuid: Scalars['String'];
-};
-
-
-export type QueryThemeSectionsArgs = {
-  themeUuid: Scalars['String'];
-};
-
-
-export type QueryThemeSettingsArgs = {
-  themeUuid: Scalars['String'];
-};
-
-
-export type QueryThemesArgs = {
-  filters?: InputMaybe<ThemesFiltersInput>;
-};
-
-
-export type QueryTimelineArgs = {
-  filters: TimelineFilterInput;
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryTotemArgs = {
-  deviceId: Scalars['String'];
-};
-
-
-export type QueryTotemsArgs = {
-  pagination?: InputMaybe<PaginationInput>;
-};
-
-
-export type QueryUnsplashArgs = {
-  page?: Scalars['Int'];
-  perPage?: Scalars['Int'];
-  query: Scalars['String'];
-};
-
-
-export type QueryWebhookArgs = {
-  id: Scalars['Int'];
-};
-
 export type Redirect = {
   __typename?: 'Redirect';
   destinationUrl: Scalars['String'];
@@ -3272,6 +3193,23 @@ export type RedirectsFiltersInput = {
 export type SatispayAccount = {
   __typename?: 'SatispayAccount';
   keyId: Scalars['String'];
+};
+
+export type SatispayPaymentResponse = {
+  __typename?: 'SatispayPaymentResponse';
+  amountUnit?: Maybe<Scalars['Int']>;
+  codeIdentifier?: Maybe<Scalars['String']>;
+  currency?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  expireDate?: Maybe<Scalars['String']>;
+  expired?: Maybe<Scalars['Boolean']>;
+  externalCode?: Maybe<Scalars['String']>;
+  flow?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
+  insertDate?: Maybe<Scalars['String']>;
+  redirectUrl?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
 };
 
 export type Section = {
@@ -3579,6 +3517,16 @@ export type StripeTerminalLocation = {
   terminalCount: Scalars['Int'];
 };
 
+export type SumUpAccount = {
+  __typename?: 'SumUpAccount';
+  hasPayments: Scalars['Boolean'];
+  merchantCode?: Maybe<Scalars['String']>;
+};
+
+export type SumUpAccountInput = {
+  merchantCode?: InputMaybe<Scalars['String']>;
+};
+
 export type Supporter = {
   __typename?: 'Supporter';
   activeRegularDonations: Array<Donation>;
@@ -3672,6 +3620,7 @@ export type SupporterFiltersInput = {
   lastDonationDate?: InputMaybe<DateRange>;
   order?: InputMaybe<Scalars['String']>;
   peerCampaigns?: InputMaybe<Array<Scalars['Int']>>;
+  phone?: InputMaybe<Scalars['String']>;
   phoneMarketing?: InputMaybe<Scalars['Boolean']>;
   placeOfBirth?: InputMaybe<Scalars['String']>;
   postalMarketing?: InputMaybe<Scalars['Boolean']>;
@@ -4034,7 +3983,7 @@ export type CampaignCreateMutationVariables = Exact<{
 }>;
 
 
-export type CampaignCreateMutation = { __typename?: 'Mutation', campaignCreate: { __typename?: 'CampaignResponse', campaign?: { __typename?: 'Campaign', id: number, title: string, type: CampaignType, content?: string | null, note?: string | null } | null, userErrors?: Array<{ __typename?: 'UserError', code: ErrorCode, field?: string | null, message?: string | null }> | null } };
+export type CampaignCreateMutation = { __typename?: 'CoreMutation', campaignCreate: { __typename?: 'CampaignResponse', campaign?: { __typename?: 'Campaign', id: number, title: string, type: CampaignType, content?: string | null, note?: string | null } | null, userErrors?: Array<{ __typename?: 'UserError', code: ErrorCode, field?: string | null, message?: string | null }> | null } };
 
 export type CampaignsListQueryVariables = Exact<{
   pagination?: InputMaybe<PaginationInput>;
@@ -4042,19 +3991,19 @@ export type CampaignsListQueryVariables = Exact<{
 }>;
 
 
-export type CampaignsListQuery = { __typename?: 'Query', campaigns: { __typename?: 'CampaignConnection', pageInfo: { __typename?: 'PageInfo', total: number, startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'CampaignEdge', cursor: string, node: { __typename?: 'Campaign', id: number, title: string, type: CampaignType, visibility: WebDocumentVisibility, cover?: { __typename?: 'Media', square: string } | null } }> } };
+export type CampaignsListQuery = { __typename?: 'CoreQuery', campaigns: { __typename?: 'CampaignConnection', pageInfo: { __typename?: 'PageInfo', total: number, startCursor?: string | null, endCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean }, edges: Array<{ __typename?: 'CampaignEdge', cursor: string, node: { __typename?: 'Campaign', id: number, title: string, type: CampaignType, visibility: WebDocumentVisibility, cover?: { __typename?: 'Media', square: string } | null } }> } };
 
 export type GetOrganizationInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrganizationInfoQuery = { __typename?: 'Query', organization: { __typename?: 'Organization', name: string, logo?: { __typename?: 'Media', square: string } | null } };
+export type GetOrganizationInfoQuery = { __typename?: 'CoreQuery', organization: { __typename?: 'Organization', name: string, logo?: { __typename?: 'Media', square: string } | null } };
 
 export type CampaignQueryVariables = Exact<{
   campaignId: Scalars['Int'];
 }>;
 
 
-export type CampaignQuery = { __typename?: 'Query', campaign: { __typename?: 'Campaign', id: number, title: string, content?: string | null, visibility: WebDocumentVisibility, slug: string, type: CampaignType, createDate: any, cover?: { __typename?: 'Media', id: number, small: string, url: string } | null } };
+export type CampaignQuery = { __typename?: 'CoreQuery', campaign: { __typename?: 'Campaign', id: number, title: string, content?: string | null, visibility: WebDocumentVisibility, slug: string, type: CampaignType, createDate: any, cover?: { __typename?: 'Media', id: number, small: string, url: string } | null } };
 
 export type CampaignUpdateDetailMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -4062,12 +4011,12 @@ export type CampaignUpdateDetailMutationVariables = Exact<{
 }>;
 
 
-export type CampaignUpdateDetailMutation = { __typename?: 'Mutation', campaignUpdate: { __typename?: 'CampaignResponse', campaign?: { __typename?: 'Campaign', id: number, title: string } | null, userErrors?: Array<{ __typename?: 'UserError', code: ErrorCode, field?: string | null, message?: string | null }> | null } };
+export type CampaignUpdateDetailMutation = { __typename?: 'CoreMutation', campaignUpdate: { __typename?: 'CampaignResponse', campaign?: { __typename?: 'Campaign', id: number, title: string } | null, userErrors?: Array<{ __typename?: 'UserError', code: ErrorCode, field?: string | null, message?: string | null }> | null } };
 
 export type GetOrgDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOrgDataQuery = { __typename?: 'Query', organization: { __typename?: 'Organization', domain: string, name: string } };
+export type GetOrgDataQuery = { __typename?: 'CoreQuery', organization: { __typename?: 'Organization', domain: string, name: string } };
 
 
 export const CampaignCreateDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CampaignCreate"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CampaignInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"campaignCreate"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"campaign"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"note"}}]}},{"kind":"Field","name":{"kind":"Name","value":"userErrors"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"code"}},{"kind":"Field","name":{"kind":"Name","value":"field"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]}}]} as unknown as DocumentNode<CampaignCreateMutation, CampaignCreateMutationVariables>;
