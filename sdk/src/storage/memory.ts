@@ -21,11 +21,13 @@ export const MemoryStorage = (): StorageAdapters => {
       expiresDateUTC,
       expiresInSeconds,
     };
+    console.debug('[RISEACT-SDK] Cached credentials in memory store', { organizationDomain });
   };
 
   const removeCredentials = async (organizationDomain: string) => {
     if (MemoryStorageObj[organizationDomain]) {
       delete MemoryStorageObj[organizationDomain];
+      console.info('[RISEACT-SDK] Removed credentials from memory store', { organizationDomain });
     } else {
       console.warn(`[RISEACT-SDK] No credentials found for organization ${organizationDomain} to remove`);
     }

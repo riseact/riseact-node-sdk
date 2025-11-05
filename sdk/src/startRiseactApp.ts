@@ -51,6 +51,7 @@ const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, opt
   // TODO feat: must accept express routers and single routes
   // Public endpoints
   if (options?.publicRouter) {
+    console.info('[RISEACT-SDK] Registering public router');
     expressInstance.use(options.publicRouter);
   }
 
@@ -58,26 +59,27 @@ const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, opt
   // Private endpoints
   if (options?.protectedRouter) {
     options?.protectedRouter.stack.map((layer) => {
-      console.log(`[RISEACT-SDK] Protected route registered: ${layer.route?.path}`);
+      console.info(`[RISEACT-SDK] Protected route registered: ${layer.route?.path}`);
       expressInstance.use(layer.route?.path, riseact.auth.authMiddleware, layer.handle);
     });
   }
 
   // GraphQL proxy endpoint
+  console.info('[RISEACT-SDK] Registering GraphQL proxy endpoint at /graphql');
   expressInstance.use('/graphql', riseact.auth.authMiddleware, riseact.network.gqlProxy);
 
   if (!riseact.devTools) {
     // === process.env.NODE_ENV === 'production'
-    console.info('🚀  Production mode, serving bundled SPA');
+    console.info('[RISEACT-SDK] 🚀  Production mode, serving bundled SPA');
     expressInstance.use(serveStatic(path.join(process.cwd(), 'client')) as RequestHandler);
   } else {
-    console.info('🔧  Development mode, piping to Vite/HMR server');
+    console.info('[RISEACT-SDK] 🔧  Development mode, piping to Vite/HMR server');
     expressInstance.use(riseact.devTools.devMiddleware);
     server.on('upgrade', riseact.devTools.hmrProxyHandler);
   }
 
   server.listen(options?.serverPort || 3000, () => {
-    console.log(`⚡️ Server is running on port ${options?.serverPort || 3000}. Open your app from Riseact admin panel.`);
+    console.info(`[RISEACT-SDK] ⚡️ Server is running on port ${options?.serverPort || 3000}. Open your app from Riseact admin panel.`);
   });
 };
 

@@ -48,7 +48,7 @@ function registerWebhook(event: WebhookEventTopic | Array<WebhookEventTopic>, ca
   // !! all webhooks must be cleared on server start. not now
   // todo register webhook in riseact w gql
 
-  console.info(`Registered webhook for ${event.join(', ')} at ${url}`);
+  console.info(`[RISEACT-SDK] Registered webhook for ${event.join(', ')} at ${url}`);
 
   // Return request handler
   return (req: Request, res: Response, next: NextFunction) => {

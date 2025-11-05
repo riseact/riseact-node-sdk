@@ -5,6 +5,7 @@ import safeAsyncHandler from '../utils/safeAsyncHandler';
 const sidExchangeHandler: RequestHandler = safeAsyncHandler(async (req: Request, res: Response) => {
   const sid = req.body.sid as string | undefined;
   // const organization = req.body.organization as string | undefined;
+  console.info('[RISEACT-SDK] Handling SID exchange request for sid:', sid);
 
   if (!sid) {
     console.error('[RISEACT-SDK] No sid provided in SID exchange request');

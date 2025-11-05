@@ -79,6 +79,7 @@ const oauthCallbackHandler: RequestHandler = safeAsyncHandler(async (req: Reques
   const oldCredentials = await storage.getCredentialsByOrganizationDomain(storedState.organizationDomain);
 
   if (!oldCredentials?.organizationDomain && config?.auth?.onInstall) {
+    console.info('[RISEACT-SDK] Running onInstall hook for organization', storedState.organizationDomain);
     // It's supposed to be a new fresh token
     const gqlClient = await dangerouslyCreateGqlClientByAccessToken(accessToken);
     config?.auth?.onInstall?.({
@@ -106,9 +107,12 @@ const oauthCallbackHandler: RequestHandler = safeAsyncHandler(async (req: Reques
     clientToken,
   });
 
+  console.info('[RISEACT-SDK] Stored OAuth credentials for organization', storedState.organizationDomain);
+
   const sid = 'sid_' + v4();
   saveSid(sid, { organizationDomain: storedState.organizationDomain, clientToken });
 
+  console.info('[RISEACT-SDK] Redirecting to client token exchange with SID', { sid, organization: storedState.organizationDomain });
   res.redirect('/auth/get-token#sid=' + sid);
 });
 

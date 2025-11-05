@@ -10,7 +10,7 @@ export const pkceStore = new LRUCache<string, PkceRecord>({
 });
 
 export function savePkce(state: string, rec: PkceRecord) {
-  console.info('Saving PKCE record', { state, rec });
+  console.info('[RISEACT-SDK] Saving PKCE record', { state, rec });
   pkceStore.set(state, rec);
 }
 
@@ -30,7 +30,7 @@ export const sidStore = new LRUCache<string, SidRecord>({
 });
 
 export function saveSid(state: string, rec: SidRecord) {
-  console.info('Saving SID record', { state, rec });
+  console.info('[RISEACT-SDK] Saving SID record', { state, rec });
   sidStore.set(state, rec);
 }
 

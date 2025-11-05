@@ -14,6 +14,11 @@ const initGqlProxy = (config: RiseactConfig, storage: StorageAdapters): RequestH
    * refresh-and-retry logic.
    */
   const forward = async (credentials: OAuthCredentials, req: Parameters<RequestHandler>[0], res: Parameters<RequestHandler>[1], body: string) => {
+    console.debug('[RISEACT-SDK] Proxying GraphQL request to Riseact', {
+      method: req.method,
+      path: req.path,
+      organization: req.organizationDomain,
+    });
     const performFetch = async (accessToken: string) => {
       const fetchResponse = await fetch(urlJoin(RISEACT_CORE_URL, RISEACT_GQL_ENDPOINT), {
         method: req.method,
@@ -39,10 +44,17 @@ const initGqlProxy = (config: RiseactConfig, storage: StorageAdapters): RequestH
         const unauth = payload?.errors?.some((e: any) => e?.message.includes('User is not authenticated'));
 
         if (unauth) {
+          console.info('[RISEACT-SDK] Riseact GraphQL responded with authentication error. Attempting backend token refresh.', {
+            organization: req.organizationDomain,
+          });
           let renewedCredentials: OAuthCredentials;
           try {
             renewedCredentials = await renewToken(config.auth.clientId!, config.auth.clientSecret!, credentials, storage);
-          } catch {
+            console.info('[RISEACT-SDK] Token refresh succeeded for GraphQL proxy request', {
+              organization: req.organizationDomain,
+            });
+          } catch (err) {
+            console.error('[RISEACT-SDK] Token refresh failed during GraphQL proxy request. Redirecting to authorize flow.', err);
             return res.redirect(`/oauth/authorize?__organization=${req.organizationDomain}`);
           }
 
@@ -87,13 +99,16 @@ const initGqlProxy = (config: RiseactConfig, storage: StorageAdapters): RequestH
     const token = req.headers.authorization?.split(' ')[1] as string | undefined;
 
     if (!token) {
-      console.warn('[RISEACT-SDK] No client token provided in request');
+      console.warn('[RISEACT-SDK] No client token provided in GraphQL proxy request');
       return res.redirect(authorizeUrl);
     }
 
     /* Retrieve Riseact credentials */
     const credentials = await storage.getCredentialsByClientToken(token);
-    if (!credentials) return res.redirect(authorizeUrl);
+    if (!credentials) {
+      console.warn('[RISEACT-SDK] No credentials found for provided client token during GraphQL proxy request');
+      return res.redirect(authorizeUrl);
+    }
 
     /* Read request body (express.json/express.raw must have run) */
     const body = typeof req.body === 'string' ? req.body : Buffer.isBuffer(req.body) ? req.body.toString() : JSON.stringify(req.body ?? {});
@@ -101,7 +116,8 @@ const initGqlProxy = (config: RiseactConfig, storage: StorageAdapters): RequestH
     /* Forward with automatic refresh / retry */
     try {
       await forward(credentials, req, res, body);
-    } catch {
+    } catch (error) {
+      console.error('[RISEACT-SDK] GraphQL proxy forwarding failed. Redirecting to authorize flow.', error);
       res.redirect(authorizeUrl);
     }
   };

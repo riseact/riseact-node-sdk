@@ -41,6 +41,7 @@ export const FileStorage = (): StorageAdapters => {
       expiresInSeconds,
     };
     await writeStore(store);
+    console.debug('[RISEACT-SDK] Persisted credentials to file store', { organizationDomain, path: CREDENTIALS_FILE });
   };
 
   const removeCredentials = async (organizationDomain: string) => {
@@ -48,6 +49,7 @@ export const FileStorage = (): StorageAdapters => {
     if (store[organizationDomain]) {
       delete store[organizationDomain];
       await writeStore(store);
+      console.info('[RISEACT-SDK] Removed credentials from file store', { organizationDomain });
     } else {
       console.warn(`[RISEACT-SDK] No credentials found for organization ${organizationDomain} to remove
 `);

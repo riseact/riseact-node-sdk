@@ -94,8 +94,11 @@ export async function renewToken(
   const currentLockState = getRefreshLockState(organizationDomain);
 
   if (currentLockState?.status === 'pending') {
+    console.info(`[RISEACT-SDK] Detected ongoing token refresh for org: ${oldCredentials.organizationDomain}. Waiting for completion...`);
     return waitForRefreshCompletion(organizationDomain, storage);
   }
+
+  console.info(`[RISEACT-SDK] Refreshing token for org: ${oldCredentials.organizationDomain}`);
 
   updateRefreshLock(organizationDomain, 'pending');
 
@@ -133,6 +136,8 @@ export async function renewToken(
       throw new Error('Could not refresh token. Response from riseact did not contain access_token or refresh_token');
     }
 
+    console.info(`[RISEACT-SDK] Successfully refreshed token for org: ${oldCredentials.organizationDomain}`);
+
     // Save new credentials
     const newCredentials: OAuthCredentials = {
       clientToken: oldCredentials.clientToken,
@@ -144,6 +149,12 @@ export async function renewToken(
     };
 
     await storage.setCredentials(newCredentials);
+
+    console.debug(
+      `[RISEACT-SDK] Stored new credentials after refresh for org: ${oldCredentials.organizationDomain} - expires at ${newCredentials.expiresDateUTC.toISOString()}`,
+      newCredentials,
+    );
+
     updateRefreshLock(organizationDomain, 'completed');
     return newCredentials;
   } catch (error) {

@@ -22,6 +22,8 @@ const initCreateGqlClient = async ({ storage, organizationDomain, clientId, clie
     throw new Error('No credentials found for organization');
   }
 
+  console.debug('[RISEACT-SDK] Creating backend GraphQL client', { organizationDomain });
+
   let refreshPromise: Promise<OAuthCredentials> | null = null;
 
   const refreshTokens = async (): Promise<OAuthCredentials> => {
@@ -55,6 +57,11 @@ const initCreateGqlClient = async ({ storage, organizationDomain, clientId, clie
       }
       return;
     }
+
+    console.info('[RISEACT-SDK] GraphQL request returned unauthenticated. Attempting token refresh.', {
+      operationName: operation.operationName || 'anonymous operation',
+      organizationDomain,
+    });
 
     return new Observable((observer) => {
       (async () => {

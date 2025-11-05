@@ -32,11 +32,13 @@ async function initRiseactSDK(config: RiseactConfig): Promise<RiseactInstance> {
 
   let devTools: RiseactDevTools | undefined = undefined;
   if (process.env.NODE_ENV === 'production') {
-    console.warn('⚠ Running RiseactSDK in production. DevTools are disabled');
+    console.warn('[RISEACT-SDK] ⚠ Running RiseactSDK in production. DevTools are disabled');
   } else {
     devTools = await initDevTools(config.dev);
+    console.info('[RISEACT-SDK] DevTools enabled');
   }
 
+  console.info('[RISEACT-SDK] Riseact SDK initialized successfully');
   return {
     auth,
     storage,
