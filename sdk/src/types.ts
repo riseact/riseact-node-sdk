@@ -191,6 +191,7 @@ export enum WebhookEventTopic {
   CheckoutPaid = 'CHECKOUT_PAID',
   CheckoutUpdated = 'CHECKOUT_UPDATED',
   DonationCreated = 'DONATION_CREATED',
+  DonationDeleted = 'DONATION_DELETED',
   DonationUpdated = 'DONATION_UPDATED',
   PaymentCreated = 'PAYMENT_CREATED',
   PaymentUpdated = 'PAYMENT_UPDATED',
@@ -317,6 +318,7 @@ export interface DonationPayload {
   create_date: string;
   update_date: string;
   code: string;
+  is_deleted: boolean;
   state: DonationState;
   amount: number;
   frequency: Frequency;
@@ -325,6 +327,7 @@ export interface DonationPayload {
   peer_campaign: number | null;
   supporter: number;
   tags: string[];
+  payment_method_id: number | null;
   payment_method_label: string | null;
   payment_method_processor: string | null;
 }
@@ -418,6 +421,13 @@ export interface WebhookDataCheckoutUpdated {
 
 export interface WebhookDataDonationCreated {
   event: WebhookEventTopic.DonationCreated;
+  object: DonationPayload;
+  organization: string;
+  idempotency_key: string;
+}
+
+export interface WebhookDataDonationDeleted {
+  event: WebhookEventTopic.DonationDeleted;
   object: DonationPayload;
   organization: string;
   idempotency_key: string;

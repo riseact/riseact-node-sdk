@@ -9,6 +9,7 @@ import {
   WebhookDataCheckoutPaid,
   WebhookDataCheckoutUpdated,
   WebhookDataDonationCreated,
+  WebhookDataDonationDeleted,
   WebhookDataDonationUpdated,
   WebhookDataMixedPayload,
   WebhookDataPaymentCreated,
@@ -31,6 +32,7 @@ function registerWebhook(event: WebhookEventTopic.CheckoutCreated, callback: (pa
 function registerWebhook(event: WebhookEventTopic.CheckoutPaid, callback: (payload: WebhookDataCheckoutPaid) => any): RequestHandler;
 function registerWebhook(event: WebhookEventTopic.CheckoutUpdated, callback: (payload: WebhookDataCheckoutUpdated) => any): RequestHandler;
 function registerWebhook(event: WebhookEventTopic.DonationCreated, callback: (payload: WebhookDataDonationCreated) => any): RequestHandler;
+function registerWebhook(event: WebhookEventTopic.DonationDeleted, callback: (payload: WebhookDataDonationDeleted) => any): RequestHandler;
 function registerWebhook(event: WebhookEventTopic.DonationUpdated, callback: (payload: WebhookDataDonationUpdated) => any): RequestHandler;
 function registerWebhook(event: WebhookEventTopic.PaymentCreated, callback: (payload: WebhookDataPaymentCreated) => any): RequestHandler;
 function registerWebhook(event: WebhookEventTopic.PaymentUpdated, callback: (payload: WebhookDataPaymentUpdated) => any): RequestHandler;
