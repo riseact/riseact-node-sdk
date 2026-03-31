@@ -16,7 +16,7 @@ async function readStore(): Promise<Record<string, StoredOrg>> {
 
 async function writeStore(store: Record<string, StoredOrg>): Promise<void> {
   const tmp = `${CREDENTIALS_FILE}.tmp`;
-  await fs.writeFile(tmp, JSON.stringify(store, null, 2), 'utf-8');
+  await fs.writeFile(tmp, JSON.stringify(store, null, 2), { encoding: 'utf-8', mode: 0o600 });
   await fs.rename(tmp, CREDENTIALS_FILE); // atomic swap
 }
 

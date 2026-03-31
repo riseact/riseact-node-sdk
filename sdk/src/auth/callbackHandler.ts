@@ -46,7 +46,6 @@ const oauthCallbackHandler: RequestHandler = safeAsyncHandler(async (req: Reques
     .catch((e) => {
       console.error('[RISEACT-SDK] Error during OAuth callback with Riseact accounts server. Details below:', e, {
         callbackParams: params,
-        codeVerifier: storedState.codeVerifier,
       });
     });
 
@@ -60,13 +59,12 @@ const oauthCallbackHandler: RequestHandler = safeAsyncHandler(async (req: Reques
 
   if (!refreshToken || !accessToken || !expiresInSeconds) {
     console.error('[RISEACT-SDK] No refresh_token, access_token or expires_in provided from authorization server. Details below:', {
-      refreshToken,
-      accessToken,
+      hasRefreshToken: !!refreshToken,
+      hasAccessToken: !!accessToken,
       expiresInSeconds,
       riseactConfig: config,
       callbackParams: params,
-      codeVerifierCookie: storedState,
-      tokenSet,
+      hasCodeVerifier: !!storedState.codeVerifier,
     });
     return res.sendStatus(500);
   }
