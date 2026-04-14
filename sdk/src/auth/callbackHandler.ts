@@ -8,6 +8,15 @@ import urlJoin from '../utils/urlJoin';
 import { getOAuthClient } from './authUtils';
 import { dangerouslyCreateGqlClientByAccessToken } from '../network/createGqlClient';
 import { popPkce, saveSid } from '../utils/lruCache';
+import { gql } from '@apollo/client/core';
+
+const VERIFY_ORG_DOMAIN_QUERY = gql`
+  query {
+    organization {
+      domain
+    }
+  }
+`;
 
 const oauthCallbackHandler: RequestHandler = safeAsyncHandler(async (req: Request, res: Response) => {
   const config: RiseactConfig = req.riseact.config;
@@ -69,6 +78,30 @@ const oauthCallbackHandler: RequestHandler = safeAsyncHandler(async (req: Reques
       tokenSet,
     });
     return res.sendStatus(500);
+  }
+
+  // Verify the access token actually belongs to the organization claimed in the PKCE record.
+  // Without this check, an attacker can craft ?__organization=victim-org to obtain another
+  // tenant's client token (horizontal tenant impersonation).
+  const verifyGqlClient = await dangerouslyCreateGqlClientByAccessToken(accessToken);
+  const verifyResult = await verifyGqlClient.query<{ organization: { domain: string } }>({ query: VERIFY_ORG_DOMAIN_QUERY }).catch((e) => {
+    console.error('[RISEACT-SDK] Failed to verify organization domain from access token:', e);
+    return null;
+  });
+
+  const tokenOrganizationDomain = verifyResult?.data?.organization?.domain;
+
+  if (!tokenOrganizationDomain) {
+    console.error('[RISEACT-SDK] Could not determine organization domain from access token during callback verification');
+    return res.sendStatus(403);
+  }
+
+  if (tokenOrganizationDomain !== storedState.organizationDomain) {
+    console.error('[RISEACT-SDK] Organization domain mismatch during OAuth callback. Possible tenant impersonation attempt.', {
+      claimedDomain: storedState.organizationDomain,
+      tokenDomain: tokenOrganizationDomain,
+    });
+    return res.sendStatus(403);
   }
 
   const expiresDateUTC = new Date(Date.now() + expiresInSeconds * 1000);
