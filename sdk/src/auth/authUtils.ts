@@ -98,6 +98,15 @@ export async function renewToken(
     return waitForRefreshCompletion(organizationDomain, storage);
   }
 
+  if (currentLockState?.status === 'completed') {
+    console.info(`[RISEACT-SDK] Token was recently refreshed for org: ${oldCredentials.organizationDomain}. Reading updated credentials from storage.`);
+    const updatedCredentials = await storage.getCredentialsByOrganizationDomain(organizationDomain);
+    if (!updatedCredentials) {
+      throw new Error(`[RISEACT-SDK] Missing credentials in storage after completed refresh for ${organizationDomain}`);
+    }
+    return updatedCredentials;
+  }
+
   console.info(`[RISEACT-SDK] Refreshing token for org: ${oldCredentials.organizationDomain}`);
 
   updateRefreshLock(organizationDomain, 'pending');
