@@ -49,7 +49,7 @@ export type RefreshLockState = {
 };
 
 export const refreshLockStore = new LRUCache<string, RefreshLockState>({
-  max: 200,
+  max: 1000,
   ttl: 5 * 60 * 1000, // 5 minutes
 });
 
