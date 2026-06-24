@@ -45,6 +45,13 @@ export var BillingPlanType;
     BillingPlanType["Platform"] = "PLATFORM";
     BillingPlanType["Team"] = "TEAM";
 })(BillingPlanType || (BillingPlanType = {}));
+export var BillingReportStatus;
+(function (BillingReportStatus) {
+    BillingReportStatus["Failed"] = "FAILED";
+    BillingReportStatus["Pending"] = "PENDING";
+    BillingReportStatus["Skipped"] = "SKIPPED";
+    BillingReportStatus["Success"] = "SUCCESS";
+})(BillingReportStatus || (BillingReportStatus = {}));
 export var CampaignCommentStatus;
 (function (CampaignCommentStatus) {
     CampaignCommentStatus["Approved"] = "APPROVED";
@@ -56,6 +63,11 @@ export var CampaignType;
     CampaignType["Donation"] = "DONATION";
     CampaignType["Lead"] = "LEAD";
 })(CampaignType || (CampaignType = {}));
+export var CertificateBulkFormat;
+(function (CertificateBulkFormat) {
+    CertificateBulkFormat["MergedPdf"] = "MERGED_PDF";
+    CertificateBulkFormat["Zip"] = "ZIP";
+})(CertificateBulkFormat || (CertificateBulkFormat = {}));
 export var CheckoutState;
 (function (CheckoutState) {
     CheckoutState["Closed"] = "CLOSED";
@@ -75,37 +87,13 @@ export var Currencies;
 })(Currencies || (Currencies = {}));
 export var CustomFieldEntity;
 (function (CustomFieldEntity) {
-    CustomFieldEntity["Article"] = "ARTICLE";
-    CustomFieldEntity["Blog"] = "BLOG";
-    CustomFieldEntity["Campaign"] = "CAMPAIGN";
     CustomFieldEntity["Donation"] = "DONATION";
-    CustomFieldEntity["Page"] = "PAGE";
-    CustomFieldEntity["Project"] = "PROJECT";
     CustomFieldEntity["Supporter"] = "SUPPORTER";
 })(CustomFieldEntity || (CustomFieldEntity = {}));
-export var CustomFieldEntityFilterOperator;
-(function (CustomFieldEntityFilterOperator) {
-    CustomFieldEntityFilterOperator["Contains"] = "CONTAINS";
-    CustomFieldEntityFilterOperator["Endswith"] = "ENDSWITH";
-    CustomFieldEntityFilterOperator["Eq"] = "EQ";
-    CustomFieldEntityFilterOperator["Gt"] = "GT";
-    CustomFieldEntityFilterOperator["Gte"] = "GTE";
-    CustomFieldEntityFilterOperator["Icontains"] = "ICONTAINS";
-    CustomFieldEntityFilterOperator["Lt"] = "LT";
-    CustomFieldEntityFilterOperator["Lte"] = "LTE";
-    CustomFieldEntityFilterOperator["Neq"] = "NEQ";
-    CustomFieldEntityFilterOperator["Startswith"] = "STARTSWITH";
-})(CustomFieldEntityFilterOperator || (CustomFieldEntityFilterOperator = {}));
 export var CustomFieldType;
 (function (CustomFieldType) {
     CustomFieldType["Boolean"] = "BOOLEAN";
-    CustomFieldType["Date"] = "DATE";
-    CustomFieldType["Datetime"] = "DATETIME";
-    CustomFieldType["Decimal"] = "DECIMAL";
-    CustomFieldType["File"] = "FILE";
-    CustomFieldType["Integer"] = "INTEGER";
-    CustomFieldType["MultilineText"] = "MULTILINE_TEXT";
-    CustomFieldType["Richtext"] = "RICHTEXT";
+    CustomFieldType["Select"] = "SELECT";
     CustomFieldType["Text"] = "TEXT";
 })(CustomFieldType || (CustomFieldType = {}));
 export var DomainStatus;
@@ -172,6 +160,7 @@ export var NotificationCode;
     NotificationCode["P2PWelcome"] = "P2P_WELCOME";
     NotificationCode["StaffDonationReceived"] = "STAFF_DONATION_RECEIVED";
     NotificationCode["StaffDonationRefunded"] = "STAFF_DONATION_REFUNDED";
+    NotificationCode["SupporterLead"] = "SUPPORTER_LEAD";
     NotificationCode["SupporterLogin"] = "SUPPORTER_LOGIN";
     NotificationCode["TaxCertificate"] = "TAX_CERTIFICATE";
 })(NotificationCode || (NotificationCode = {}));
@@ -189,6 +178,7 @@ export var OnboardingStatus;
 })(OnboardingStatus || (OnboardingStatus = {}));
 export var PaperDocumentCode;
 (function (PaperDocumentCode) {
+    PaperDocumentCode["AnnualCertificate"] = "ANNUAL_CERTIFICATE";
     PaperDocumentCode["DonationReceipt"] = "DONATION_RECEIPT";
 })(PaperDocumentCode || (PaperDocumentCode = {}));
 export var PaymentProcessor;
@@ -197,6 +187,7 @@ export var PaymentProcessor;
     PaymentProcessor["Paypal"] = "PAYPAL";
     PaymentProcessor["Satispay"] = "SATISPAY";
     PaymentProcessor["Stripe"] = "STRIPE";
+    PaymentProcessor["Sumup"] = "SUMUP";
 })(PaymentProcessor || (PaymentProcessor = {}));
 export var PaymentState;
 (function (PaymentState) {
@@ -399,6 +390,7 @@ export var WebhookEventTopic;
     WebhookEventTopic["CheckoutPaid"] = "CHECKOUT_PAID";
     WebhookEventTopic["CheckoutUpdated"] = "CHECKOUT_UPDATED";
     WebhookEventTopic["DonationCreated"] = "DONATION_CREATED";
+    WebhookEventTopic["DonationDeleted"] = "DONATION_DELETED";
     WebhookEventTopic["DonationUpdated"] = "DONATION_UPDATED";
     WebhookEventTopic["PaymentCreated"] = "PAYMENT_CREATED";
     WebhookEventTopic["PaymentUpdated"] = "PAYMENT_UPDATED";
@@ -411,3 +403,4 @@ export const CampaignsListDocument = { "kind": "Document", "definitions": [{ "ki
 export const GetOrganizationInfoDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOrganizationInfo" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "organization" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "name" } }, { "kind": "Field", "name": { "kind": "Name", "value": "logo" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "square" } }] } }] } }] } }] };
 export const CampaignDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "Campaign" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "campaignId" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "Int" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "campaign" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "campaignId" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "title" } }, { "kind": "Field", "name": { "kind": "Name", "value": "content" } }, { "kind": "Field", "name": { "kind": "Name", "value": "visibility" } }, { "kind": "Field", "name": { "kind": "Name", "value": "slug" } }, { "kind": "Field", "name": { "kind": "Name", "value": "type" } }, { "kind": "Field", "name": { "kind": "Name", "value": "cover" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "small" } }, { "kind": "Field", "name": { "kind": "Name", "value": "url" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "createDate" } }] } }] } }] };
 export const CampaignUpdateDetailDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "mutation", "name": { "kind": "Name", "value": "CampaignUpdateDetail" }, "variableDefinitions": [{ "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "Int" } } } }, { "kind": "VariableDefinition", "variable": { "kind": "Variable", "name": { "kind": "Name", "value": "data" } }, "type": { "kind": "NonNullType", "type": { "kind": "NamedType", "name": { "kind": "Name", "value": "CampaignInput" } } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "campaignUpdate" }, "arguments": [{ "kind": "Argument", "name": { "kind": "Name", "value": "id" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "id" } } }, { "kind": "Argument", "name": { "kind": "Name", "value": "data" }, "value": { "kind": "Variable", "name": { "kind": "Name", "value": "data" } } }], "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "campaign" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "id" } }, { "kind": "Field", "name": { "kind": "Name", "value": "title" } }] } }, { "kind": "Field", "name": { "kind": "Name", "value": "userErrors" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "code" } }, { "kind": "Field", "name": { "kind": "Name", "value": "field" } }, { "kind": "Field", "name": { "kind": "Name", "value": "message" } }] } }] } }] } }] };
+export const GetOrgDataDocument = { "kind": "Document", "definitions": [{ "kind": "OperationDefinition", "operation": "query", "name": { "kind": "Name", "value": "GetOrgData" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "organization" }, "selectionSet": { "kind": "SelectionSet", "selections": [{ "kind": "Field", "name": { "kind": "Name", "value": "domain" } }, { "kind": "Field", "name": { "kind": "Name", "value": "name" } }] } }] } }] };

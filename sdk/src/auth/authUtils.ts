@@ -136,7 +136,11 @@ export async function renewToken(
       body: formBodyStr,
     });
     if (!oauthRes.ok) {
-      throw new Error(`Failed to refresh token for org: ${oldCredentials.organizationDomain} - ${oauthRes.status} ${oauthRes.statusText}`);
+      const err = new Error(`Failed to refresh token for org: ${oldCredentials.organizationDomain} - ${oauthRes.status} ${oauthRes.statusText}`);
+      // Only 400/401 (invalid_grant) means the refresh token is genuinely dead.
+      // 5xx / 429 / anything else is transient and must NOT destroy credentials.
+      (err as any).isRefreshTokenInvalid = oauthRes.status === 400 || oauthRes.status === 401;
+      throw err;
     }
 
     // Check if response is ok

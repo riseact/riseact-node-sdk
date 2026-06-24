@@ -81,11 +81,14 @@ const initCreateGqlClient = async ({ storage, organizationDomain, clientId, clie
             complete: () => observer.complete(),
           });
         } catch (err) {
-          // Check if this is a refresh token expiration/authentication error
-          const isAuthError =
-            err instanceof Error && (err.message.includes('401') || err.message.includes('403') || err.message.includes('Failed to refresh token'));
+          // Destroy stored credentials ONLY when the refresh token is definitively
+          // invalid (OAuth server rejected it with 400/401, flagged by renewToken).
+          // Transient failures — 5xx, 429, network errors, malformed responses,
+          // refresh-lock races — must NOT delete credentials: a momentary hiccup
+          // would otherwise permanently unlink the organization and orphan its config.
+          const isRefreshTokenInvalid = (err as any)?.isRefreshTokenInvalid === true;
 
-          if (isAuthError) {
+          if (isRefreshTokenInvalid) {
             // Create a proper 401 error for expired/invalid refresh token
             const authError = new Error('Authentication failed: refresh token expired or invalid');
             (authError as any).statusCode = 401;
@@ -99,10 +102,8 @@ const initCreateGqlClient = async ({ storage, organizationDomain, clientId, clie
             currentCredentials = null;
             observer.error(authError);
           } else {
-            // Something terrible happened, we can't recover from this. Try to remove credentials to force user to re-authenticate.
-            console.error('[RISEACT-SDK] Failed to refresh token, removing credentials for organization:', organizationDomain);
-            storage.removeCredentials(organizationDomain);
-            currentCredentials = null;
+            // Transient/unknown failure: KEEP credentials so the next request can retry.
+            console.error('[RISEACT-SDK] Token refresh failed transiently; keeping credentials for organization:', organizationDomain, err);
             observer.error(err);
           }
         }

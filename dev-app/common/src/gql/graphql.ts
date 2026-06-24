@@ -158,7 +158,6 @@ export type Article = {
   content?: Maybe<Scalars['String']>;
   cover?: Maybe<Media>;
   createDate: Scalars['DateTime'];
-  customfields: Array<CustomField>;
   id: Scalars['Int'];
   seoDescription?: Maybe<Scalars['String']>;
   seoTitle?: Maybe<Scalars['String']>;
@@ -187,7 +186,6 @@ export type ArticleInput = {
   blogId?: InputMaybe<Scalars['Int']>;
   content?: InputMaybe<Scalars['String']>;
   coverId?: InputMaybe<Scalars['Int']>;
-  customfields?: InputMaybe<Array<CustomFieldInput>>;
   seoDescription?: InputMaybe<Scalars['String']>;
   seoTitle?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
@@ -248,6 +246,28 @@ export type AssetsFiltersInput = {
   themeUuid?: InputMaybe<Scalars['String']>;
 };
 
+export type BillingFeeReport = {
+  __typename?: 'BillingFeeReport';
+  errorMessage?: Maybe<Scalars['String']>;
+  paymentDate?: Maybe<Scalars['Date']>;
+  paymentThreshold: Scalars['Int'];
+  paymentsDigitalAmount: Scalars['Float'];
+  paymentsDigitalCount: Scalars['Int'];
+  paymentsManualAmount: Scalars['Float'];
+  paymentsManualCount: Scalars['Int'];
+  paymentsPhygitalAmount: Scalars['Float'];
+  paymentsPhygitalCount: Scalars['Int'];
+  quarter: Scalars['Int'];
+  quarterYear: Scalars['Int'];
+  status: BillingReportStatus;
+};
+
+export type BillingFeeReportFilters = {
+  quarter?: InputMaybe<Array<Scalars['Int']>>;
+  quarterYear?: InputMaybe<Array<Scalars['Int']>>;
+  status?: InputMaybe<Array<BillingReportStatus>>;
+};
+
 export enum BillingPlanType {
   Development = 'DEVELOPMENT',
   Grow = 'GROW',
@@ -256,6 +276,13 @@ export enum BillingPlanType {
   PayAsYouGo = 'PAY_AS_YOU_GO',
   Platform = 'PLATFORM',
   Team = 'TEAM'
+}
+
+export enum BillingReportStatus {
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Skipped = 'SKIPPED',
+  Success = 'SUCCESS'
 }
 
 export type Block = {
@@ -283,7 +310,6 @@ export type Blog = {
   content?: Maybe<Scalars['String']>;
   cover?: Maybe<Media>;
   createDate: Scalars['DateTime'];
-  customfields: Array<CustomField>;
   id: Scalars['Int'];
   seoDescription?: Maybe<Scalars['String']>;
   seoTitle?: Maybe<Scalars['String']>;
@@ -311,7 +337,6 @@ export type BlogEdge = {
 export type BlogInput = {
   content?: InputMaybe<Scalars['String']>;
   coverId?: InputMaybe<Scalars['Int']>;
-  customfields?: InputMaybe<Array<CustomFieldInput>>;
   seoDescription?: InputMaybe<Scalars['String']>;
   seoTitle?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
@@ -330,6 +355,12 @@ export type BlogsResponse = {
   userErrors?: Maybe<Array<UserError>>;
 };
 
+export type BulkCertificateResult = {
+  __typename?: 'BulkCertificateResult';
+  downloadUrl: Scalars['String'];
+  generatedCount: Scalars['Int'];
+};
+
 export type Campaign = {
   __typename?: 'Campaign';
   allowCustomAmount: Scalars['Boolean'];
@@ -341,7 +372,6 @@ export type Campaign = {
   costExamples: Array<CostExample>;
   cover?: Maybe<Media>;
   createDate: Scalars['DateTime'];
-  customfields: Array<CustomField>;
   defaultAmount?: Maybe<Scalars['Float']>;
   defaultSubscriptionAmount?: Maybe<Scalars['Float']>;
   excludedChannels: Array<Scalars['Int']>;
@@ -450,7 +480,6 @@ export type CampaignEdge = {
 
 export type CampaignFilters = {
   channels?: InputMaybe<Array<Scalars['String']>>;
-  customfields?: InputMaybe<Array<CustomFieldEntityFilter>>;
   ids?: InputMaybe<Array<Scalars['Int']>>;
   order?: InputMaybe<Scalars['String']>;
   q?: InputMaybe<Scalars['String']>;
@@ -469,7 +498,6 @@ export type CampaignInput = {
   content?: InputMaybe<Scalars['String']>;
   costExamples?: InputMaybe<Array<CostExampleInput>>;
   coverId?: InputMaybe<Scalars['Int']>;
-  customfields?: InputMaybe<Array<CustomFieldInput>>;
   defaultAmount?: InputMaybe<Scalars['Float']>;
   defaultSubscriptionAmount?: InputMaybe<Scalars['Float']>;
   excludedChannels?: InputMaybe<Array<Scalars['Int']>>;
@@ -509,6 +537,41 @@ export enum CampaignType {
   Lead = 'LEAD'
 }
 
+export enum CertificateBulkFormat {
+  MergedPdf = 'MERGED_PDF',
+  Zip = 'ZIP'
+}
+
+export type CertificateData = {
+  __typename?: 'CertificateData';
+  oneoffCount: Scalars['Int'];
+  oneoffTotal: Scalars['String'];
+  paymentCount: Scalars['Int'];
+  payments: Array<CertificatePayment>;
+  recurringCount: Scalars['Int'];
+  recurringTotal: Scalars['String'];
+  totalAmount: Scalars['String'];
+  year: Scalars['Int'];
+};
+
+export type CertificatePayment = {
+  __typename?: 'CertificatePayment';
+  amount: Scalars['String'];
+  campaignName: Scalars['String'];
+  donationCode: Scalars['String'];
+  frequency: Scalars['String'];
+  paymentDate: Scalars['String'];
+  paymentId: Scalars['Int'];
+  paymentMethod: Scalars['String'];
+};
+
+export type CertificateUrl = {
+  __typename?: 'CertificateUrl';
+  supporterId: Scalars['Int'];
+  url: Scalars['String'];
+  year: Scalars['Int'];
+};
+
 export type ChangePlanResponse = {
   __typename?: 'ChangePlanResponse';
   success: Scalars['Boolean'];
@@ -521,6 +584,7 @@ export type Checkout = {
   campaign: Campaign;
   checkoutUrl: Scalars['String'];
   completedDate?: Maybe<Scalars['DateTime']>;
+  costExampleQuantity: Scalars['Int'];
   createDate: Scalars['DateTime'];
   donation?: Maybe<Donation>;
   donationAmount?: Maybe<Scalars['Float']>;
@@ -577,6 +641,7 @@ export type CheckoutEdge = {
 };
 
 export type CheckoutFilters = {
+  completedDate?: InputMaybe<DateRange>;
   createDate?: InputMaybe<DateRange>;
   order?: InputMaybe<Scalars['String']>;
   q?: InputMaybe<Scalars['String']>;
@@ -591,6 +656,7 @@ export type CheckoutInput = {
   applicationId?: InputMaybe<Scalars['Int']>;
   applicationMetadata?: InputMaybe<Scalars['JSON']>;
   campaignId?: InputMaybe<Scalars['Int']>;
+  costExampleQuantity?: InputMaybe<Scalars['Int']>;
   device?: InputMaybe<Scalars['String']>;
   donationData?: InputMaybe<DonationInput>;
   frequency?: InputMaybe<Frequency>;
@@ -694,6 +760,8 @@ export type CoreMutation = {
   campaignDelete: CampaignResponse;
   campaignDuplicate: CampaignResponse;
   campaignUpdate: CampaignResponse;
+  certificateBulkGenerate: BulkCertificateResult;
+  certificateGetUrl: CertificateUrl;
   checkoutComplete: CheckoutResponse;
   checkoutCreate: CheckoutResponse;
   checkoutRegisterPayment: CheckoutResponse;
@@ -958,6 +1026,19 @@ export type CoreMutationCampaignDuplicateArgs = {
 export type CoreMutationCampaignUpdateArgs = {
   data: CampaignInput;
   id: Scalars['Int'];
+};
+
+
+export type CoreMutationCertificateBulkGenerateArgs = {
+  format?: CertificateBulkFormat;
+  supporterIds: Array<Scalars['Int']>;
+  year: Scalars['Int'];
+};
+
+
+export type CoreMutationCertificateGetUrlArgs = {
+  supporterId: Scalars['Int'];
+  year: Scalars['Int'];
 };
 
 
@@ -1570,6 +1651,8 @@ export type CoreQuery = {
   asset?: Maybe<Asset>;
   assetLayout?: Maybe<Asset>;
   assets: Array<Asset>;
+  billingFeeReportGetCurrent?: Maybe<BillingFeeReport>;
+  billingFeeReports: Array<BillingFeeReport>;
   billingPlans?: Maybe<Plan>;
   blog: Blog;
   blogs: BlogConnection;
@@ -1578,6 +1661,9 @@ export type CoreQuery = {
   campaignComments: CampaignCommentConnection;
   campaignTags: StrConnection;
   campaigns: CampaignConnection;
+  certificateContextFields: Array<Scalars['String']>;
+  certificateData: CertificateData;
+  certificateYears: Array<Scalars['Int']>;
   checkout: Checkout;
   checkouts: CheckoutConnection;
   checkoutsAbandoned: CheckoutConnection;
@@ -1586,7 +1672,6 @@ export type CoreQuery = {
   customerPortal: CustomerPortal;
   customfieldDefinition: CustomFieldDefinition;
   customfieldDefinitions: Array<CustomFieldDefinition>;
-  customfieldDefinitionsEntitiesUsage: Array<CustomEntityUsage>;
   domain?: Maybe<Domain>;
   domains: Array<Domain>;
   donation: Donation;
@@ -1706,6 +1791,11 @@ export type CoreQueryAssetsArgs = {
 };
 
 
+export type CoreQueryBillingFeeReportsArgs = {
+  filters?: InputMaybe<BillingFeeReportFilters>;
+};
+
+
 export type CoreQueryBlogArgs = {
   id: Scalars['Int'];
 };
@@ -1742,6 +1832,17 @@ export type CoreQueryCampaignTagsArgs = {
 export type CoreQueryCampaignsArgs = {
   filters?: InputMaybe<CampaignFilters>;
   pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryCertificateDataArgs = {
+  supporterId: Scalars['Int'];
+  year: Scalars['Int'];
+};
+
+
+export type CoreQueryCertificateYearsArgs = {
+  supporterId: Scalars['Int'];
 };
 
 
@@ -2094,12 +2195,6 @@ export enum Currencies {
   Usd = 'USD'
 }
 
-export type CustomEntityUsage = {
-  __typename?: 'CustomEntityUsage';
-  count: Scalars['Int'];
-  entity: CustomFieldEntity;
-};
-
 export type CustomField = {
   __typename?: 'CustomField';
   key: Scalars['String'];
@@ -2110,49 +2205,23 @@ export type CustomField = {
 
 export type CustomFieldDefinition = {
   __typename?: 'CustomFieldDefinition';
-  dateMaxValue?: Maybe<Scalars['Date']>;
-  dateMinValue?: Maybe<Scalars['Date']>;
-  datetimeMaxValue?: Maybe<Scalars['DateTime']>;
-  datetimeMinValue?: Maybe<Scalars['DateTime']>;
-  decimalMaxValue?: Maybe<Scalars['Float']>;
-  decimalMinValue?: Maybe<Scalars['Float']>;
+  archived: Scalars['Boolean'];
   description?: Maybe<Scalars['String']>;
   entity: CustomFieldEntity;
-  hasSitefrontVisibility: Scalars['Boolean'];
-  hidden: Scalars['Boolean'];
   id: Scalars['Int'];
-  integerMaxValue?: Maybe<Scalars['Int']>;
-  integerMinValue?: Maybe<Scalars['Int']>;
   key: Scalars['String'];
   name: Scalars['String'];
+  options?: Maybe<Array<Scalars['String']>>;
   position: Scalars['Int'];
-  textChoices?: Maybe<Array<Scalars['String']>>;
-  textMaxLength?: Maybe<Scalars['Int']>;
-  textMinLength?: Maybe<Scalars['Int']>;
-  textUseChoices: Scalars['Boolean'];
   type: CustomFieldType;
 };
 
 export type CustomFieldDefinitionCreateInput = {
-  dateMaxValue?: InputMaybe<Scalars['String']>;
-  dateMinValue?: InputMaybe<Scalars['String']>;
-  datetimeMaxValue?: InputMaybe<Scalars['String']>;
-  datetimeMinValue?: InputMaybe<Scalars['String']>;
-  decimalMaxValue?: InputMaybe<Scalars['Float']>;
-  decimalMinValue?: InputMaybe<Scalars['Float']>;
   description?: InputMaybe<Scalars['String']>;
   entity: CustomFieldEntity;
-  hasSitefrontVisibility?: InputMaybe<Scalars['Boolean']>;
-  hidden?: InputMaybe<Scalars['Boolean']>;
-  integerMaxValue?: InputMaybe<Scalars['Int']>;
-  integerMinValue?: InputMaybe<Scalars['Int']>;
-  key: Scalars['String'];
   name: Scalars['String'];
+  options?: InputMaybe<Array<Scalars['String']>>;
   position?: InputMaybe<Scalars['Int']>;
-  textChoices?: InputMaybe<Array<Scalars['String']>>;
-  textMaxLength?: InputMaybe<Scalars['Int']>;
-  textMinLength?: InputMaybe<Scalars['Int']>;
-  textUseChoices?: InputMaybe<Scalars['Boolean']>;
   type: CustomFieldType;
 };
 
@@ -2163,57 +2232,27 @@ export type CustomFieldDefinitionResponse = {
 };
 
 export type CustomFieldDefinitionUpdateInput = {
-  dateMaxValue?: InputMaybe<Scalars['String']>;
-  dateMinValue?: InputMaybe<Scalars['String']>;
-  datetimeMaxValue?: InputMaybe<Scalars['String']>;
-  datetimeMinValue?: InputMaybe<Scalars['String']>;
-  decimalMaxValue?: InputMaybe<Scalars['Float']>;
-  decimalMinValue?: InputMaybe<Scalars['Float']>;
+  archived?: InputMaybe<Scalars['Boolean']>;
   description?: InputMaybe<Scalars['String']>;
-  hasSitefrontVisibility?: InputMaybe<Scalars['Boolean']>;
-  hidden?: InputMaybe<Scalars['Boolean']>;
-  integerMaxValue?: InputMaybe<Scalars['Int']>;
-  integerMinValue?: InputMaybe<Scalars['Int']>;
   name?: InputMaybe<Scalars['String']>;
+  options?: InputMaybe<Array<Scalars['String']>>;
   position?: InputMaybe<Scalars['Int']>;
-  textChoices?: InputMaybe<Array<Scalars['String']>>;
-  textMaxLength?: InputMaybe<Scalars['Int']>;
-  textMinLength?: InputMaybe<Scalars['Int']>;
-  textUseChoices?: InputMaybe<Scalars['Boolean']>;
 };
 
 export enum CustomFieldEntity {
-  Article = 'ARTICLE',
-  Blog = 'BLOG',
-  Campaign = 'CAMPAIGN',
   Donation = 'DONATION',
-  Page = 'PAGE',
-  Project = 'PROJECT',
   Supporter = 'SUPPORTER'
 }
 
 export type CustomFieldEntityFilter = {
+  defined?: InputMaybe<Scalars['Boolean']>;
   key: Scalars['String'];
-  operator: CustomFieldEntityFilterOperator;
   value?: InputMaybe<Scalars['String']>;
 };
 
-export enum CustomFieldEntityFilterOperator {
-  Contains = 'CONTAINS',
-  Endswith = 'ENDSWITH',
-  Eq = 'EQ',
-  Gt = 'GT',
-  Gte = 'GTE',
-  Icontains = 'ICONTAINS',
-  Lt = 'LT',
-  Lte = 'LTE',
-  Neq = 'NEQ',
-  Startswith = 'STARTSWITH'
-}
-
 export type CustomFieldFilters = {
+  archived?: InputMaybe<Scalars['Boolean']>;
   entity?: InputMaybe<CustomFieldEntity>;
-  hidden?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type CustomFieldInput = {
@@ -2223,13 +2262,7 @@ export type CustomFieldInput = {
 
 export enum CustomFieldType {
   Boolean = 'BOOLEAN',
-  Date = 'DATE',
-  Datetime = 'DATETIME',
-  Decimal = 'DECIMAL',
-  File = 'FILE',
-  Integer = 'INTEGER',
-  MultilineText = 'MULTILINE_TEXT',
-  Richtext = 'RICHTEXT',
+  Select = 'SELECT',
   Text = 'TEXT'
 }
 
@@ -2288,6 +2321,7 @@ export type Donation = {
   code: Scalars['String'];
   completedDate?: Maybe<Scalars['DateTime']>;
   costExample?: Maybe<CostExample>;
+  costExampleQuantity: Scalars['Int'];
   createDate: Scalars['DateTime'];
   customfields: Array<CustomField>;
   device?: Maybe<Scalars['String']>;
@@ -2324,9 +2358,13 @@ export type DonationEdge = {
 };
 
 export type DonationFiltersInput = {
+  archived?: InputMaybe<Scalars['Boolean']>;
   campaigns?: InputMaybe<Array<Scalars['Int']>>;
+  completedDate?: InputMaybe<DateRange>;
+  completedDatetime?: InputMaybe<DateTimeRange>;
   createDate?: InputMaybe<DateRange>;
   createDatetime?: InputMaybe<DateTimeRange>;
+  customfields?: InputMaybe<Array<CustomFieldEntityFilter>>;
   frequencies?: InputMaybe<Array<Frequency>>;
   order?: InputMaybe<Scalars['String']>;
   paymentMethods?: InputMaybe<Array<Scalars['Int']>>;
@@ -2339,6 +2377,7 @@ export type DonationFiltersInput = {
   totalPaid?: InputMaybe<IntRange>;
   totalPayments?: InputMaybe<IntRange>;
   updateDate?: InputMaybe<DateRange>;
+  updateDatetime?: InputMaybe<DateRange>;
 };
 
 export type DonationInput = {
@@ -2471,6 +2510,7 @@ export type ManualPaymentMethodInput = {
   description?: InputMaybe<Scalars['String']>;
   hasOneoffSupport?: InputMaybe<Scalars['Boolean']>;
   hasSubscriptionSupport?: InputMaybe<Scalars['Boolean']>;
+  includeInCertificate?: InputMaybe<Scalars['Boolean']>;
   instructions?: InputMaybe<Scalars['String']>;
   label: Scalars['String'];
 };
@@ -2554,6 +2594,7 @@ export type MenuResponse = {
 export type Notification = {
   __typename?: 'Notification';
   code: NotificationCode;
+  contextVersion: Scalars['Int'];
   description?: Maybe<Scalars['String']>;
   emailBcc?: Maybe<Scalars['String']>;
   emailBody?: Maybe<Scalars['String']>;
@@ -2589,6 +2630,7 @@ export type NotificationFilters = {
 };
 
 export type NotificationInput = {
+  contextVersion: Scalars['Int'];
   emailBcc: Scalars['String'];
   emailBody: Scalars['String'];
   emailDesign: Scalars['String'];
@@ -2626,6 +2668,10 @@ export type Organization = {
   __typename?: 'Organization';
   addressLine1?: Maybe<Scalars['String']>;
   addressLine2?: Maybe<Scalars['String']>;
+  annualCertificateAutoSend: Scalars['Boolean'];
+  annualCertificateLastSentYear?: Maybe<Scalars['Int']>;
+  annualCertificateSendDay: Scalars['Int'];
+  annualCertificateSendMonth: Scalars['Int'];
   baseSitefrontUrl: Scalars['String'];
   city?: Maybe<Scalars['String']>;
   consentScopes: Array<Scalars['String']>;
@@ -2659,6 +2705,9 @@ export type Organization = {
 export type OrganizationInput = {
   addressLine1?: InputMaybe<Scalars['String']>;
   addressLine2?: InputMaybe<Scalars['String']>;
+  annualCertificateAutoSend?: InputMaybe<Scalars['Boolean']>;
+  annualCertificateSendDay?: InputMaybe<Scalars['Int']>;
+  annualCertificateSendMonth?: InputMaybe<Scalars['Int']>;
   city?: InputMaybe<Scalars['String']>;
   contactEmail?: InputMaybe<Scalars['String']>;
   contactPhone?: InputMaybe<Scalars['String']>;
@@ -2708,7 +2757,6 @@ export type Page = {
   content?: Maybe<Scalars['String']>;
   cover?: Maybe<Media>;
   createDate: Scalars['DateTime'];
-  customfields: Array<CustomField>;
   id: Scalars['Int'];
   seoDescription?: Maybe<Scalars['String']>;
   seoTitle?: Maybe<Scalars['String']>;
@@ -2745,7 +2793,6 @@ export type PageInfo = {
 export type PageInput = {
   content?: InputMaybe<Scalars['String']>;
   coverId?: InputMaybe<Scalars['Int']>;
-  customfields?: InputMaybe<Array<CustomFieldInput>>;
   seoDescription?: InputMaybe<Scalars['String']>;
   seoTitle?: InputMaybe<Scalars['String']>;
   slug?: InputMaybe<Scalars['String']>;
@@ -2776,6 +2823,7 @@ export type PaperDocument = {
   code: PaperDocumentCode;
   content?: Maybe<Scalars['String']>;
   contextFields: Array<Scalars['String']>;
+  contextVersion: Scalars['Int'];
   description?: Maybe<Scalars['String']>;
   group: Scalars['String'];
   name: Scalars['String'];
@@ -2784,11 +2832,13 @@ export type PaperDocument = {
 };
 
 export enum PaperDocumentCode {
+  AnnualCertificate = 'ANNUAL_CERTIFICATE',
   DonationReceipt = 'DONATION_RECEIPT'
 }
 
 export type PaperDocumentInput = {
   content?: InputMaybe<Scalars['String']>;
+  contextVersion?: InputMaybe<Scalars['Int']>;
   style?: InputMaybe<Scalars['String']>;
 };
 
@@ -2859,6 +2909,7 @@ export type PaymentMethod = {
   hasOneoffSupport: Scalars['Boolean'];
   hasSubscriptionSupport: Scalars['Boolean'];
   id: Scalars['Int'];
+  includeInCertificate: Scalars['Boolean'];
   instructions?: Maybe<Scalars['String']>;
   label?: Maybe<Scalars['String']>;
   processor: PaymentProcessor;
@@ -3046,7 +3097,6 @@ export type Project = {
   content?: Maybe<Scalars['String']>;
   cover?: Maybe<Media>;
   createDate: Scalars['DateTime'];
-  customfields: Array<CustomField>;
   id: Scalars['Int'];
   items: Array<ProjectCampaignItem>;
   rules: Array<ProjectRule>;
@@ -3099,7 +3149,6 @@ export type ProjectInput = {
   campaignsOrder?: InputMaybe<ProjectCampaignsOrder>;
   content?: InputMaybe<Scalars['String']>;
   coverId?: InputMaybe<Scalars['Int']>;
-  customfields?: InputMaybe<Array<CustomFieldInput>>;
   rules?: InputMaybe<Array<ProjectRuleInput>>;
   rulesMatch?: InputMaybe<ProjectRuleMatchType>;
   seoDescription?: InputMaybe<Scalars['String']>;
@@ -3944,6 +3993,7 @@ export enum WebhookEventTopic {
   CheckoutPaid = 'CHECKOUT_PAID',
   CheckoutUpdated = 'CHECKOUT_UPDATED',
   DonationCreated = 'DONATION_CREATED',
+  DonationDeleted = 'DONATION_DELETED',
   DonationUpdated = 'DONATION_UPDATED',
   PaymentCreated = 'PAYMENT_CREATED',
   PaymentUpdated = 'PAYMENT_UPDATED',
