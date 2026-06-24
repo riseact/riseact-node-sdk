@@ -28,7 +28,7 @@ const sidExchangeHandler: RequestHandler = safeAsyncHandler(async (req: Request,
   //   console.error('[RISEACT-SDK] Organization domain mismatch in SID exchange request');
   //   return res.status(400).send('Organization domain mismatch');
   // }
-  console.debug('[RISEACT-SDK] SID exchange successful>', { sid, token });
+  console.debug('[RISEACT-SDK] SID exchange successful>', { sid, organizationDomain: token.organizationDomain });
   return res.json({
     client_token: token.clientToken,
     organization: token.organizationDomain,
