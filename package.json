@@ -12,7 +12,6 @@
   "main": "build/index.js",
   "license": "MIT",
   "scripts": {
-    "open-tunnel": "ngrok http 3000",
     "dev": "npm run clean-vite-cache && concurrently -c blue,red -n SRV,GQL --kill-others \"yarn workspace server dev\" \"yarn workspace common codegen\"",
     "dev:local": "RISEACT_ACCOUNTS_URL=http://accounts.localhost:8000 RISEACT_CORE_URL=http://core.localhost:8000 yarn dev",
     "clean-vite-cache": "rm -rf ./dev-app/client/node_modules/.vite",

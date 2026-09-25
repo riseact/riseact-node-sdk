@@ -2,7 +2,7 @@
   "name": "server",
   "version": "1.0.0",
   "scripts": {
-    "dev": "NODE_ENV=development ts-node-dev --watch ../sdk/**/* --files --respawn --clear -r tsconfig-paths/register src/index.ts"
+    "dev": "NODE_ENV=development ts-node-dev --watch ../sdk/**/* --files --respawn -r tsconfig-paths/register src/index.ts"
   },
   "dependencies": {
     "@apollo/client": "3.7.7",

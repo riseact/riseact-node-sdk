@@ -372,9 +372,11 @@ export type Campaign = {
   costExamples: Array<CostExample>;
   cover?: Maybe<Media>;
   createDate: Scalars['DateTime'];
+  customfields: Array<CustomField>;
   defaultAmount?: Maybe<Scalars['Float']>;
   defaultSubscriptionAmount?: Maybe<Scalars['Float']>;
   excludedChannels: Array<Scalars['Int']>;
+  excludedPaymentMethods: Array<Scalars['Int']>;
   goal?: Maybe<Scalars['Float']>;
   hasOneOff: Scalars['Boolean'];
   hasSubscription: Scalars['Boolean'];
@@ -498,9 +500,11 @@ export type CampaignInput = {
   content?: InputMaybe<Scalars['String']>;
   costExamples?: InputMaybe<Array<CostExampleInput>>;
   coverId?: InputMaybe<Scalars['Int']>;
+  customfields?: InputMaybe<Array<CustomFieldInput>>;
   defaultAmount?: InputMaybe<Scalars['Float']>;
   defaultSubscriptionAmount?: InputMaybe<Scalars['Float']>;
   excludedChannels?: InputMaybe<Array<Scalars['Int']>>;
+  excludedPaymentMethods?: InputMaybe<Array<Scalars['Int']>>;
   goal?: InputMaybe<Scalars['Float']>;
   hasOneOff?: InputMaybe<Scalars['Boolean']>;
   hasSubscription?: InputMaybe<Scalars['Boolean']>;
@@ -762,6 +766,7 @@ export type CoreMutation = {
   campaignUpdate: CampaignResponse;
   certificateBulkGenerate: BulkCertificateResult;
   certificateGetUrl: CertificateUrl;
+  certificateSendAll: Scalars['Int'];
   checkoutComplete: CheckoutResponse;
   checkoutCreate: CheckoutResponse;
   checkoutRegisterPayment: CheckoutResponse;
@@ -780,7 +785,7 @@ export type CoreMutation = {
   donationBulkDelete: Scalars['Boolean'];
   donationDelete: Donation;
   donationExport: Scalars['String'];
-  donationImport: Task;
+  donationImport: ImportRun;
   donationReceiptSend: Scalars['Boolean'];
   donationRegisterPayment: DonationResponse;
   donationRevoke: Donation;
@@ -848,7 +853,8 @@ export type CoreMutation = {
   supporterCreate: Supporter;
   supporterDelete: Supporter;
   supporterExport: Scalars['String'];
-  supporterImport: Task;
+  supporterImport: ImportRun;
+  supporterLeadCreate: Supporter;
   supporterMerge: Supporter;
   supporterRemovePrivacy: SupporterResponse;
   supporterSendTaxCertificate: Supporter;
@@ -1042,6 +1048,11 @@ export type CoreMutationCertificateGetUrlArgs = {
 };
 
 
+export type CoreMutationCertificateSendAllArgs = {
+  year: Scalars['Int'];
+};
+
+
 export type CoreMutationCheckoutCompleteArgs = {
   data: CheckoutCompleteInput;
   token: Scalars['String'];
@@ -1139,11 +1150,8 @@ export type CoreMutationDonationExportArgs = {
 
 
 export type CoreMutationDonationImportArgs = {
-  createMissingCampaigns: Scalars['Boolean'];
-  createMissingPaymentMethod: Scalars['Boolean'];
   fallbackCampaignId?: InputMaybe<Scalars['Int']>;
   file: Scalars['Upload'];
-  importAnonymousPayments: Scalars['Boolean'];
 };
 
 
@@ -1478,7 +1486,11 @@ export type CoreMutationSupporterExportArgs = {
 
 export type CoreMutationSupporterImportArgs = {
   file: Scalars['Upload'];
-  overrideSupporters: Scalars['Boolean'];
+};
+
+
+export type CoreMutationSupporterLeadCreateArgs = {
+  data: LeadSupporterInput;
 };
 
 
@@ -1677,6 +1689,8 @@ export type CoreQuery = {
   donation: Donation;
   donationTags: StrConnection;
   donations: DonationConnection;
+  importRun?: Maybe<ImportRun>;
+  importRuns: Array<ImportRun>;
   invite: Invite;
   invites: Array<Invite>;
   manualPaymentMethod: PaymentMethod;
@@ -1904,6 +1918,11 @@ export type CoreQueryDonationTagsArgs = {
 export type CoreQueryDonationsArgs = {
   filters?: InputMaybe<DonationFiltersInput>;
   pagination?: InputMaybe<PaginationInput>;
+};
+
+
+export type CoreQueryImportRunArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -2240,6 +2259,7 @@ export type CustomFieldDefinitionUpdateInput = {
 };
 
 export enum CustomFieldEntity {
+  Campaign = 'CAMPAIGN',
   Donation = 'DONATION',
   Supporter = 'SUPPORTER'
 }
@@ -2262,6 +2282,7 @@ export type CustomFieldInput = {
 
 export enum CustomFieldType {
   Boolean = 'BOOLEAN',
+  Date = 'DATE',
   Select = 'SELECT',
   Text = 'TEXT'
 }
@@ -2285,6 +2306,12 @@ export type DateRange = {
 export type DateTimeRange = {
   end?: InputMaybe<Scalars['DateTime']>;
   start?: InputMaybe<Scalars['DateTime']>;
+};
+
+export type DisplayedPartner = {
+  __typename?: 'DisplayedPartner';
+  logo?: Maybe<Media>;
+  name: Scalars['String'];
 };
 
 export type Domain = {
@@ -2325,8 +2352,10 @@ export type Donation = {
   createDate: Scalars['DateTime'];
   customfields: Array<CustomField>;
   device?: Maybe<Scalars['String']>;
+  externalRef?: Maybe<Scalars['String']>;
   frequency?: Maybe<Frequency>;
   id: Scalars['Int'];
+  importRun?: Maybe<ImportRun>;
   isPublic: Scalars['Boolean'];
   note?: Maybe<Scalars['String']>;
   paymentMethod?: Maybe<PaymentMethod>;
@@ -2360,12 +2389,14 @@ export type DonationEdge = {
 export type DonationFiltersInput = {
   archived?: InputMaybe<Scalars['Boolean']>;
   campaigns?: InputMaybe<Array<Scalars['Int']>>;
+  channels?: InputMaybe<Array<Scalars['Int']>>;
   completedDate?: InputMaybe<DateRange>;
   completedDatetime?: InputMaybe<DateTimeRange>;
   createDate?: InputMaybe<DateRange>;
   createDatetime?: InputMaybe<DateTimeRange>;
   customfields?: InputMaybe<Array<CustomFieldEntityFilter>>;
   frequencies?: InputMaybe<Array<Frequency>>;
+  importRuns?: InputMaybe<Array<Scalars['Int']>>;
   order?: InputMaybe<Scalars['String']>;
   paymentMethods?: InputMaybe<Array<Scalars['Int']>>;
   peerCampaigns?: InputMaybe<Array<Scalars['Int']>>;
@@ -2473,6 +2504,86 @@ export enum Frequency {
   Oneoff = 'ONEOFF'
 }
 
+export type ImportFailedRow = {
+  __typename?: 'ImportFailedRow';
+  errorCode: ImportRowErrorCode;
+  errorMessage?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  rawData: Scalars['JSON'];
+  rowNumber: Scalars['Int'];
+  stage: ImportStage;
+};
+
+export enum ImportKind {
+  Donations = 'DONATIONS',
+  Supporters = 'SUPPORTERS'
+}
+
+export enum ImportRowErrorCode {
+  AmountInvalid = 'AMOUNT_INVALID',
+  BooleanInvalid = 'BOOLEAN_INVALID',
+  CampaignMissing = 'CAMPAIGN_MISSING',
+  CountryCodeInvalid = 'COUNTRY_CODE_INVALID',
+  CustomValueInvalid = 'CUSTOM_VALUE_INVALID',
+  DateInvalid = 'DATE_INVALID',
+  DobInvalid = 'DOB_INVALID',
+  DonorTypeInvalid = 'DONOR_TYPE_INVALID',
+  PaymentMethodMissing = 'PAYMENT_METHOD_MISSING',
+  RowMalformed = 'ROW_MALFORMED',
+  SsnInvalid = 'SSN_INVALID',
+  VatInvalid = 'VAT_INVALID'
+}
+
+export type ImportRun = {
+  __typename?: 'ImportRun';
+  attempts: Scalars['Int'];
+  createDate: Scalars['DateTime'];
+  donationsCreated: Scalars['Int'];
+  errorCode?: Maybe<ImportRunError>;
+  errorMessage?: Maybe<Scalars['String']>;
+  failedRows: Array<ImportFailedRow>;
+  fileHash?: Maybe<Scalars['String']>;
+  filename?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  kind: ImportKind;
+  label: Scalars['String'];
+  paymentsCreated: Scalars['Int'];
+  rowsFailed: Scalars['Int'];
+  rowsTotal: Scalars['Int'];
+  staffName?: Maybe<Scalars['String']>;
+  state: ImportRunState;
+  supportersCreated: Scalars['Int'];
+  taskId?: Maybe<Scalars['String']>;
+  updateDate: Scalars['DateTime'];
+};
+
+export enum ImportRunError {
+  EmptyFile = 'EMPTY_FILE',
+  FallbackCampaignInvalid = 'FALLBACK_CAMPAIGN_INVALID',
+  FileInvalid = 'FILE_INVALID',
+  FileTooLarge = 'FILE_TOO_LARGE',
+  HeadersInvalid = 'HEADERS_INVALID',
+  PreflightFailed = 'PREFLIGHT_FAILED',
+  TooManyRows = 'TOO_MANY_ROWS',
+  WorkerError = 'WORKER_ERROR'
+}
+
+export enum ImportRunState {
+  Completed = 'COMPLETED',
+  Failed = 'FAILED',
+  Pending = 'PENDING',
+  Processing = 'PROCESSING'
+}
+
+export enum ImportStage {
+  Campaign = 'CAMPAIGN',
+  Donation = 'DONATION',
+  Parsing = 'PARSING',
+  Payment = 'PAYMENT',
+  PaymentMethod = 'PAYMENT_METHOD',
+  Supporter = 'SUPPORTER'
+}
+
 export type IntRange = {
   end?: InputMaybe<Scalars['Int']>;
   start?: InputMaybe<Scalars['Int']>;
@@ -2499,6 +2610,43 @@ export type InviteInput = {
   role: StaffRole;
 };
 
+export type LeadSupporterInput = {
+  address?: InputMaybe<Scalars['String']>;
+  address2?: InputMaybe<Scalars['String']>;
+  businessName?: InputMaybe<Scalars['String']>;
+  certificationUrl?: InputMaybe<Scalars['String']>;
+  city?: InputMaybe<Scalars['String']>;
+  country?: InputMaybe<Scalars['String']>;
+  customfields?: InputMaybe<Array<CustomFieldInput>>;
+  dateOfBirth?: InputMaybe<Scalars['Date']>;
+  email?: InputMaybe<Scalars['String']>;
+  emailMarketing?: InputMaybe<Scalars['Boolean']>;
+  externalRef?: InputMaybe<Scalars['String']>;
+  firstName?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<Scalars['String']>;
+  job?: InputMaybe<Scalars['String']>;
+  lastName?: InputMaybe<Scalars['String']>;
+  locality?: InputMaybe<Scalars['String']>;
+  mobile?: InputMaybe<Scalars['String']>;
+  note?: InputMaybe<Scalars['String']>;
+  phone?: InputMaybe<Scalars['String']>;
+  phoneMarketing?: InputMaybe<Scalars['Boolean']>;
+  placeOfBirth?: InputMaybe<Scalars['String']>;
+  postalCode?: InputMaybe<Scalars['String']>;
+  postalMarketing?: InputMaybe<Scalars['Boolean']>;
+  privacyValues?: InputMaybe<Array<SupporterPrivacyInput>>;
+  profilationMarketing?: InputMaybe<Scalars['Boolean']>;
+  sex?: InputMaybe<Sex>;
+  smsMarketing?: InputMaybe<Scalars['Boolean']>;
+  sourceCampaignId?: InputMaybe<Scalars['Int']>;
+  sourcePeerCampaignId?: InputMaybe<Scalars['Int']>;
+  ssn?: InputMaybe<Scalars['String']>;
+  supporterType?: InputMaybe<SupporterType>;
+  tags?: InputMaybe<Array<Scalars['String']>>;
+  title?: InputMaybe<Scalars['String']>;
+  vat?: InputMaybe<Scalars['String']>;
+};
+
 export type ManualPaymentInput = {
   amount: Scalars['Float'];
   paymentDate: Scalars['DateTime'];
@@ -2513,6 +2661,7 @@ export type ManualPaymentMethodInput = {
   includeInCertificate?: InputMaybe<Scalars['Boolean']>;
   instructions?: InputMaybe<Scalars['String']>;
   label: Scalars['String'];
+  sendInstructions?: InputMaybe<Scalars['Boolean']>;
 };
 
 export type Media = {
@@ -2679,6 +2828,7 @@ export type Organization = {
   contactPhone?: Maybe<Scalars['String']>;
   country?: Maybe<Country>;
   currency: Currencies;
+  displayedPartner?: Maybe<DisplayedPartner>;
   domain: Scalars['String'];
   id: Scalars['Int'];
   isInvoiceRequired?: Maybe<Scalars['Boolean']>;
@@ -2864,6 +3014,7 @@ export type Payment = {
   createDate: Scalars['DateTime'];
   donation?: Maybe<Donation>;
   id: Scalars['Int'];
+  importRun?: Maybe<ImportRun>;
   netAmount?: Maybe<Scalars['Float']>;
   paymentDate?: Maybe<Scalars['DateTime']>;
   paymentMethod?: Maybe<PaymentMethod>;
@@ -2913,6 +3064,7 @@ export type PaymentMethod = {
   instructions?: Maybe<Scalars['String']>;
   label?: Maybe<Scalars['String']>;
   processor: PaymentProcessor;
+  sendInstructions: Scalars['Boolean'];
 };
 
 export type PaymentMethodResponse = {
@@ -3593,10 +3745,12 @@ export type Supporter = {
   dateOfBirth?: Maybe<Scalars['Date']>;
   email?: Maybe<Scalars['String']>;
   emailMarketing?: Maybe<Scalars['Boolean']>;
+  externalRef?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
   fullName?: Maybe<Scalars['String']>;
   id: Scalars['Int'];
   image?: Maybe<Scalars['String']>;
+  importRun?: Maybe<ImportRun>;
   job?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
   lastOneoffDonation?: Maybe<Donation>;
@@ -3651,6 +3805,7 @@ export type SupporterEdge = {
 export type SupporterFiltersInput = {
   archived?: InputMaybe<Scalars['Boolean']>;
   campaigns?: InputMaybe<Array<Scalars['Int']>>;
+  channels?: InputMaybe<Array<Scalars['Int']>>;
   city?: InputMaybe<Scalars['String']>;
   country?: InputMaybe<Scalars['String']>;
   createDate?: InputMaybe<DateRange>;
@@ -3664,6 +3819,7 @@ export type SupporterFiltersInput = {
   haveSsn?: InputMaybe<Scalars['Boolean']>;
   haveVat?: InputMaybe<Scalars['Boolean']>;
   ids?: InputMaybe<Array<Scalars['Int']>>;
+  importRuns?: InputMaybe<Array<Scalars['Int']>>;
   isOneoffSupporter?: InputMaybe<Scalars['Boolean']>;
   isRegularSupporter?: InputMaybe<Scalars['Boolean']>;
   lastDonationDate?: InputMaybe<DateRange>;
@@ -3752,11 +3908,6 @@ export enum SupporterType {
   Individual = 'INDIVIDUAL',
   Organization = 'ORGANIZATION'
 }
-
-export type Task = {
-  __typename?: 'Task';
-  taskId: Scalars['String'];
-};
 
 export enum TemplateType {
   Blog = 'BLOG',

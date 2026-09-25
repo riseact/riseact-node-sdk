@@ -12,23 +12,14 @@ const ProtectedRoute: FC = () => {
 
   const __organization = new URLSearchParams(window.location.search).get('__organization');
 
-  const isInIframe = (): boolean => {
-    try {
-      return window.self !== window.top;
-    } catch (e) {
-      // Se c'è un errore di sicurezza per accesso cross-origin,
-      // probabilmente siamo in un iframe
-      return true;
-    }
-  };
+  // `__organization` is only present on the first load from the Riseact admin
+  // iframe: client-side navigation drops the query string, so a missing param
+  // must not invalidate the session. Same rule as the SDK auth middleware:
+  // only an explicit mismatch forces a new authorize round.
+  const hasSession = !!token && !!organization && (!__organization || organization === __organization);
 
-  if (isInIframe() && !__organization) {
-    console.warn('Missing __organization parameter in iframe context');
-    window.parent.postMessage({ type: 'RELOAD_IFRAME' }, '*');
-  }
-
-  if (!token || !organization || organization !== __organization) {
-    window.location.href = `/oauth/authorize?__organization=${__organization || ''}`;
+  if (!hasSession) {
+    window.location.href = `/oauth/authorize?__organization=${encodeURIComponent(__organization || organization || '')}`;
 
     // return (
     //   <div>

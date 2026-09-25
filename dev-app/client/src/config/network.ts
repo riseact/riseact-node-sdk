@@ -5,6 +5,26 @@ import axios from 'axios';
 import urlJoin from 'url-join';
 import { CLIENT_TOKEN_KEY, ORGANIZATION_KEY } from './const';
 
+function getCurrentOrganization() {
+  return localStorage.getItem(ORGANIZATION_KEY) || new URLSearchParams(window.location.search).get('__organization') || '';
+}
+
+/**
+ * Drops the local session and restarts the OAuth flow.
+ *
+ * The organization must be carried over explicitly: navigating to '/' loses the
+ * `__organization` query param, and the authorize endpoint answers
+ * "Organization not specified. Try to refresh the page." without it.
+ */
+export function redirectToAuth() {
+  const organization = getCurrentOrganization();
+
+  localStorage.removeItem(CLIENT_TOKEN_KEY);
+  localStorage.removeItem(ORGANIZATION_KEY);
+
+  document.location.href = organization ? `/oauth/authorize?__organization=${encodeURIComponent(organization)}` : '/';
+}
+
 const httpLink = createHttpLink({
   uri: urlJoin(window.location.origin, '/graphql'),
   fetchOptions: { credentials: 'omit' },
@@ -46,13 +66,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 
   if (shouldLogout) {
-    const lastOrg = localStorage.getItem(ORGANIZATION_KEY);
-
-    localStorage.removeItem(CLIENT_TOKEN_KEY);
-    localStorage.removeItem(ORGANIZATION_KEY);
-
-    document.location.href = lastOrg ? `/?__organization=${lastOrg}` : '/';
-    // note: / will trigger an "Organization not specified. Try to refresh the page"
+    redirectToAuth();
   }
 });
 
@@ -66,25 +80,47 @@ export const gqlClient = new ApolloClient({
   },
 });
 
-export const apiClient = axios.create({
-  headers: {
-    Authorization: `Bearer ${localStorage.getItem(CLIENT_TOKEN_KEY)}`,
-    'X-Riseact-Organization': localStorage.getItem(ORGANIZATION_KEY),
-  },
+export const apiClient = axios.create();
+
+// Read the session on every request: baking the headers into the instance
+// snapshots localStorage at module load, so a token stored or rotated later
+// (sid exchange, re-install) leaves every following call unauthenticated.
+apiClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem(CLIENT_TOKEN_KEY);
+  const organization = localStorage.getItem(ORGANIZATION_KEY);
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  if (organization) {
+    config.headers['X-Riseact-Organization'] = organization;
+  }
+
+  return config;
 });
 
 apiClient.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      const lastOrg = localStorage.getItem(ORGANIZATION_KEY);
+  (response) => {
+    // Unauthenticated requests are 302'd to /oauth/authorize by the SDK auth
+    // middleware; axios follows the redirect, so the failure arrives as a 2xx/4xx
+    // from the authorize endpoint instead of a 401 on the original call.
+    const responseURL: string | undefined = response.request?.responseURL;
 
-      localStorage.removeItem(CLIENT_TOKEN_KEY);
-      localStorage.removeItem(ORGANIZATION_KEY);
-
-      document.location.href = lastOrg ? `/?__organization=${lastOrg}` : '/';
-      // note: / will trigger an "Organization not specified. Try to refresh the page"
+    if (responseURL && responseURL.includes('/oauth/authorize')) {
+      redirectToAuth();
     }
+
+    return response;
+  },
+  (error) => {
+    const status = error.response?.status;
+    const responseURL: string | undefined = error.request?.responseURL;
+
+    if (status === 401 || (responseURL && responseURL.includes('/oauth/authorize'))) {
+      redirectToAuth();
+    }
+
     return Promise.reject(error);
   },
 );
