@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: '22.x'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
@@ -23,11 +23,6 @@ jobs:
       - name: Build package
         working-directory: ./sdk
         run: npm run build
-
-      - name: Copy documentation files
-        run: |
-          cp README.md sdk/README.md
-          cp LICENSE sdk/LICENSE
 
       - name: Publish to npm
         working-directory: ./sdk
