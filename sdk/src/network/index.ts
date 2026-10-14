@@ -4,6 +4,7 @@ import { RiseactConfig, RiseactNetwork, StorageAdapters } from '../types';
 import initGqlProxy from './gqlProxy';
 import registerWebhook from './registerWebhook';
 import initCreateGqlClient from './createGqlClient';
+import verifyWebhookSignature from '../webhooks/verifyWebhookSignature';
 
 const initNetwork = async (config: RiseactConfig, storage: StorageAdapters): Promise<RiseactNetwork> => {
   // ! todo reset webhooks from riseact
@@ -23,6 +24,7 @@ const initNetwork = async (config: RiseactConfig, storage: StorageAdapters): Pro
     gqlProxy,
     createGqlClient,
     registerWebhook,
+    verifyWebhookSignature,
   };
 };
 

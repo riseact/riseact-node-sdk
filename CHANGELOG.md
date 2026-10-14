@@ -38,3 +38,10 @@ Complete rewrite of the package
 ### 6.0.0
 - Auth flow refactor. Removed state cookies for oauth, now using internal server side cache. (details in src/auth/README.md)
 - Now using only Authorization headers with Bearer tokens for rest and graphql clients
+
+### 6.3.0
+- Added the built-in uninstall webhook: Riseact calls `POST /webhooks/app-uninstalled` when the app is uninstalled or the organization is deleted. The SDK verifies the signature, runs the new `auth.onUninstall` callback and removes the organization's credentials
+- Webhook signature verification (`X-Riseact-Signature`, HMAC-SHA256 with the client secret): calls with an invalid signature are rejected with `401`. Unsigned calls are still accepted unless `network.webhooks.requireSignature` is set
+- `registerWebhook` now awaits the callback and answers `500` when it throws, instead of always `200`
+- `startRiseactApp` keeps the raw request body in `req.rawBody`
+- New exports: `riseact.network.verifyWebhookSignature` middleware, `verifyRiseactSignature`, `APP_UNINSTALLED_PATH`

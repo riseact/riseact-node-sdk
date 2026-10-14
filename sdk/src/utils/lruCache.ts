@@ -63,3 +63,18 @@ export const updateRefreshLock = (organizationDomain: string, status: RefreshLoc
 export const deleteRefreshLock = (organizationDomain: string) => refreshLockStore.delete(organizationDomain);
 
 export const getRefreshLockState = (organizationDomain: string): RefreshLockState | undefined => refreshLockStore.get(organizationDomain);
+
+/* ------------------------------- WEBHOOKS -------------------------------- */
+
+// Idempotency keys of the webhook calls already handled: Riseact may deliver one more than once.
+export const processedWebhookStore = new LRUCache<string, true>({
+  max: 5000,
+  ttl: 60 * 60 * 1000, // 1 hour
+});
+
+export const isWebhookProcessed = (idempotencyKey: string | undefined): boolean =>
+  Boolean(idempotencyKey && processedWebhookStore.has(idempotencyKey));
+
+export const markWebhookProcessed = (idempotencyKey: string | undefined) => {
+  if (idempotencyKey) processedWebhookStore.set(idempotencyKey, true);
+};

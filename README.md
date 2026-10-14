@@ -128,7 +128,59 @@ export const OrganizationInfoHandler = async (req, res) => {
   }
 ```
 
+### Webhooks
 
+`registerWebhook` mounts a handler on a public route for one or more events:
+
+```ts
+publicEpsRouter.use(
+  riseact.network.registerWebhook(WebhookEventTopic.DonationCreated, async (data) => {
+    await saveDonation(data);
+  }),
+);
+```
+
+The callback is awaited: the SDK answers `200` when it resolves and `500` when it throws, so a failure shows up in the Riseact event log.
+
+#### Signature
+
+Riseact signs the webhooks registered by an app with the app's client secret (`X-Riseact-Signature`, `X-Riseact-Timestamp`). The SDK verifies the signature on every call: a call with an invalid signature is rejected with `401` before reaching your callback.
+
+Webhooks created from the Riseact admin, or registered before signing was introduced, arrive unsigned and are accepted by default. Once your webhooks are registered by the app itself, reject unsigned calls too:
+
+```ts
+network: {
+  appPublicUrl: process.env.RISEACT_APP_URL,
+  webhooks: { requireSignature: true },
+},
+```
+
+For webhook routes you define yourself, use the `verifyWebhookSignature` middleware, or `verifyRiseactSignature` outside Express:
+
+```ts
+publicRouter.post('/hooks/supporter', riseact.network.verifyWebhookSignature, SupporterWebhookHandler);
+```
+
+`startRiseactApp` keeps the raw request body in `req.rawBody`, which the signature is computed on.
+
+#### Uninstall
+
+When an organization uninstalls the app, or is deleted, Riseact calls `POST /webhooks/app-uninstalled` on the app. The route is mounted by `startRiseactApp`: you do not register it, and it does not show among the app's webhooks. The SDK verifies the signature, runs `auth.onUninstall` and then removes the organization's credentials from the storage.
+
+```ts
+auth: {
+  clientId: process.env.CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  onUninstall: async ({ domain, reason, uninstalledAt }) => {
+    // reason: 'app_uninstalled' | 'organization_deleted'
+    await prisma.organization.deleteMany({ where: { domain } });
+  },
+},
+```
+
+- When the call arrives the app's access is already revoked: the Riseact API cannot be queried for that organization.
+- If `onUninstall` throws, the SDK answers `500` and Riseact retries the call, as for every webhook (after 1 minute, 10 minutes, 1 hour, 6 hours and 24 hours). Make it idempotent: it may run again on data already deleted.
+- Without `onUninstall`, the SDK still removes the credentials.
 
 ## Development
 

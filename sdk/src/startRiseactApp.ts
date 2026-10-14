@@ -8,6 +8,7 @@ import http from 'http';
 import oauthCallbackHandler from './auth/callbackHandler';
 import oauthAuthorizeHandler from './auth/authorizeHandler';
 import sidExchangeHandler from './auth/sidExchange';
+import appUninstalledHandler, { APP_UNINSTALLED_PATH } from './webhooks/appUninstalledHandler';
 import { existsSync } from 'fs';
 
 const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, options?: RiseactToolsMiddlewareOptions) => {
@@ -21,7 +22,12 @@ const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, opt
       allowedHeaders: ['Content-Type', 'Authorization'],
       maxAge: 86400, // 24 h
     }),
-    express.json(),
+    express.json({
+      // Riseact signs the bytes it sends: keep them to verify the webhook signatures
+      verify: (req, _res, buf) => {
+        (req as Request).rawBody = buf;
+      },
+    }),
   );
 
   expressInstance.use((req: Request, _res: Response, next: NextFunction) => {
@@ -47,6 +53,9 @@ const startRiseactApp = (expressInstance: Express, riseact: RiseactInstance, opt
   // Client auth endpoints for be-app/fe-app authentication
   expressInstance.use('/auth/get-token', serveStatic(libStaticPath + '/get-token.html'));
   expressInstance.use('/auth/sid-exchange', sidExchangeHandler);
+
+  // Built-in webhook: Riseact calls it when the app is uninstalled from an organization
+  expressInstance.post(APP_UNINSTALLED_PATH, appUninstalledHandler);
 
   // TODO feat: must accept express routers and single routes
   // Public endpoints

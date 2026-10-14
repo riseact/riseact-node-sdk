@@ -92,6 +92,41 @@ export interface AuthConfig {
     gqlClient: ApolloClient<NormalizedCacheObject>;
     credentials: OAuthCredentials;
   }) => Promise<void> | void;
+
+  /** Callback to run when the app is uninstalled from an organization, or the organization is deleted.
+   *
+   * Delete here the data you keep for the organization: the SDK removes its credentials right after.
+   * The access is already revoked, so the Riseact API cannot be queried for that organization.
+   * If it throws, Riseact calls it again later: it must be idempotent.
+   */
+  onUninstall?: (onUninstallParams: OnUninstallParams) => Promise<void> | void;
+}
+
+export type AppUninstallReason = 'app_uninstalled' | 'organization_deleted';
+
+export interface OnUninstallParams {
+  /** Domain of the organization the app was uninstalled from */
+  domain: string;
+  /** Why the app was uninstalled */
+  reason: AppUninstallReason;
+  /** When the app was uninstalled */
+  uninstalledAt: Date;
+}
+
+/** Body of the call Riseact sends to /webhooks/app-uninstalled */
+export interface AppUninstalledPayload {
+  organization: string;
+  event: 'app.uninstalled';
+  object: {
+    /** Id of the app on Riseact */
+    id: number;
+    client_id: string;
+    /** Domain of the organization, also when it has been deleted */
+    organization: string;
+    reason: AppUninstallReason;
+    uninstalled_at: string;
+  };
+  idempotency_key: string;
 }
 
 /** Credentials returned by Riseact after a successful OAuth flow */
@@ -139,6 +174,18 @@ export interface StorageAdapters {
 export interface NetworkConfig {
   /** Define a custom middleware to run before the request is rewrote to Riseact  */
   appPublicUrl?: string;
+
+  webhooks?: WebhooksConfig;
+}
+
+export interface WebhooksConfig {
+  /** Reject webhook calls without a Riseact signature. Default: false.
+   *
+   * Calls with an invalid signature are always rejected. Unsigned calls come from webhooks
+   * created from the Riseact admin, or registered before signing was introduced: turn this on
+   * once your webhooks are registered by the app itself. It will be the default in the next major.
+   */
+  requireSignature?: boolean;
 }
 
 export interface RiseactNetwork {
@@ -153,6 +200,9 @@ export interface RiseactNetwork {
 
   /** Register a webhook to listen to Riseact events */
   registerWebhook: typeof registerWebhook;
+
+  /** Middleware that rejects with 401 the calls not signed by Riseact. Use it on webhook routes you define yourself */
+  verifyWebhookSignature: RequestHandler;
 }
 
 /* -------------------------------------------------------------------------- */

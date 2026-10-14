@@ -1,5 +1,7 @@
 import initRiseactSDK from './RiseactSDK';
 import {
+  AppUninstalledPayload,
+  AppUninstallReason,
   AuthConfig,
   CampaignPayload,
   CampaignType,
@@ -10,6 +12,7 @@ import {
   Frequency,
   NetworkConfig,
   OAuthCredentials,
+  OnUninstallParams,
   PaymentPayload,
   RiseactAuth,
   RiseactConfig,
@@ -36,6 +39,7 @@ import {
   WebhookDataSupporterDeleted,
   WebhookDataSupporterUpdated,
   WebhookEventTopic,
+  WebhooksConfig,
 } from './types';
 
 export { CampaignType, CheckoutState, DonationState, Frequency, Visibility, SupporterType, WebhookEventTopic };
@@ -56,8 +60,12 @@ export type {
   WebhookDataSupporterCreated,
   WebhookDataSupporterDeleted,
   WebhookDataSupporterUpdated,
+  AppUninstalledPayload,
+  AppUninstallReason,
   AuthConfig,
   OAuthCredentials,
+  OnUninstallParams,
+  WebhooksConfig,
   StorageConfig,
   StorageAdapters,
   NetworkConfig,
@@ -75,6 +83,11 @@ export type {
 import { dangerouslyCreateGqlClientByAccessToken } from './network/createGqlClient';
 import { RISEACT_ORGANIZATION_HEADER } from './config/consts';
 
-export { dangerouslyCreateGqlClientByAccessToken, RISEACT_ORGANIZATION_HEADER };
+import { verifyRiseactSignature } from './webhooks/signature';
+import type { VerifyRiseactSignatureParams } from './webhooks/signature';
+import { APP_UNINSTALLED_PATH } from './webhooks/appUninstalledHandler';
+
+export { dangerouslyCreateGqlClientByAccessToken, RISEACT_ORGANIZATION_HEADER, verifyRiseactSignature, APP_UNINSTALLED_PATH };
+export type { VerifyRiseactSignatureParams };
 
 export default initRiseactSDK;

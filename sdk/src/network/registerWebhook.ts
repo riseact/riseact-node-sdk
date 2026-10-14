@@ -20,6 +20,7 @@ import {
   WebhookEventTopic,
 } from '../types';
 import { hashString } from '../utils/hash';
+import { isWebhookCallAllowed } from '../webhooks/verifyWebhookSignature';
 
 function registerWebhook(event: WebhookEventTopic.SupporterCreated, callback: (payload: WebhookDataSupporterCreated) => any): RequestHandler;
 function registerWebhook(event: WebhookEventTopic.SupporterUpdated, callback: (payload: WebhookDataSupporterUpdated) => any): RequestHandler;
@@ -54,12 +55,24 @@ function registerWebhook(event: WebhookEventTopic | Array<WebhookEventTopic>, ca
 
   // Return request handler
   return (req: Request, res: Response, next: NextFunction) => {
-    if (req.url === url) {
-      callback(req.body);
-      res.sendStatus(200);
-    } else {
-      next();
+    if (req.url !== url) {
+      return next();
     }
+
+    if (!isWebhookCallAllowed(req)) {
+      console.warn(`[RISEACT-SDK] Rejected webhook call to ${url}: missing or invalid signature`);
+      res.sendStatus(401);
+      return;
+    }
+
+    // Answer 2xx only once the callback succeeded, so a failure is visible in the Riseact event log
+    Promise.resolve()
+      .then(() => callback(req.body))
+      .then(() => res.sendStatus(200))
+      .catch((e) => {
+        console.error(`[RISEACT-SDK] Webhook callback for ${event.join(', ')} failed`, e);
+        res.sendStatus(500);
+      });
   };
 }
 

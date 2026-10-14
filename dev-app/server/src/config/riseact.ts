@@ -27,6 +27,11 @@ const RiseactConfig: RiseactConfig = {
 
       console.log('[DEV-APP] Gql client initialized successfully. Fetched data:', res.data.organization);
     },
+
+    onUninstall: async ({ domain, reason }) => {
+      // Delete here the data kept for the organization: the SDK removes its credentials right after
+      console.log('[DEV-APP] App uninstalled from organization:', domain, reason);
+    },
   },
   storage: {
     type: 'file',
