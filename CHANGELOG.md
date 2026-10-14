@@ -45,3 +45,9 @@ Complete rewrite of the package
 - `registerWebhook` now awaits the callback and answers `500` when it throws, instead of always `200`
 - `startRiseactApp` keeps the raw request body in `req.rawBody`
 - New exports: `riseact.network.verifyWebhookSignature` middleware, `verifyRiseactSignature`, `APP_UNINSTALLED_PATH`
+
+### 6.4.0
+- New webhook topic `WebhookEventTopic.DonationRevoked` (`donation.revoked`, payload `WebhookDataDonationRevoked`): Riseact emits it when a donation is revoked by hand, by the refund of its last payment, or by the failed payment of a one-off
+- Fixed the type of the `event` field in the webhook payloads: it is the dotted event name sent by Riseact (`donation.created`), not the topic (`DONATION_CREATED`). New types `WebhookEventName` and `WebhookEventNames` (topic to event name)
+- `WebhookDataMixedPayload` is exported from the package root: no more deep imports from `lib/esm/types`
+- `lib/TypeExtensions.d.ts` imported `./src`, which is not in the published package: it now points to `./esm`

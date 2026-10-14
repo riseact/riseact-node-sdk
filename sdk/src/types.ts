@@ -242,6 +242,7 @@ export enum WebhookEventTopic {
   CheckoutUpdated = 'CHECKOUT_UPDATED',
   DonationCreated = 'DONATION_CREATED',
   DonationDeleted = 'DONATION_DELETED',
+  DonationRevoked = 'DONATION_REVOKED',
   DonationUpdated = 'DONATION_UPDATED',
   PaymentCreated = 'PAYMENT_CREATED',
   PaymentUpdated = 'PAYMENT_UPDATED',
@@ -249,6 +250,32 @@ export enum WebhookEventTopic {
   SupporterDeleted = 'SUPPORTER_DELETED',
   SupporterUpdated = 'SUPPORTER_UPDATED',
 }
+
+/** Value of the `event` field in the webhook payloads, for each topic.
+ *
+ * The topic is what you subscribe to (and what the webhook path is derived from); the payload
+ * names the event in its dotted form, e.g. `donation.created`.
+ */
+export interface WebhookEventNames {
+  [WebhookEventTopic.CampaignCreated]: 'campaign.created';
+  [WebhookEventTopic.CampaignDeleted]: 'campaign.deleted';
+  [WebhookEventTopic.CampaignUpdated]: 'campaign.updated';
+  [WebhookEventTopic.CheckoutClosed]: 'checkout.closed';
+  [WebhookEventTopic.CheckoutCreated]: 'checkout.created';
+  [WebhookEventTopic.CheckoutPaid]: 'checkout.paid';
+  [WebhookEventTopic.CheckoutUpdated]: 'checkout.updated';
+  [WebhookEventTopic.DonationCreated]: 'donation.created';
+  [WebhookEventTopic.DonationDeleted]: 'donation.deleted';
+  [WebhookEventTopic.DonationRevoked]: 'donation.revoked';
+  [WebhookEventTopic.DonationUpdated]: 'donation.updated';
+  [WebhookEventTopic.PaymentCreated]: 'payment.created';
+  [WebhookEventTopic.PaymentUpdated]: 'payment.updated';
+  [WebhookEventTopic.SupporterCreated]: 'supporter.created';
+  [WebhookEventTopic.SupporterDeleted]: 'supporter.deleted';
+  [WebhookEventTopic.SupporterUpdated]: 'supporter.updated';
+}
+
+export type WebhookEventName = WebhookEventNames[WebhookEventTopic];
 
 export enum Visibility {
   Unpublished = 'unpublished',
@@ -400,105 +427,113 @@ export interface PaymentPayload {
 }
 
 export interface WebhookDataSupporterCreated {
-  event: WebhookEventTopic.SupporterCreated;
+  event: WebhookEventNames[WebhookEventTopic.SupporterCreated];
   object: SupporterPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataSupporterUpdated {
-  event: WebhookEventTopic.SupporterUpdated;
+  event: WebhookEventNames[WebhookEventTopic.SupporterUpdated];
   object: SupporterPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataSupporterDeleted {
-  event: WebhookEventTopic.SupporterDeleted;
+  event: WebhookEventNames[WebhookEventTopic.SupporterDeleted];
   object: SupporterPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataCampaignCreated {
-  event: WebhookEventTopic.CampaignCreated;
+  event: WebhookEventNames[WebhookEventTopic.CampaignCreated];
   object: CampaignPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataCampaignDeleted {
-  event: WebhookEventTopic.CampaignDeleted;
+  event: WebhookEventNames[WebhookEventTopic.CampaignDeleted];
   object: CampaignPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataCampaignUpdated {
-  event: WebhookEventTopic.CampaignUpdated;
+  event: WebhookEventNames[WebhookEventTopic.CampaignUpdated];
   object: CampaignPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataCheckoutClosed {
-  event: WebhookEventTopic.CheckoutClosed;
+  event: WebhookEventNames[WebhookEventTopic.CheckoutClosed];
   object: CheckoutPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataCheckoutCreated {
-  event: WebhookEventTopic.CheckoutCreated;
+  event: WebhookEventNames[WebhookEventTopic.CheckoutCreated];
   object: CheckoutPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataCheckoutPaid {
-  event: WebhookEventTopic.CheckoutPaid;
+  event: WebhookEventNames[WebhookEventTopic.CheckoutPaid];
   object: CheckoutPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataCheckoutUpdated {
-  event: WebhookEventTopic.CheckoutUpdated;
+  event: WebhookEventNames[WebhookEventTopic.CheckoutUpdated];
   object: CheckoutPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataDonationCreated {
-  event: WebhookEventTopic.DonationCreated;
+  event: WebhookEventNames[WebhookEventTopic.DonationCreated];
   object: DonationPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataDonationDeleted {
-  event: WebhookEventTopic.DonationDeleted;
+  event: WebhookEventNames[WebhookEventTopic.DonationDeleted];
+  object: DonationPayload;
+  organization: string;
+  idempotency_key: string;
+}
+
+/** A donation was revoked: by hand, by the refund of its last payment, or by the failed payment of a one-off */
+export interface WebhookDataDonationRevoked {
+  event: WebhookEventNames[WebhookEventTopic.DonationRevoked];
   object: DonationPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataDonationUpdated {
-  event: WebhookEventTopic.DonationUpdated;
+  event: WebhookEventNames[WebhookEventTopic.DonationUpdated];
   object: DonationPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataPaymentCreated {
-  event: WebhookEventTopic.PaymentCreated;
+  event: WebhookEventNames[WebhookEventTopic.PaymentCreated];
   object: PaymentPayload;
   organization: string;
   idempotency_key: string;
 }
 
 export interface WebhookDataPaymentUpdated {
-  event: WebhookEventTopic.PaymentUpdated;
+  event: WebhookEventNames[WebhookEventTopic.PaymentUpdated];
   object: PaymentPayload;
   organization: string;
   idempotency_key: string;
@@ -511,7 +546,7 @@ export type MixedPayload = Partial<SupporterPayload> &
   Partial<DonationPayload>;
 
 export interface WebhookDataMixedPayload {
-  event: WebhookEventTopic;
+  event: WebhookEventName;
   object: MixedPayload;
   organization: string;
   idempotency_key: string;
